@@ -119,13 +119,21 @@ void loop() {
 
 
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
+<<<<<<< HEAD
     int prob = changeProb;
 
     if(pt->dir == 0){
       pt->dir = 1;
     }
+=======
+  int prob = changeProb;
+>>>>>>> Dev
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Dev
 
     if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
       prob += abs(pt->midAngle - pt->angle);
@@ -152,46 +160,45 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 }
 
 int getMarkovSpeed(int oldSpeed){
-int val = random(101);
+  int val = random(101);
 
-if(oldSpeed == 1){
-  if(val < 20){
-    return 2;
+  if(oldSpeed == 1){
+    if(val < 20){
+      return 2;
+    }
+    else{
+      return 1;
+    }
   }
+
+  else if(oldSpeed == 2){
+    if(val < 20){
+      return 3;
+    }
+    else if(val < 70){
+      return 2;
+    }
+    else{
+      return 1;
+    }
+  }
+
+  else if(oldSpeed == 3){
+    if(val < 20){
+      return 2;
+    }
+    else{
+      return 3;
+    }
+  }
+
   else{
-    return 1;
+    return constrain(oldSpeed, 1, 3);
   }
-}
-else if(oldSpeed == 2){
-  if(val < 20){
-    return 3;
-  }
-  else if(val < 70){
-    return 2;
-  }
-  else{
-    return 1;
-  }
-}
-else if(oldSpeed == 3){
-  if(val < 20){
-    return 2;
-  }
-
-  else{
-    return 3;
-  }
-}
-else{
-
-  return constrain(oldSpeed, 1, 3);
-}
-
 }
 
 int markovPause(){
-int val = random(101);
-
+  int val = random(101);
 
   if(val < 35){
     return random(1000, 2000);
@@ -199,7 +206,7 @@ int val = random(101);
   else if(val < 80){
     return random(750, 1000);
   }
-else{
-  return random(500, 750);
-}
+  else{
+    return random(500, 750);
+  }
 }
