@@ -77,7 +77,7 @@ void loop() {
 
 
   delay(50);
-  //changeVal = getMarkovSpeed(changeVal);
+  changeVal = getMarkovSpeed(changeVal);
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, probVal) + panTiltX.angle;
 
@@ -97,7 +97,7 @@ void loop() {
   else if(random(100001) < 10){
     laser.fire(0);
     panTilt.detach();
-    delay(60 * 1000 * random(5, 30));
+    delay(60000 * random(5, 30));
     panTilt.begin();
   }
 
