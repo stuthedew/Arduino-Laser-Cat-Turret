@@ -1,3 +1,22 @@
+
+/**************************************************************************/
+/*!
+    @file     stuPanTilt.h
+    @author   Stuart Feichtinger
+    @license  BSD (see license.txt)
+
+    Library for controlling dual servo pan-tilt rig
+    (https://www.adafruit.com/products/1967) with an Arduino Uno (Atmel
+    Atmega 328).
+
+
+    @section  HISTORY
+    v1.0 - First release
+
+*/
+/**************************************************************************/
+
+
 #ifndef _STUPANTILT_H_
 #define _STUPANTILT_H_
 

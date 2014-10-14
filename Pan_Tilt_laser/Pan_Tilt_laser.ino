@@ -1,3 +1,22 @@
+/**************************************************************************/
+/*!
+    @file     Pan_Tilt_laser.ino
+    @author   Stuart Feichtinger
+    @license  BSD (see license.txt)
+
+    Main program running an automatic laser-turret cat toy using a pan-tilt
+    rig (https://www.adafruit.com/products/1967) and laser diode
+    (https://www.adafruit.com/products/1054). Random laser path, speed
+    and pauses determined by homebrew Markov chain algorithm.
+
+
+    @section  HISTORY
+    v1.0 - First release
+
+*/
+/**************************************************************************/
+
+
 
 #include <Servo.h>
 #include <math.h>
