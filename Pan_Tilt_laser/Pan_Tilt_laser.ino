@@ -97,7 +97,7 @@ void loop() {
 
   if(random(10001) < 2){
     laser.fire(0);
-    delay(random(1000, 5000))
+    delay(random(1000, 5000));
 
   }
 
