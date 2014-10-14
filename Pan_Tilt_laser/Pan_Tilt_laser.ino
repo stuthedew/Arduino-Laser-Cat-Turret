@@ -26,6 +26,8 @@
 #include "stuPanTilt.h"
 #include "stuLaser.h"
 
+#define DIRECTION_CHANGE_PROBABILITY 15
+
 
 #define BAUD_RATE 115200
 
@@ -71,20 +73,18 @@ void setup() {
   Serial.println("setup complete");
 }
 
-int probVal = 10;
-int changeVal = 2;
+
 
 void loop() {
-
-
+  int changeVal;
   delay(50);
   changeVal = getMarkovSpeed(changeVal);
 
-  panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, probVal) + panTiltX.angle;
+  panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
 
 
 
-  panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, probVal) + panTiltY.angle;
+  panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
 
 
   panTilt.updateAngles();
