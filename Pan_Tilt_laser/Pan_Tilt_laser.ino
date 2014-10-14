@@ -13,7 +13,7 @@ point_t oldPoint, newPoint;
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
 
-panTiltPos_t panTiltX(0, 55, 130, -25);
+panTiltPos_t panTiltX(0, 55, 125, -20);
 panTiltPos_t panTiltY(0, 10, 45);
 
 
@@ -46,6 +46,7 @@ void setup() {
   laser.begin();
   laser.fire(1);
   delay(2000);
+
 
 
 /*
@@ -88,9 +89,15 @@ void loop() {
 
   panTilt.updateAngles();
 
+  if(random(1001) < 5){
+    delay(markovPause());
+
+  }
+
+
   if(random(10001) < 2){
     laser.fire(0);
-    delay(random(2000, 10000));
+    delay(random(1000, 5000));
 
   }
 
@@ -150,7 +157,7 @@ return tempVal;
 
 int getMarkovSpeed(int oldSpeed){
 int val = random(101);
-Serial.println(F("Markov"));
+
 if(oldSpeed == 1){
   if(val < 20){
     return 2;
@@ -160,7 +167,7 @@ if(oldSpeed == 1){
   }
 }
 else if(oldSpeed == 2){
-  if(val < 35){
+  if(val < 20){
     return 3;
   }
   else if(val < 70){
@@ -174,6 +181,7 @@ else if(oldSpeed == 3){
   if(val < 20){
     return 2;
   }
+
   else{
     return 3;
   }
@@ -183,4 +191,19 @@ else{
   return constrain(oldSpeed, 1, 3);
 }
 
+}
+
+int markovPause(){
+int val = random(101);
+
+
+  if(val < 20){
+    return random(1000, 1500);
+  }
+  else if(val < 80){
+    return random(500, 1000);
+  }
+else{
+  return random(250, 500);
+}
 }
