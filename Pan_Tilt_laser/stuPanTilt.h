@@ -45,13 +45,6 @@ struct panTiltPos_t {
 
 };
 
-struct point_t{
-  int
-    x,
-    y;
-
-  point_t(int X=0, int Y=0):x(X), y(Y){}
-};
 
 class PanTilt {
 

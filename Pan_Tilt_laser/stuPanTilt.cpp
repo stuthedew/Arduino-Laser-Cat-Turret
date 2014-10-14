@@ -57,45 +57,8 @@ float adjacent = _height / tan(_deg2Rad(90-_Ypos->angle));
 _Ypos->pos = sin(_deg2Rad(_Xpos->angle)) * adjacent;
 _Xpos->pos = cos(_deg2Rad(_Xpos->angle)) * adjacent;
 }
-/*
-void PanTilt::updatePosition(){
-  _setAnglesFromPosition();
-  bool overRunFlag = 0;
-  if(_Ypos->angle >= _Ypos->maxAngle - 1){
-    _Ypos->angle = _Ypos->maxAngle;
 
-    overRunFlag = 1;
-  }
-  else if(_Ypos->angle <= _Ypos->minAngle + 1){
-    _Ypos->angle = _Ypos->minAngle;
-
-    overRunFlag = 1;
-
-  }
-
-  if(_Xpos->angle >= _Xpos->maxAngle - 1){
-    _Xpos->angle = _Xpos->maxAngle;
-
-
-    overRunFlag = 1;
-  }
-  else if(_Xpos->angle <= _Xpos->minAngle +1){
-
-    _Xpos->angle = _Xpos->minAngle;
-
-    overRunFlag = 1;
-  }
-  if(overRunFlag){
-    Serial.println(F("########OVERRUN#########"));
-    updateAngles();
-    return;
-  }
-  _update();
-
-}
-*/
 void PanTilt::updateAngles(){
-  //_setPositionFromAngles();
   _update();
 
 }
@@ -103,17 +66,7 @@ void PanTilt::updateAngles(){
 void PanTilt::_update(){
 static int oldXangle, oldYangle;
 
-  Serial.print(F("X angle: "));
-  Serial.println(_Xpos->angle);
-  Serial.print(F("Y angle: "));
-  Serial.println(_Ypos->angle);
-  /*
-  Serial.print(F("X pos: "));
-  Serial.println(_Xpos->pos);
-  Serial.print(F("Y pos: "));
-  Serial.println(_Ypos->pos);
-  Serial.println();
-*/
+
   _xServo.stuWrite(_Xpos->angle);
 
   _yServo.stuWrite(_Ypos->angle);

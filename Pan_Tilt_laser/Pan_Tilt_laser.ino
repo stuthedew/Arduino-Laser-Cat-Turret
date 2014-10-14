@@ -25,8 +25,7 @@
 #include "stuLaser.h"
 
 
-point_t oldPoint, newPoint;
-
+#define BAUD_RATE 115200
 
 
 //X Position: lower numbers == Right
@@ -40,7 +39,7 @@ PanTilt panTilt(9, &panTiltX, 10, &panTiltY, 98);
 
 StuLaser laser(5);
 
-#define BAUD_RATE 115200
+
 
 void setup() {
 
@@ -66,25 +65,6 @@ void setup() {
   laser.fire(1);
   delay(2000);
 
-
-
-/*
-  Serial.print(F("X min Value: "));
-  Serial.println(panTiltX.minAngle);
-  Serial.print(F("X max Value: "));
-  Serial.println(panTiltX.maxAngle);
-  Serial.print(F("X mid Value: "));
-  Serial.println(panTiltX.midAngle);
-  Serial.println();
-  Serial.print(F("Y min Value: "));
-  Serial.println(panTiltY.minAngle);
-  Serial.print(F("Y max Value: "));
-  Serial.println(panTiltY.maxAngle);
-  Serial.print(F("Y mid Value: "));
-  Serial.println(panTiltY.midAngle);
-  Serial.println();
-
-*/
   Serial.println("setup complete");
 
 
@@ -146,16 +126,12 @@ int prob = changeProb;
 
   if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
     prob += abs(pt->midAngle - pt->angle);
-/*
-    Serial.print(F("Probability: "));
-    Serial.println(prob);
-*/
+
   }
 
   if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
     pt->dir *= -1;
-    Serial.println(F("##############CHANGE#################"));
-    Serial.println(pt->dir);
+
 
   }
 
@@ -166,9 +142,6 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
   int tempVal = getMarkovDirection(pt, changeProb);
 
   tempVal *=funcChangeVal;
-  Serial.print(F("Delta: "));
-  Serial.println(tempVal);
-  Serial.println();
 
 return tempVal;
 
