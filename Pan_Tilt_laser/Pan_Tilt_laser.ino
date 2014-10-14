@@ -198,7 +198,7 @@ int val = random(101);
 
 
   if(val < 35){
-    return random(1000, 1500);
+    return random(1000, 2000);
   }
   else if(val < 80){
     return random(750, 1000);
