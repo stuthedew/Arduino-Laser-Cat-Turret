@@ -69,8 +69,6 @@ void setup() {
   delay(2000);
 
   Serial.println("setup complete");
-
-
 }
 
 int probVal = 10;
@@ -119,21 +117,13 @@ void loop() {
 
 
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
-<<<<<<< HEAD
+
     int prob = changeProb;
 
     if(pt->dir == 0){
       pt->dir = 1;
     }
-=======
-  int prob = changeProb;
->>>>>>> Dev
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> Dev
 
     if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
       prob += abs(pt->midAngle - pt->angle);
