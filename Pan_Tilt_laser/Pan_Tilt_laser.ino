@@ -89,7 +89,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(random(1001) < 20){
+  if(random(1001) < 15){
     delay(markovPause());
 
   }
@@ -197,7 +197,7 @@ int markovPause(){
 int val = random(101);
 
 
-  if(val < 30){
+  if(val < 35){
     return random(1000, 1500);
   }
   else if(val < 80){
