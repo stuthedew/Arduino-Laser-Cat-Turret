@@ -48,6 +48,7 @@ void setup() {
   Serial.begin(BAUD_RATE);
 
   panTilt.begin();
+  laser.begin();
 
   panTiltX.angle = panTiltX.minAngle;
   panTiltY.angle = panTiltY.minAngle;
@@ -63,7 +64,7 @@ void setup() {
   panTiltX.angle = panTiltX.midAngle;
   panTiltY.angle = panTiltY.midAngle;
   panTilt.updateAngles();
-  laser.begin();
+
   laser.fire(1);
   delay(2000);
 
@@ -118,27 +119,28 @@ void loop() {
 
 
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
+    int prob = changeProb;
+
+    if(pt->dir == 0){
+      pt->dir = 1;
+    }
 
 
-  if(pt->dir == 0){
-    pt->dir = 1;
+
+    if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
+      prob += abs(pt->midAngle - pt->angle);
+
+    }
+
+    if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
+      pt->dir *= -1;
+
+
+    }
+
+    return pt->dir;
   }
 
-int prob = changeProb;
-
-  if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
-    prob += abs(pt->midAngle - pt->angle);
-
-  }
-
-  if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
-    pt->dir *= -1;
-
-
-  }
-
-  return pt->dir;
-}
 
 int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
   int tempVal = getMarkovDirection(pt, changeProb);
