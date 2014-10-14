@@ -98,8 +98,8 @@ static int oldXangle, oldYangle;
   _xServo.stuWrite(_Xpos->angle);
 
   _yServo.stuWrite(_Ypos->angle);
-  delay(abs(_Xpos->angle - oldXangle)+15);
-  delay(abs(_Ypos->angle - oldYangle)+15);
+  delay(abs(2*(_Xpos->angle - oldXangle)+15));
+  delay(abs(2*(_Ypos->angle - oldYangle)+15));
 
   oldXangle = _Xpos->angle;
   oldYangle = _Ypos->angle;
