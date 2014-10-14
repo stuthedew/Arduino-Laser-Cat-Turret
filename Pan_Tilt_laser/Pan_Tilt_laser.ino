@@ -89,7 +89,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(random(1001) < 5){
+  if(random(1001) < 8){
     delay(markovPause());
 
   }
