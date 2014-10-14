@@ -77,7 +77,7 @@ void loop() {
 
 
   delay(50);
-  //changeVal = getMarkovSpeed(changeVal);
+  changeVal = getMarkovSpeed(changeVal);
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, probVal) + panTiltX.angle;
 
@@ -97,7 +97,8 @@ void loop() {
   else if(random(100001) < 10){
     laser.fire(0);
     panTilt.detach();
-    delay(60 * 1000 * random(5, 30));
+    int delayVal = 60000 * random(5, 30);
+    delay(delayVal);
     panTilt.begin();
   }
 
@@ -125,11 +126,11 @@ int prob = changeProb;
 */
   }
 
-  if(random(1001) <= prob<<1 || pt->angle >= pt->maxAngle || pt->angle <= pt->minAngle){
-    pt->dir *= -1;/*
+  if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
+    pt->dir *= -1;
     Serial.println(F("##############CHANGE#################"));
     Serial.println(pt->dir);
-    */
+
   }
 
   return pt->dir;
@@ -149,6 +150,7 @@ return tempVal;
 
 int getMarkovSpeed(int oldSpeed){
 int val = random(101);
+Serial.println(F("Markov"));
 if(oldSpeed == 1){
   if(val < 20){
     return 2;
@@ -177,6 +179,7 @@ else if(oldSpeed == 3){
   }
 }
 else{
+
   return constrain(oldSpeed, 1, 3);
 }
 
