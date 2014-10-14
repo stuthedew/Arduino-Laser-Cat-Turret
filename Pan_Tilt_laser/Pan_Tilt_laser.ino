@@ -26,9 +26,7 @@ StuLaser laser(5);
 void setup() {
 
   Serial.begin(BAUD_RATE);
-Serial.println(panTiltX.midAngle);
-Serial.println(panTiltY.midAngle);
-Serial.println();
+
   panTilt.begin();
 
   panTiltX.angle = panTiltX.minAngle;
@@ -80,10 +78,10 @@ void loop() {
 
   delay(50);
   //changeVal = getMarkovSpeed(changeVal);
-//  changeVal = random(1, 3);
+
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, probVal) + panTiltX.angle;
 
-  //changeVal = random(1, 3);
+
 
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, probVal) + panTiltY.angle;
 
