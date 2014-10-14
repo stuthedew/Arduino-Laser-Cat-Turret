@@ -157,7 +157,6 @@ if(oldSpeed == 1){
     return 1;
   }
 }
-
 else if(oldSpeed == 2){
   if(val < 35){
     return 3;
@@ -178,7 +177,7 @@ else if(oldSpeed == 3){
   }
 }
 else{
-  return oldSpeed;
+  return constrain(oldSpeed, 1, 3);
 }
 
 }
