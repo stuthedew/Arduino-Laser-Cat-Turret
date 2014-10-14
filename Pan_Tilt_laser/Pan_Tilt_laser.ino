@@ -97,7 +97,8 @@ void loop() {
   else if(random(100001) < 10){
     laser.fire(0);
     panTilt.detach();
-    delay(60000 * random(5, 30));
+    int delayVal = 60000 * random(5, 30);
+    delay(delayVal);
     panTilt.begin();
   }
 
