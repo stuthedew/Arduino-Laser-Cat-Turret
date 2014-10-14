@@ -89,7 +89,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(random(1001) < 8){
+  if(random(1001) < 12){
     delay(markovPause());
 
   }
@@ -97,7 +97,7 @@ void loop() {
 
   if(random(10001) < 2){
     laser.fire(0);
-    delay(random(1000, 5000));
+    delay(random(1000, 5000))
 
   }
 
@@ -197,7 +197,7 @@ int markovPause(){
 int val = random(101);
 
 
-  if(val < 20){
+  if(val < 30){
     return random(1000, 1500);
   }
   else if(val < 80){
