@@ -26,8 +26,10 @@
 #include "stuPanTilt.h"
 #include "stuLaser.h"
 
-#define BAUD_RATE 115200
 #define DIRECTION_CHANGE_PROBABILITY 15
+
+
+#define BAUD_RATE 115200
 
 
 //X Position: lower numbers == Right
@@ -35,6 +37,7 @@
 
 panTiltPos_t panTiltX(0, 55, 125, -20);
 panTiltPos_t panTiltY(0, 10, 45);
+
 
 PanTilt panTilt(9, &panTiltX, 10, &panTiltY, 98);
 
@@ -78,6 +81,8 @@ void loop() {
   changeVal = getMarkovSpeed(changeVal);
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
+
+
 
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
 
@@ -127,6 +132,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
     if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
       pt->dir *= -1;
+
 
     }
 
