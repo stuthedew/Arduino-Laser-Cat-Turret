@@ -147,7 +147,7 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
   tempVal *=funcChangeVal;
 
-return tempVal;
+  return tempVal;
 
 }
 
