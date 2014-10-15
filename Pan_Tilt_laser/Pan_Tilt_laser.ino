@@ -207,7 +207,7 @@ void sleep(unsigned int minTime, unsigned int maxTime){
       heartBeat();
       delay(10000);
       if(startTime > millis()){ //check for rollovers
-        break;
+        startTime = millis();
       }
     }
     startTime = millis();
