@@ -14,7 +14,7 @@
     v1.0.0 - First release
     v1.1.0 - Added Markov-based speed control
     v1.2.0 - Added Markov-based pause length/frequency
-
+    v1.3.1 - Added Heartbeat during pause
 */
 /**************************************************************************/
 
@@ -102,11 +102,7 @@ void loop() {
   }
 
   else if(random(100001) < 10){
-    laser.fire(0);
-    panTilt.detach();
-    int delayVal = 60000 * random(5, 30);
-    delay(delayVal);
-    panTilt.begin();
+    sleep(30, 40);
   }
 
   laser.fire(1);
@@ -199,4 +195,34 @@ int markovPause(){
   else{
     return random(500, 750);
   }
+}
+
+void sleep(unsigned int minTime, unsigned int maxTime){
+  unsigned int delayVal = random(minTime, maxTime);
+  laser.fire(0);
+  panTilt.detach();
+  unsigned long startTime = millis();
+  for(unsigned int i = 0; i < delayVal; i++){}
+  while(millis() - startTime < 60000){
+    heartBeat();
+    delay(10000);
+  }
+  startTime = millis();
+}
+  panTilt.begin();
+  laser.fire(1);
+
+}
+
+void heartbeat(){
+  uint8_t ledPin = 13;
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);
+  delay(250);
+  digitalWrite(ledPin, LOW);
+  delay(250);
+  digitalWrite(ledPin, HIGH);
+  delay(250);
+  digitalWrite(ledPin, LOW);
+
 }
