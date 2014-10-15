@@ -218,11 +218,11 @@ void heartBeat(){
   uint8_t ledPin = 13;
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, HIGH);
-  delay(250);
+  delay(100);
   digitalWrite(ledPin, LOW);
-  delay(250);
+  delay(100);
   digitalWrite(ledPin, HIGH);
-  delay(250);
+  delay(100);
   digitalWrite(ledPin, LOW);
 
 }
