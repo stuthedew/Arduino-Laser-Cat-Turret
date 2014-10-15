@@ -202,19 +202,19 @@ void sleep(unsigned int minTime, unsigned int maxTime){
   laser.fire(0);
   panTilt.detach();
   unsigned long startTime = millis();
-  for(unsigned int i = 0; i < delayVal; i++){}
-  while(millis() - startTime < 60000){
-    heartBeat();
-    delay(10000);
+  for(unsigned int i = 0; i < delayVal; i++){
+    while(millis() - startTime < 60000){
+      heartBeat();
+      delay(10000);
+    }
+    startTime = millis();
   }
-  startTime = millis();
-}
   panTilt.begin();
   laser.fire(1);
 
 }
 
-void heartbeat(){
+void heartBeat(){
   uint8_t ledPin = 13;
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, HIGH);
