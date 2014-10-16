@@ -89,7 +89,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(random(1001) < 15){
+  if(random(1001) < 12){
     delay(markovPause());
 
   }
@@ -150,19 +150,7 @@ int getMarkovSpeed(int oldSpeed){
 
   if(oldSpeed == 1){
     if(val < 20){
-      return 2;
-    }
-    else{
-      return 1;
-    }
-  }
-
-  else if(oldSpeed == 2){
-    if(val < 20){
       return 3;
-    }
-    else if(val < 70){
-      return 2;
     }
     else{
       return 1;
@@ -171,15 +159,27 @@ int getMarkovSpeed(int oldSpeed){
 
   else if(oldSpeed == 3){
     if(val < 20){
-      return 2;
+      return 5;
+    }
+    else if(val < 70){
+      return 3;
     }
     else{
+      return 1;
+    }
+  }
+
+  else if(oldSpeed == 5){
+    if(val < 20){
       return 3;
+    }
+    else{
+      return 5;
     }
   }
 
   else{
-    return constrain(oldSpeed, 1, 3);
+    return constrain(oldSpeed, 1, 5);
   }
 }
 
