@@ -47,15 +47,15 @@ void PanTilt::detach(){
 }
 
 void PanTilt::_setAnglesFromPosition(){
-_Xpos->angle = _rad2Deg(atan(_Ypos->pos/_Xpos->pos));
-_Ypos->angle = _rad2Deg(atan(sqrt(square(_Ypos->pos) + square(_Xpos->pos)) /_height));
+  _Xpos->angle = _rad2Deg(atan(_Ypos->pos/_Xpos->pos));
+  _Ypos->angle = _rad2Deg(atan(sqrt(square(_Ypos->pos) + square(_Xpos->pos)) /_height));
 }
 
 void PanTilt::_setPositionFromAngles(){
 
-float adjacent = _height / tan(_deg2Rad(90-_Ypos->angle));
-_Ypos->pos = sin(_deg2Rad(_Xpos->angle)) * adjacent;
-_Xpos->pos = cos(_deg2Rad(_Xpos->angle)) * adjacent;
+  float adjacent = _height / tan(_deg2Rad(90-_Ypos->angle));
+  _Ypos->pos = sin(_deg2Rad(_Xpos->angle)) * adjacent;
+  _Xpos->pos = cos(_deg2Rad(_Xpos->angle)) * adjacent;
 }
 
 void PanTilt::updateAngles(){
@@ -64,11 +64,11 @@ void PanTilt::updateAngles(){
 }
 
 void PanTilt::_update(){
-static int oldXangle, oldYangle;
+  static int oldXangle, oldYangle;
 
 
   _xServo.stuWrite(_Xpos->angle);
-
+  delay(15);
   _yServo.stuWrite(_Ypos->angle);
   delay(abs(2*(_Xpos->angle - oldXangle)+15));
   delay(abs(2*(_Ypos->angle - oldYangle)+15));
@@ -79,13 +79,13 @@ static int oldXangle, oldYangle;
 }
 
 float PanTilt::_rad2Deg(float radVal){
-#define RAD2DEG_CONVERSION_FACTOR 57.2958
+  #define RAD2DEG_CONVERSION_FACTOR 57.2958
 
   return radVal * RAD2DEG_CONVERSION_FACTOR;
 }
 
 float PanTilt::_deg2Rad(float degVal){
-#define DEG2RAD_CONVERSION_FACTOR 0.01745
+  #define DEG2RAD_CONVERSION_FACTOR 0.01745
 
   return degVal * DEG2RAD_CONVERSION_FACTOR;
 }

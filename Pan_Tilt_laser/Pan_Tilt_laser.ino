@@ -14,7 +14,7 @@
     v1.0.0 - First release
     v1.1.0 - Added Markov-based speed control
     v1.2.0 - Added Markov-based pause length/frequency
-
+    v1.2.1 - Added Heartbeat during pause
 */
 /**************************************************************************/
 
@@ -89,7 +89,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(random(1001) < 15){
+  if(random(1001) < 12){
     delay(markovPause());
 
   }
@@ -102,11 +102,7 @@ void loop() {
   }
 
   else if(random(100001) < 10){
-    laser.fire(0);
-    panTilt.detach();
-    int delayVal = 60000 * random(5, 30);
-    delay(delayVal);
-    panTilt.begin();
+    sleep(30, 40);
   }
 
   laser.fire(1);
@@ -154,19 +150,7 @@ int getMarkovSpeed(int oldSpeed){
 
   if(oldSpeed == 1){
     if(val < 20){
-      return 2;
-    }
-    else{
-      return 1;
-    }
-  }
-
-  else if(oldSpeed == 2){
-    if(val < 20){
       return 3;
-    }
-    else if(val < 70){
-      return 2;
     }
     else{
       return 1;
@@ -175,15 +159,27 @@ int getMarkovSpeed(int oldSpeed){
 
   else if(oldSpeed == 3){
     if(val < 20){
-      return 2;
+      return 5;
+    }
+    else if(val < 70){
+      return 3;
     }
     else{
+      return 1;
+    }
+  }
+
+  else if(oldSpeed == 5){
+    if(val < 20){
       return 3;
+    }
+    else{
+      return 5;
     }
   }
 
   else{
-    return constrain(oldSpeed, 1, 3);
+    return constrain(oldSpeed, 1, 5);
   }
 }
 
@@ -199,4 +195,37 @@ int markovPause(){
   else{
     return random(500, 750);
   }
+}
+
+void sleep(unsigned int minTime, unsigned int maxTime){
+  unsigned int delayVal = random(minTime, maxTime);
+  laser.fire(0);
+  panTilt.detach();
+  unsigned long startTime = millis();
+  for(unsigned int i = 0; i < delayVal; i++){
+    while(millis() - startTime < 60000){
+      heartBeat();
+      delay(10000);
+      if(startTime > millis()){ //check for rollovers
+        startTime = millis();
+      }
+    }
+    startTime = millis();
+  }
+  panTilt.begin();
+  laser.fire(1);
+
+}
+
+void heartBeat(){
+  uint8_t ledPin = 13;
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+
 }
