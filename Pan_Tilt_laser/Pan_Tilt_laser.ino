@@ -82,8 +82,6 @@ void loop() {
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
 
-
-
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
 
 
@@ -145,41 +143,43 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 }
 
 int getMarkovSpeed(int oldSpeed){
-  int val = random(101);
-  int lowVal, midVal, hiVal;
+  int probability = random(101);
+  int lowVal = 2;
+  int midVal = 5;
+  int hiVal = 8;
 
-  if(oldSpeed == 1){
-    if(val < 20){
-      return 3;
+  if(oldSpeed == lowVal){
+    if(probability < 20){
+      return midVal;
     }
     else{
-      return 1;
+      return lowVal;
     }
   }
 
-  else if(oldSpeed == 3){
-    if(val < 20){
-      return 5;
+  else if(oldSpeed == midVal){
+    if(probability < 20){
+      return hiVal;
     }
-    else if(val < 70){
-      return 3;
+    else if(probability < 70){
+      return midVal;
     }
     else{
-      return 1;
+      return lowVal;
     }
   }
 
-  else if(oldSpeed == 5){
-    if(val < 20){
-      return 3;
+  else if(oldSpeed == hiVal){
+    if(probability < 20){
+      return midVal;
     }
     else{
-      return 5;
+      return hiVal;
     }
   }
 
   else{
-    return constrain(oldSpeed, 1, 5);
+    return constrain(oldSpeed, lowVal, hiVal);
   }
 }
 
@@ -232,4 +232,24 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
     digitalWrite(ledPin, LOW);
     oldTime = mSeconds;
   }
+}
+
+void shake(){
+  panTiltY.angle += 1;
+  panTilt.updateAngles();
+  delay(50);
+  panTiltY.angle -= 1;
+  panTiltX.angle += 1;
+  panTilt.updateAngles();
+  delay(50);
+  panTiltY.angle -= 1;
+  panTiltX.angle -= 1;
+  panTilt.updateAngles();
+  panTiltY.angle += 1;
+  panTiltX.angle -= 1;
+  panTilt.updateAngles();
+  delay(50);
+  panTiltX.angle += 1;
+  panTilt.updateAngles();
+  delay(50);
 }
