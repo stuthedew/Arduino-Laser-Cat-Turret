@@ -92,7 +92,7 @@ void loop() {
     shake();
   }
 
-  if(random(1001) < 12){
+  if(random(1001) < 6){
     delay(markovPause());
 
   }
