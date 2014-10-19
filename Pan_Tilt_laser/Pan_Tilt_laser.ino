@@ -96,13 +96,12 @@ void loop() {
 
 
   if(random(10001) < 2){
-    laser.fire(0);
-    delay(random(1000, 5000));
+    sleep(5, 10);
 
   }
 
   else if(random(100001) < 10){
-    sleep(30*60, 40*60);
+    sleep(1800, 2400); //sleep between 30 and 40 minutes
   }
 
   laser.fire(1);
@@ -147,7 +146,7 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
 int getMarkovSpeed(int oldSpeed){
   int val = random(101);
-  int lowVal, midVal, hiVal
+  int lowVal, midVal, hiVal;
 
   if(oldSpeed == 1){
     if(val < 20){
@@ -198,17 +197,17 @@ int markovPause(){
   }
 }
 
-void sleep(unsigned long minTime, unsigned long maxTime){
-  unsigned int delayVal = random(minTime, maxTime);
+void sleep(unsigned long minSec, unsigned long maxSec){
+  unsigned int delayVal = random(minSec, maxSec);
   laser.fire(0);
   panTilt.detach();
   unsigned long startTime = millis();
   for(unsigned long i = 0; i < delayVal; i++){
     while(millis() - startTime < 1000){
-      heartBeat(millis());
-      delay(10000);
+      heartBeat(millis(), 10000);
       if(startTime > millis()){ //check for rollovers
         startTime = millis();
+        break;
       }
     }
     startTime = millis();
@@ -234,5 +233,3 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
     oldTime = mSeconds;
   }
 }
-
-void get
