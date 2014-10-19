@@ -88,7 +88,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(markovState(30, 40) == 1){
+  if(markovState(40, 80) == 2){
     shake();
   }
 
@@ -98,7 +98,7 @@ void loop() {
   }
 
 
-  if(random(10001) < 2){
+  if(random(60001) < 2){
     sleep(5, 10);
 
   }
