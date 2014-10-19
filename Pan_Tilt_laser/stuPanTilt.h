@@ -42,7 +42,7 @@ struct panTiltPos_t {
     probOffset;
 
 
-  panTiltPos_t(int p, int mn, int mx, int mdOff = 0, int pbOff = 0): pos(p), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
+  panTiltPos_t(int p, int mn, int mx, int mdOff = 0, int pbOff = 1): pos(p), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
 
 };
 

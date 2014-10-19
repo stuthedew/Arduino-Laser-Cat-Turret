@@ -121,7 +121,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
 
     if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
-      prob += abs(pt->midAngle - pt->angle) * pt->probOffset;
+      prob += abs(pt->midAngle - pt->angle) * max(pt->probOffset, 1);
 
     }
 
