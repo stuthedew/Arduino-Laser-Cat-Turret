@@ -77,7 +77,7 @@ void setup() {
 
 void loop() {
   int changeVal;
-  delay(50);
+  delay(10);
   changeVal = getMarkovSpeed(changeVal);
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
@@ -126,10 +126,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
     if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
       pt->dir *= -1;
-
-
     }
-
     return pt->dir;
   }
 
@@ -147,7 +144,7 @@ int getMarkovSpeed(int oldSpeed){
   int probability = random(101);
   int lowVal = 2;
   int midVal = 5;
-  int hiVal = 8;
+  int hiVal = 10;
 
   if(oldSpeed == lowVal){
     if(probability < 20){
@@ -236,23 +233,14 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
 }
 
 void shake(){
-  int moveVal = 2;
-
-  panTiltY.angle += moveVal;
-  panTilt.updateAngles();
-  //delay(50);
-  panTiltY.angle -= moveVal;
+  int moveVal = 5;
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
-  //delay(50);
-  panTiltY.angle -= moveVal;
-  panTiltX.angle -= moveVal;
+  delay(10);
+  panTiltX.angle -= 2*moveVal;
   panTilt.updateAngles();
-  panTiltY.angle += moveVal;
-  panTiltX.angle -= moveVal;
-  panTilt.updateAngles();
-  //delay(50);
+  delay(10);
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
-  //delay(50);
+  delay(10);
 }
