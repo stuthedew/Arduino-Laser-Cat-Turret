@@ -37,7 +37,7 @@
 //Y Position: lower numbers == Up
 
 panTiltPos_t panTiltX(0, 55, 125, -20);
-panTiltPos_t panTiltY(0, 10, 45, 0, 20);
+panTiltPos_t panTiltY(0, 10, 45, 0, 5);
 
 
 PanTilt panTilt(9, &panTiltX, 10, &panTiltY, 98);
