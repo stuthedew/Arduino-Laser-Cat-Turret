@@ -254,10 +254,9 @@ int markovState(int prob1, int prob2){
   static int markovState;
   int probVal = random(10001);
   if(!markovState){
-    markovState = 2;
+    markovState = 1;
   }
-
-  if(markovState == 1){
+  else if(markovState == 1){
     if(probVal <= prob1){
       markovState = 2;
     }
