@@ -236,21 +236,23 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
 }
 
 void shake(){
-  panTiltY.angle += 1;
+  int moveVal = 2;
+
+  panTiltY.angle += moveVal;
   panTilt.updateAngles();
-  delay(50);
-  panTiltY.angle -= 1;
-  panTiltX.angle += 1;
+  //delay(50);
+  panTiltY.angle -= moveVal;
+  panTiltX.angle += moveVal;
   panTilt.updateAngles();
-  delay(50);
-  panTiltY.angle -= 1;
-  panTiltX.angle -= 1;
+  //delay(50);
+  panTiltY.angle -= moveVal;
+  panTiltX.angle -= moveVal;
   panTilt.updateAngles();
-  panTiltY.angle += 1;
-  panTiltX.angle -= 1;
+  panTiltY.angle += moveVal;
+  panTiltX.angle -= moveVal;
   panTilt.updateAngles();
-  delay(50);
-  panTiltX.angle += 1;
+  //delay(50);
+  panTiltX.angle += moveVal;
   panTilt.updateAngles();
-  delay(50);
+  //delay(50);
 }
