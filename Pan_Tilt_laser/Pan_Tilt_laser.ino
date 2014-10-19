@@ -86,6 +86,7 @@ void loop() {
 
 
   panTilt.updateAngles();
+  shake();
 
   if(random(1001) < 12){
     delay(markovPause());
