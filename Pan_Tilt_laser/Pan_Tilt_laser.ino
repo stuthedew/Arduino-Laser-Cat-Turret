@@ -37,7 +37,7 @@
 //Y Position: lower numbers == Up
 
 panTiltPos_t panTiltX(0, 55, 125, -20);
-panTiltPos_t panTiltY(0, 10, 45);
+panTiltPos_t panTiltY(0, 10, 45, 0, 20);
 
 
 PanTilt panTilt(9, &panTiltX, 10, &panTiltY, 98);
@@ -88,7 +88,7 @@ void loop() {
 
   panTilt.updateAngles();
 
-  if(markovState(40, 80) == 2){
+  if(markovState(20, 80) == 2){
     shake();
   }
 
@@ -111,9 +111,6 @@ void loop() {
 
 }
 
-
-
-
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
     int prob = changeProb;
@@ -124,7 +121,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
 
     if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
-      prob += abs(pt->midAngle - pt->angle);
+      prob += abs(pt->midAngle - pt->angle) * pt->probOffset;
 
     }
 
