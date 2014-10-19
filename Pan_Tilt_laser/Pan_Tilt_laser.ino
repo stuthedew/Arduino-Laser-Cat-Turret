@@ -144,7 +144,7 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 int getMarkovSpeed(int oldSpeed){
   int probability = random(101);
   int lowVal = 2;
-  int midVal = 7;
+  int midVal = 5;
   int hiVal = 10;
 
   if(oldSpeed == lowVal){
