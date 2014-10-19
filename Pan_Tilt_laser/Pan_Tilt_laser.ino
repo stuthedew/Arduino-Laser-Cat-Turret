@@ -15,6 +15,7 @@
     v1.1.0 - Added Markov-based speed control
     v1.2.0 - Added Markov-based pause length/frequency
     v1.2.1 - Added Heartbeat during pause
+    v1.2.2 - Added laser shake to enhance cat enjoyment
 */
 /**************************************************************************/
 
@@ -86,7 +87,10 @@ void loop() {
 
 
   panTilt.updateAngles();
-  shake();
+
+  if(markovState(30, 40) == 1){
+    shake();
+  }
 
   if(random(1001) < 12){
     delay(markovPause());
@@ -143,8 +147,8 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 int getMarkovSpeed(int oldSpeed){
   int probability = random(101);
   int lowVal = 2;
-  int midVal = 5;
-  int hiVal = 10;
+  int midVal = 7;
+  int hiVal = 12;
 
   if(oldSpeed == lowVal){
     if(probability < 20){
@@ -233,7 +237,7 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
 }
 
 void shake(){
-  int moveVal = 5;
+  int moveVal = 10;
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
   delay(10);
@@ -243,4 +247,26 @@ void shake(){
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
   delay(10);
+}
+
+
+int markovState(int prob1, int prob2){
+  static int markovState;
+  int probVal = random(10001);
+  if(!markovState){
+    markovState = 2;
+  }
+
+  if(markovState == 1){
+    if(probVal <= prob1){
+      markovState = 2;
+    }
+  }
+  else if(markovState == 2){
+    if(probVal <= prob2){
+      markovState = 1;
+    }
+  }
+
+  return markovState;
 }
