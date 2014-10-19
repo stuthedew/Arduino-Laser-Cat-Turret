@@ -145,7 +145,7 @@ int getMarkovSpeed(int oldSpeed){
   int probability = random(101);
   int lowVal = 2;
   int midVal = 7;
-  int hiVal = 12;
+  int hiVal = 10;
 
   if(oldSpeed == lowVal){
     if(probability < 20){
