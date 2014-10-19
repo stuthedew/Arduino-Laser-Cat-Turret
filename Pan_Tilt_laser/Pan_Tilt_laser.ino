@@ -102,7 +102,7 @@ void loop() {
   }
 
   else if(random(100001) < 10){
-    sleep(30, 40);
+    sleep(30*60, 40*60);
   }
 
   laser.fire(1);
@@ -139,7 +139,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
   int tempVal = getMarkovDirection(pt, changeProb);
 
-  tempVal *=funcChangeVal;
+  tempVal *= funcChangeVal;
 
   return tempVal;
 
@@ -147,6 +147,7 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
 int getMarkovSpeed(int oldSpeed){
   int val = random(101);
+  int lowVal, midVal, hiVal
 
   if(oldSpeed == 1){
     if(val < 20){
@@ -197,14 +198,14 @@ int markovPause(){
   }
 }
 
-void sleep(unsigned int minTime, unsigned int maxTime){
+void sleep(unsigned long minTime, unsigned long maxTime){
   unsigned int delayVal = random(minTime, maxTime);
   laser.fire(0);
   panTilt.detach();
   unsigned long startTime = millis();
-  for(unsigned int i = 0; i < delayVal; i++){
-    while(millis() - startTime < 60000){
-      heartBeat();
+  for(unsigned long i = 0; i < delayVal; i++){
+    while(millis() - startTime < 1000){
+      heartBeat(millis());
       delay(10000);
       if(startTime > millis()){ //check for rollovers
         startTime = millis();
@@ -217,15 +218,21 @@ void sleep(unsigned int minTime, unsigned int maxTime){
 
 }
 
-void heartBeat(){
-  uint8_t ledPin = 13;
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, HIGH);
-  delay(100);
-  digitalWrite(ledPin, LOW);
-  delay(100);
-  digitalWrite(ledPin, HIGH);
-  delay(100);
-  digitalWrite(ledPin, LOW);
 
+void heartBeat(unsigned long mSeconds, int hbInterval){
+  static unsigned long oldTime;
+  if(mSeconds - oldTime > hbInterval){
+    uint8_t ledPin = 13;
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, HIGH);
+    delay(100);
+    digitalWrite(ledPin, LOW);
+    delay(100);
+    digitalWrite(ledPin, HIGH);
+    delay(100);
+    digitalWrite(ledPin, LOW);
+    oldTime = mSeconds;
+  }
 }
+
+void get
