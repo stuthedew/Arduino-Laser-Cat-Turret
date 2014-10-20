@@ -79,6 +79,7 @@ void setup() {
 void loop() {
   static unsigned long timePassed;
   static int changeVal;
+  static int markovShakeState;
   delay(10);
 
 
@@ -88,12 +89,14 @@ void loop() {
 
 
   panTilt.updateAngles();
+  if(markovShakeState == 2){
+    shake();
+  }
+
 if(millis() - timePassed >= 1000){
     changeVal = getMarkovSpeed(changeVal);
+    markovShakeState = markovState(10, 20);
 
-    if(markovState(20, 70) == 2){
-      shake();
-    }
 
     if(random(101) < 6){
       delay(markovPause());
@@ -101,12 +104,12 @@ if(millis() - timePassed >= 1000){
     }
 
 
-    if(random(6001) < 2){
+    if(random(5001) < 1){
       sleep(5, 10);
 
     }
 
-    else if(random(100001) < 10){
+    else if(random(10001) < 10){
       sleep(1800, 2400); //sleep between 30 and 40 minutes
     }
     timePassed = millis();
@@ -147,12 +150,12 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
 int getMarkovSpeed(int oldSpeed){
   int probability = random(101);
-  int lowVal = 2;
-  int midVal = 5;
-  int hiVal = 10;
+  int lowVal = 1;
+  int midVal = 2;
+  int hiVal = 3;
 
   if(oldSpeed == lowVal){
-    if(probability < 20){
+    if(probability < 60){
       return midVal;
     }
     else{
@@ -161,10 +164,10 @@ int getMarkovSpeed(int oldSpeed){
   }
 
   else if(oldSpeed == midVal){
-    if(probability < 20){
+    if(probability < 40){
       return hiVal;
     }
-    else if(probability < 70){
+    else if(probability < 90){
       return midVal;
     }
     else{
@@ -173,7 +176,7 @@ int getMarkovSpeed(int oldSpeed){
   }
 
   else if(oldSpeed == hiVal){
-    if(probability < 20){
+    if(probability < 50){
       return midVal;
     }
     else{
