@@ -77,6 +77,7 @@ void setup() {
 
 
 void loop() {
+static unsigned long timePassed;
   int changeVal;
   delay(10);
   changeVal = getMarkovSpeed(changeVal);
@@ -87,26 +88,27 @@ void loop() {
 
 
   panTilt.updateAngles();
+if(millis() - timePassed >= 1000){
+    if(markovState(20, 70) == 2){
+      shake();
+    }
 
-  if(markovState(20, 70) == 2){
-    shake();
+    if(random(101) < 6){
+      delay(markovPause());
+
+    }
+
+
+    if(random(6001) < 2){
+      sleep(5, 10);
+
+    }
+
+    else if(random(100001) < 10){
+      sleep(1800, 2400); //sleep between 30 and 40 minutes
+    }
+    timePassed = millis();
   }
-
-  if(random(1001) < 6){
-    delay(markovPause());
-
-  }
-
-
-  if(random(60001) < 2){
-    sleep(5, 10);
-
-  }
-
-  else if(random(100001) < 10){
-    sleep(1800, 2400); //sleep between 30 and 40 minutes
-  }
-
   laser.fire(1);
 
 }
@@ -249,7 +251,7 @@ void shake(){
 
 int markovState(int prob1, int prob2){
   static int markovState;
-  int probVal = random(10001);
+  int probVal = random(101);
   if(!markovState){
     markovState = 1;
   }
