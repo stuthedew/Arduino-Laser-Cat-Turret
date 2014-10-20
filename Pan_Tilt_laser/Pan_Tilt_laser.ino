@@ -15,7 +15,8 @@
     v1.1.0 - Added Markov-based speed control
     v1.2.0 - Added Markov-based pause length/frequency
     v1.2.1 - Added Heartbeat during pause
-    v1.2.2 - Added laser shake to enhance cat enjoyment
+    v1.3.0 - Added laser shake to enhance cat enjoyment
+    v1.3.1 - Changed probability polling frequency to once a second
 */
 /**************************************************************************/
 
@@ -90,7 +91,7 @@ void loop() {
 
 
   panTilt.updateAngles();
-  
+
   if(markovShakeState == 2){
     shake();
   }
