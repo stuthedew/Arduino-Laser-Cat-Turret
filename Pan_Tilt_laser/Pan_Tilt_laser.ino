@@ -77,6 +77,7 @@ void setup() {
 
 
 void loop() {
+  randomSeed(analogRead(0));
   static unsigned long timePassed;
   static int changeVal;
   static int markovShakeState;
@@ -89,6 +90,7 @@ void loop() {
 
 
   panTilt.updateAngles();
+  
   if(markovShakeState == 2){
     shake();
   }
