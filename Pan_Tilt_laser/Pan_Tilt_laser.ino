@@ -77,10 +77,10 @@ void setup() {
 
 
 void loop() {
-static unsigned long timePassed;
-  int changeVal;
+  static unsigned long timePassed;
+  static int changeVal;
   delay(10);
-  changeVal = getMarkovSpeed(changeVal);
+
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
 
@@ -89,6 +89,8 @@ static unsigned long timePassed;
 
   panTilt.updateAngles();
 if(millis() - timePassed >= 1000){
+    changeVal = getMarkovSpeed(changeVal);
+
     if(markovState(20, 70) == 2){
       shake();
     }
