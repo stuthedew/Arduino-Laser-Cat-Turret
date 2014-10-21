@@ -38,7 +38,7 @@
 //Y Position: lower numbers == Up
 
 panTiltPos_t panTiltX(0, 55, 125, -20);
-panTiltPos_t panTiltY(0, 10, 45, 0, 5);
+panTiltPos_t panTiltY(0, 10, 45, 0, 10);
 
 
 PanTilt panTilt(9, &panTiltX, 10, &panTiltY, 98);
@@ -167,10 +167,10 @@ int getMarkovSpeed(int oldSpeed){
   }
 
   else if(oldSpeed == midVal){
-    if(probability < 40){
+    if(probability < 30){
       return hiVal;
     }
-    else if(probability < 90){
+    else if(probability < 80){
       return midVal;
     }
     else{
@@ -179,7 +179,7 @@ int getMarkovSpeed(int oldSpeed){
   }
 
   else if(oldSpeed == hiVal){
-    if(probability < 50){
+    if(probability < 60){
       return midVal;
     }
     else{
