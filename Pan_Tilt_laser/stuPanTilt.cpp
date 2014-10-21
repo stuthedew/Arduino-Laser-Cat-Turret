@@ -68,10 +68,10 @@ void PanTilt::_update(){
 
 
   _xServo.stuWrite(_Xpos->angle);
-  delay(15);
+  delay(10);
   _yServo.stuWrite(_Ypos->angle);
-  delay(abs(2*(_Xpos->angle - oldXangle)+15));
-  delay(abs(2*(_Ypos->angle - oldYangle)+15));
+  delay(abs((_Xpos->angle - oldXangle)+15));
+  delay(abs((_Ypos->angle - oldYangle)+15));
 
   oldXangle = _Xpos->angle;
   oldYangle = _Ypos->angle;
