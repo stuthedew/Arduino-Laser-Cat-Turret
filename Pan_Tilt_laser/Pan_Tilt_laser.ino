@@ -30,8 +30,30 @@
 
 #define DIRECTION_CHANGE_PROBABILITY 15
 
+volatile int sleepState = 0;
+const int ledPin =  4;      // the number of the LED pin
+
+
+void sleepInt(){
+  detachInterrupt(0);
+  sleepState = 1;
+  digitalWrite(ledPin, HIGH);
+
+  
+}
+
+void wake(){
+  detachInterrupt(0);
+ sleepState = 0;
+
+digitalWrite(ledPin, LOW); 
+ 
+}
+
 
 #define BAUD_RATE 115200
+
+const int switchPin = 3;     // the number of the pushbutton pin
 
 
 //X Position: lower numbers == Right
@@ -45,15 +67,46 @@ PanTilt panTilt(A0, &panTiltX, A1, &panTiltY, 98);
 
 StuLaser laser(5);
 
-
+int switchState = 0;
 
 void setup() {
-
+  pinMode(switchPin, INPUT);
   Serial.begin(BAUD_RATE);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+  delay(100);
+  digitalWrite(ledPin, LOW);
+
+  
+  
+  switchState = digitalRead(switchPin);
+   if (switchState == LOW) {
+    // turn LED off:
+    digitalWrite(ledPin, HIGH);
+    sleepState = 1;
+    //attachInterrupt(0, wake, RISING);
+    while(digitalRead(switchPin) == LOW){
+      millis();
+    }
+  }
+  else {
+    // turn LED on:
+    digitalWrite(ledPin, LOW);
+   // attachInterrupt(0, sleepInt, FALLING);
+  }
+
 
   panTilt.begin();
   laser.begin();
-
+  
   panTiltX.angle = panTiltX.minAngle;
   panTiltY.angle = panTiltY.minAngle;
   panTilt.updateAngles();
@@ -73,11 +126,35 @@ void setup() {
   delay(2000);
 
   Serial.println("setup complete");
+//  attachInterrupt(0, sleepInt, FALLING);
 }
 
 
 
 void loop() {
+  
+  if(digitalRead(switchPin) == LOW){
+
+    laser.fire(0);
+    digitalWrite(ledPin, HIGH);
+    panTiltX.angle = panTiltX.midAngle;
+    panTiltY.angle = panTiltY.midAngle;
+    panTilt.updateAngles();
+    
+    delay(50);
+//    attachInterrupt(0, wake, RISING);
+
+    panTilt.detach();
+    while(digitalRead(switchPin) == LOW){
+      delay(10);
+     
+    }
+    digitalWrite(ledPin, LOW);
+    panTilt.begin();
+    laser.fire(1);
+    
+  }
+  //attachInterrupt(0, sleepInt, FALLING);
   randomSeed(analogRead(0));
   static unsigned long timePassed;
   static int changeVal;
@@ -210,6 +287,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned int delayVal = random(minSec, maxSec);
   laser.fire(0);
   panTilt.detach();
+  
   unsigned long startTime = millis();
   for(unsigned long i = 0; i < delayVal; i++){
     while(millis() - startTime < 1000){
@@ -230,15 +308,15 @@ void sleep(unsigned long minSec, unsigned long maxSec){
 void heartBeat(unsigned long mSeconds, int hbInterval){
   static unsigned long oldTime;
   if(mSeconds - oldTime > hbInterval){
-    uint8_t ledPin = 13;
+ 
     pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, HIGH);
-    delay(100);
     digitalWrite(ledPin, LOW);
     delay(100);
     digitalWrite(ledPin, HIGH);
     delay(100);
     digitalWrite(ledPin, LOW);
+    delay(100);
+    digitalWrite(ledPin, HIGH);
     oldTime = mSeconds;
   }
 }
