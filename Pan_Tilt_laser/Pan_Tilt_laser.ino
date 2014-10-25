@@ -41,7 +41,7 @@ panTiltPos_t panTiltX(0, 55, 125, -20);
 panTiltPos_t panTiltY(0, 10, 45, 0, 10);
 
 
-PanTilt panTilt(9, &panTiltX, 10, &panTiltY, 98);
+PanTilt panTilt(A0, &panTiltX, A1, &panTiltY, 98);
 
 StuLaser laser(5);
 
