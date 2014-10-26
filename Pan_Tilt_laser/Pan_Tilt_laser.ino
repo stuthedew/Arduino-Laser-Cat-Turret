@@ -17,6 +17,7 @@
     v1.2.1 - Added Heartbeat during pause
     v1.3.0 - Added laser shake to enhance cat enjoyment
     v1.3.1 - Changed probability polling frequency to once a second
+    v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
 */
 /**************************************************************************/
 
