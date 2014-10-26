@@ -65,7 +65,11 @@ void setup() {
 
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
+  panTilt.begin();
   mSwitch.heartBeat(3);
+  panTiltX.angle = panTiltX.midAngle - panTiltX.midOffset;
+  panTiltY.angle = panTiltY.midAngle - panTiltY.midOffset;
+  panTilt.updateAngles();
 
   if(!mSwitch.switchState()) {
     mSwitch.ledState(0);
@@ -77,7 +81,7 @@ void setup() {
   Serial.println(F("setup starting..."));
   mSwitch.ledState(1);
 
-  panTilt.begin();
+
   laser.begin();
 
   panTiltX.angle = panTiltX.minAngle;
