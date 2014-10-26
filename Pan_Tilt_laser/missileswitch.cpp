@@ -56,9 +56,12 @@ void Missileswitch::heartBeat(int numHeartBeat){
 
 
 bool Missileswitch::switchState(){
-
+  Serial.println(F("Start Debounce"));
   _switchState = _debounce();
+  Serial.println(F("End Debounce"));
+
   return _switchState;
+
 }
 
 
@@ -70,7 +73,7 @@ bool Missileswitch::_debounce(){
   processTime = millis();
   lastDebounceTime = millis();
 
-  while(millis() - processTime > timeOutDelay){
+  while(timeOutDelay > millis() - processTime){
     bool reading = digitalRead(_switchPin);
     if(reading != _switchState){
       lastDebounceTime = millis();
