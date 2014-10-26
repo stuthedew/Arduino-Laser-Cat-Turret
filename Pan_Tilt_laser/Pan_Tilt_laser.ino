@@ -27,6 +27,7 @@
 #include "stuServo.h"
 #include "stuPanTilt.h"
 #include "stuLaser.h"
+#include "missileswitch.h"
 
 
 #define BAUD_RATE 115200
@@ -56,9 +57,7 @@ PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY, 98);
 
 StuLaser laser(LASER_PIN);
 
-
-
-mSwitch Missileswitch(MS_SWITCH_PIN, MS_LED_PIN);
+Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
 void setup() {
 
@@ -73,10 +72,10 @@ void setup() {
     mSwitch.ledState(0);
     sleepState = 1;
 
-    while(!mSwitch.switchState()){
-      millis();
+      while(!mSwitch.switchState()){
+        millis();
+      }
     }
-  }
   else {
     // turn LED on:
     mSwitch.ledState(0);
@@ -105,7 +104,7 @@ void setup() {
   laser.fire(1);
   delay(2000);
 
-  Serial.println("setup complete");
+  Serial.println(F("setup complete"));
 //  attachInterrupt(0, sleepInt, FALLING);
 }
 
@@ -113,10 +112,10 @@ void setup() {
 
 void loop() {
 
-  if(digitalRead(switchPin) == LOW){
+  if(!mSwitch.switchState()){
 
     laser.fire(0);
-    digitalWrite(ledPin, HIGH);
+    mSwitch.ledState(0);
     panTiltX.angle = panTiltX.midAngle;
     panTiltY.angle = panTiltY.midAngle;
     panTilt.updateAngles();
@@ -125,11 +124,11 @@ void loop() {
 //    attachInterrupt(0, wake, RISING);
 
     panTilt.detach();
-    while(digitalRead(switchPin) == LOW){
+    while(!mSwitch.switchState()){
       delay(10);
 
     }
-    digitalWrite(ledPin, LOW);
+    mSwitch.ledState(1);
     panTilt.begin();
     laser.fire(1);
 
@@ -289,14 +288,8 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
   static unsigned long oldTime;
   if(mSeconds - oldTime > hbInterval){
 
-    pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, LOW);
-    delay(100);
-    digitalWrite(ledPin, HIGH);
-    delay(100);
-    digitalWrite(ledPin, LOW);
-    delay(100);
-    digitalWrite(ledPin, HIGH);
+
+    mSwitch.heartBeat(3);
     oldTime = mSeconds;
   }
 }
