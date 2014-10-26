@@ -101,7 +101,7 @@ void setup() {
   delay(2000);
   laser.fire(1);
   Serial.println(F("setup complete"));
-//  attachInterrupt(0, sleepInt, FALLING);
+
 }
 
 
@@ -117,7 +117,7 @@ void loop() {
     panTilt.updateAngles();
 
     delay(50);
-//    attachInterrupt(0, wake, RISING);
+
 
     panTilt.detach();
     while(!mSwitch.switchState()){
@@ -129,7 +129,7 @@ void loop() {
     laser.fire(1);
 
   }
-  //attachInterrupt(0, sleepInt, FALLING);
+
   randomSeed(analogRead(0));
   static unsigned long timePassed;
   static int changeVal;
@@ -148,23 +148,25 @@ void loop() {
     shake();
   }
 
+  //check for rollovers
+  if(timePassed > millis()){
+    timePassed = millis();
+  }
+
 if(millis() - timePassed >= 1000){
     changeVal = getMarkovSpeed(changeVal);
     markovShakeState = markovState(10, 20);
-
 
     if(random(101) < 6){
       delay(markovPause());
 
     }
 
-
     if(random(1001) <= 5){
       sleep(5, 10);
-
     }
 
-    else if(random(6001) < 10){
+    else if(random(3001) < 10){
       sleep(1800, 2400); //sleep between 30 and 40 minutes
     }
     timePassed = millis();
