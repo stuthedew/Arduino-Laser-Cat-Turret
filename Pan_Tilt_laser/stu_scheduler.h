@@ -21,9 +21,10 @@
 #include "Arduino.h"
 
 
-struct Task;
-typedef void (*TaskCallback)(struct Task *);
-typedef struct Task{
+
+
+class Task{
+public:
   unsigned long
     runNextAt,
     timeBetweenRuns;
@@ -33,6 +34,9 @@ typedef struct Task{
 
   bool
     enabled;
+
+private:
+  
 };
 
 void
