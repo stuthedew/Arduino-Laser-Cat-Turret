@@ -153,7 +153,7 @@ void loop() {
   }
 
 if(millis() - timePassed >= 1000){
-    randomSeed(analogRead(0));
+    randomSeed(analogRead(4));
     changeVal = getMarkovSpeed(changeVal);
     markovShakeState = markovState(10, 20);
 
