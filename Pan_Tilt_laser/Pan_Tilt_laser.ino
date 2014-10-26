@@ -50,8 +50,8 @@ int sleepState = 0;
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
 
-panTiltPos_t panTiltX(0, 55, 125, -20);
-panTiltPos_t panTiltY(0, 10, 45, 0, 10);
+panTiltPos_t panTiltX(0, 50, 120, -30);
+panTiltPos_t panTiltY(0, 7, 45, 0, 10);
 
 
 PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY, 98);
@@ -61,15 +61,12 @@ StuLaser laser(LASER_PIN);
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
 void setup() {
-  delay(1000); // let things settle for stability
 
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
-  panTilt.begin();
+
+
   mSwitch.heartBeat(3);
-  panTiltX.angle = panTiltX.midAngle - panTiltX.midOffset;
-  panTiltY.angle = panTiltY.midAngle - panTiltY.midOffset;
-  panTilt.updateAngles();
 
   if(!mSwitch.switchState()) {
     mSwitch.ledState(0);
@@ -77,6 +74,8 @@ void setup() {
       delay(50);
       }
   }
+
+  panTilt.begin();
 
   Serial.println(F("setup starting..."));
   mSwitch.ledState(1);
@@ -206,9 +205,9 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
 int getMarkovSpeed(int oldSpeed){
   int probability = random(101);
-  int lowVal = 1;
-  int midVal = 2;
-  int hiVal = 3;
+  int lowVal = 2;
+  int midVal = 4;
+  int hiVal = 6;
 
   if(oldSpeed == lowVal){
     if(probability < 60){
