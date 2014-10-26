@@ -70,12 +70,14 @@ bool Missileswitch::_debounce(){
   const unsigned int timeOutDelay = 500;
 
   unsigned long lastDebounceTime, processTime;
+  bool oldReading;
   processTime = millis();
   lastDebounceTime = millis();
 
   while(timeOutDelay > millis() - processTime){
     bool reading = digitalRead(_switchPin);
-    if(reading != _switchState){
+    if(reading != oldReading){
+      oldReading = reading;
       lastDebounceTime = millis();
     }
     else if((millis() - lastDebounceTime) > debounceDelay){
