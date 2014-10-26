@@ -159,12 +159,12 @@ if(millis() - timePassed >= 1000){
     }
 
 
-    if(random(5001) < 1){
+    if(random(1001) <= 5){
       sleep(5, 10);
 
     }
 
-    else if(random(10001) < 10){
+    else if(random(6001) < 10){
       sleep(1800, 2400); //sleep between 30 and 40 minutes
     }
     timePassed = millis();
