@@ -62,25 +62,21 @@ Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 void setup() {
 
   Serial.begin(BAUD_RATE);
+  Serial.println(F("setup starting..."));
 
   mSwitch.begin();
   mSwitch.heartBeat(3);
 
    if(!mSwitch.switchState()) {
-    // turn LED off:
+
     mSwitch.ledState(0);
-    sleepState = 1;
 
       while(!mSwitch.switchState()){
-        millis();
+        delay(50);
       }
     }
-  else {
-    // turn LED on:
-    mSwitch.ledState(1);
-   // attachInterrupt(0, sleepInt, FALLING);
-  }
 
+  mSwitch.ledState(1);
 
   panTilt.begin();
   laser.begin();
@@ -114,8 +110,8 @@ void loop() {
 
     laser.fire(0);
     mSwitch.ledState(0);
-    panTiltX.angle = panTiltX.midAngle;
-    panTiltY.angle = panTiltY.midAngle;
+    panTiltX.angle = panTiltX.midAngle - panTiltX.midOffset;
+    panTiltY.angle = panTiltY.midAngle - panTiltY.midOffset;
     panTilt.updateAngles();
 
     delay(50);
@@ -123,7 +119,7 @@ void loop() {
 
     panTilt.detach();
     while(!mSwitch.switchState()){
-      delay(10);
+      delay(50);
 
     }
     mSwitch.ledState(1);
