@@ -112,8 +112,8 @@ void loop() {
 
     laser.fire(0);
     mSwitch.ledState(0);
-    panTiltX.angle = panTiltX.midAngle - panTiltX.midOffset;
-    panTiltY.angle = panTiltY.midAngle - panTiltY.midOffset;
+    panTiltX.angle = 90;
+    panTiltY.angle = 90;
     panTilt.updateAngles();
 
     delay(50);
