@@ -28,6 +28,7 @@
 #include "stuServo.h"
 #include "stuPanTilt.h"
 #include "stuLaser.h"
+#include "stu_scheduler.h"
 #include "missileswitch.h"
 
 
@@ -46,7 +47,6 @@
 
 int sleepState = 0;
 
-
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
 
@@ -60,11 +60,21 @@ StuLaser laser(LASER_PIN);
 
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
-void setup() {
+Task testTask;
 
+void foo2(struct Task *t){
+  Serial.println(F("Foo 2"));
+}
+
+TaskCallback foo(struct Task *t, TaskCallback func);
+
+void setup() {
+  void (*f)(struct Task *, TaskCallback func);
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
-
+  f = foo(&testTask);
+  //foo2(&testTask);
+  testTask.callback;
 
   mSwitch.heartBeat(3);
 
