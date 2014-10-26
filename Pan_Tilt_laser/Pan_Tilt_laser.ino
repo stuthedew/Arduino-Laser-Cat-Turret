@@ -60,22 +60,20 @@ StuLaser laser(LASER_PIN);
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
 void setup() {
+  delay(1000); // let things settle for stability
 
   Serial.begin(BAUD_RATE);
-  Serial.println(F("setup starting..."));
-
   mSwitch.begin();
   mSwitch.heartBeat(3);
 
-   if(!mSwitch.switchState()) {
-
+  if(!mSwitch.switchState()) {
     mSwitch.ledState(0);
-
-      while(!mSwitch.switchState()){
-        delay(50);
+    while(!mSwitch.switchState()){
+      delay(50);
       }
-    }
+  }
 
+  Serial.println(F("setup starting..."));
   mSwitch.ledState(1);
 
   panTilt.begin();
