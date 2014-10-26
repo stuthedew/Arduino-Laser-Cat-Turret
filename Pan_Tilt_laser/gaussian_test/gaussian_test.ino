@@ -14,7 +14,7 @@ void setup(){
 
 void loop(){
   for(int i = 0; i < 1000; i++){
-  Serial.println(g.gRandom(60, 5));
+  Serial.println(g.gRandom(60, 10));
 
   }
 

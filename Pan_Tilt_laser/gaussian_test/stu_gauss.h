@@ -30,7 +30,7 @@ public:
 
 
   unsigned int
-    gRandom(unsigned int, double);
+    gRandom(unsigned int zero, double variance);
 
 
 
