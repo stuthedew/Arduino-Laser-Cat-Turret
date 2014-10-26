@@ -28,10 +28,13 @@ class Missileswitch {
 
     void
       begin(),
-      ledState(bool);
+      ledState(bool),
+      heartBeat(int);
 
     bool
-      ledState();
+      ledState(),
+      switchState();
+
 
   private:
     const int
@@ -39,7 +42,9 @@ class Missileswitch {
       _switchPin;
 
     bool
-      _ledState;
+      _ledState,
+      _switchState,
+      _debounce();
 
 
 
