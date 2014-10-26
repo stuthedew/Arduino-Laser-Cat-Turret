@@ -66,7 +66,6 @@ void setup() {
   mSwitch.begin();
   mSwitch.heartBeat(3);
 
-
    if(!mSwitch.switchState()) {
     // turn LED off:
     mSwitch.ledState(0);
@@ -78,7 +77,7 @@ void setup() {
     }
   else {
     // turn LED on:
-    mSwitch.ledState(0);
+    mSwitch.ledState(1);
    // attachInterrupt(0, sleepInt, FALLING);
   }
 
@@ -101,9 +100,8 @@ void setup() {
   panTiltY.angle = panTiltY.midAngle;
   panTilt.updateAngles();
 
-  laser.fire(1);
   delay(2000);
-
+  laser.fire(1);
   Serial.println(F("setup complete"));
 //  attachInterrupt(0, sleepInt, FALLING);
 }

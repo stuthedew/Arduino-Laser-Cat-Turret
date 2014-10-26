@@ -59,7 +59,7 @@ bool Missileswitch::switchState(){
   Serial.println(F("Start Debounce"));
   _switchState = _debounce();
   Serial.println(F("End Debounce"));
-
+  Serial.println(_switchState);
   return _switchState;
 
 }
