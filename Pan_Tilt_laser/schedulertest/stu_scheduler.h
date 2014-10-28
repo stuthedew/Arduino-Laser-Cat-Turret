@@ -21,38 +21,50 @@
 #include "Arduino.h"
 
 
-
+typedef void (*Callback)(void);
 
 class Task{
 public:
-  unsigned long
-    runNextAt,
-    timeBetweenRuns;
 
-  TaskCallback
-    callback;
+  Task(void (*cbFunc)());
+
+  void
+    resetPeriodic(),
+    setInterval(unsigned long mSec),
+    setNextRunTime(unsigned long mSec),
+    disable(),
+    enable();
+  Callback
+    run();
 
   bool
-    enabled;
+    enabled();
+
+  unsigned long
+    nextRunTime();
 
 private:
-  
+  bool
+    _enabled;
+
+  Callback
+    _callback;
+
+  unsigned long
+    _runNextAt,
+    _timeBetweenRuns;
+
 };
 
-void
-  TaskresetPeriodic(struct Task *t),
-  TaskSetNextTime(struct Task *t, unsigned long timeFromNow),
-  TaskDisable(struct Task *t),
-  TaskEnable(struct Task *t);
 
 
 class StuScheduler {
 
 public:
-  StuScheduler(uint8_t);
+  StuScheduler();
 
   void
-    addTask(struct Task *t),
+    addTask(Task *t),
     run();
 
 
@@ -61,8 +73,8 @@ private:
   Task
     *_Task[20];
 
-  const uint8_t
-    _tArraySize;
+  uint8_t
+    _tItr;
 
 
 
