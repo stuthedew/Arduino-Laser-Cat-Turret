@@ -91,7 +91,6 @@ void StuScheduler::restart(){
 }
 
 void StuScheduler::run(){
-  Serial.println("S run");
   for(uint8_t i = 0; i < _tItr; i++){
     if(_Task[i]->enabled() && _Task[i]->nextRunTime() <= millis()){
       _Task[i]->run();

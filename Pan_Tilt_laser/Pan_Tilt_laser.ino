@@ -78,7 +78,7 @@ StuScheduler schedule;
 
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned int avg_sec_to_pause=30, double variance=20){
+void setNextPauseTime(unsigned long avg_sec_to_pause=30, double variance=20){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
@@ -90,7 +90,7 @@ void setNextPauseTime(unsigned int avg_sec_to_pause=30, double variance=20){
 }
 
 //turn off laser for a few moments at this time
-void setNextRestTime(unsigned int avg_sec_to_rest=120, double variance=60){
+void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
   unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
 
   Serial.print(F("Next rest in "));
@@ -101,7 +101,7 @@ void setNextRestTime(unsigned int avg_sec_to_rest=120, double variance=60){
 
 
 //turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned int avg_sec_to_sleep=3600, double variance = 900){
+void setNextSleepTime(unsigned long avg_sec_to_sleep=3600, double variance = 900){
   unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*1000;
   Serial.print(F("Next sleep in "));
   Serial.print(temp/1000);
@@ -111,36 +111,34 @@ void setNextSleepTime(unsigned int avg_sec_to_sleep=3600, double variance = 900)
 }
 
 void pauseCB(){
-  Serial.print(F("Pause Callback!"));
+  Serial.println(F("Pause Callback!"));
   delay(markovPause());
   setNextPauseTime();
 }
 
 void restCB(){
-  Serial.print(F("Rest Callback!"));
+  Serial.println(F("Rest Callback!"));
   sleep(5, 10);
   setNextRestTime();
 }
 
 void sleepCB(){
-  Serial.print(F("Sleep Callback!"));
+  Serial.println(F("Sleep Callback!"));
   sleep(1800, 2400); //sleep between 30 and 40 minutes
   setNextSleepTime();
 }
 
 void setup() {
-  randomSeed(analogRead(4));
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
+  randomSeed(analogRead(5));
   schedule.addTask(&pauseTask);
   schedule.addTask(&restTask);
   schedule.addTask(&sleepTask);
-  setNextPauseTime();
-  setNextRestTime();
-  setNextSleepTime();
+
 
   mSwitch.heartBeat(3);
-
+/*
   if(!mSwitch.switchState()) {
     mSwitch.ledState(0);
     while(!mSwitch.switchState()){
@@ -159,23 +157,26 @@ void setup() {
   panTiltX.angle = panTiltX.minAngle;
   panTiltY.angle = panTiltY.minAngle;
   panTilt.updateAngles();
-  delay(1000);
+  delay(500);
 
   panTiltX.angle = panTiltX.maxAngle;
   panTiltY.angle = panTiltY.maxAngle;
   panTilt.updateAngles();
-  delay(1000);
+  delay(500);
 
 
   panTiltX.angle = panTiltX.midAngle;
   panTiltY.angle = panTiltY.midAngle;
   panTilt.updateAngles();
 
-  delay(2000);
+  delay(1000);
   laser.fire(1);
+  */
   Serial.println(F("setup complete"));
 
-  schedule.restart();
+  setNextPauseTime();
+  setNextRestTime();
+  setNextSleepTime();
 }
 
 
