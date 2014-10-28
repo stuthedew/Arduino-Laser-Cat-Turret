@@ -78,7 +78,7 @@ StuScheduler schedule;
 
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=30, double variance=20){
+void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=20){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
