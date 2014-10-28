@@ -2,7 +2,7 @@
 /*!
     @file     Pan_Tilt_laser.ino
     @author   Stuart Feichtinger
-    @license  BSD (see license.txt)
+    @license  MIT (see license.txt)
 
     Main program running an automatic laser-turret cat toy using a pan-tilt
     rig (https://www.adafruit.com/products/1967) and laser diode
@@ -18,6 +18,7 @@
     v1.3.0 - Added laser shake to enhance cat enjoyment
     v1.3.1 - Changed probability polling frequency to once a second
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
+    v1.5.0 - Added scheduler and gaussian library for random values
 */
 /**************************************************************************/
 
@@ -28,7 +29,10 @@
 #include "stuServo.h"
 #include "stuPanTilt.h"
 #include "stuLaser.h"
+#include "stu_scheduler.h"
 #include "missileswitch.h"
+#include "stu_gauss.h"
+#include <Gaussian.h>
 
 
 #define BAUD_RATE 115200
@@ -46,6 +50,7 @@
 
 int sleepState = 0;
 
+StuGauss gauss;
 
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
@@ -60,11 +65,78 @@ StuLaser laser(LASER_PIN);
 
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
-void setup() {
+Task pauseTask(&pauseCB);
+Task restTask(&restCB);
+Task sleepTask(&sleepCB);
 
+StuScheduler schedule;
+
+//halt laser at certain spot for a few moments at this time
+void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
+
+  unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
+
+  Serial.print(F("Next pause in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  pauseTask.setInterval(temp);
+
+}
+
+//turn off laser for a few moments at this time
+void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
+  unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
+
+  Serial.print(F("Next rest in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  restTask.setInterval(temp);
+}
+
+
+//turn of laser for a minutes to hours at this time
+void setNextSleepTime(unsigned long avg_sec_to_sleep=360, double variance = 100){
+  unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*10000;
+  Serial.print(F("Next sleep in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  sleepTask.setInterval(temp);
+
+}
+
+void pauseCB(){
+  Serial.println(F("Pause Callback!"));
+  delay(markovPause());
+  setNextPauseTime();
+}
+
+void restCB(){
+  Serial.println(F("Rest Callback!"));
+  mSwitch.ledState(0);
+  sleep(5, 10);
+  mSwitch.ledState(1);
+  setNextPauseTime();
+  setNextRestTime();
+}
+
+void sleepCB(){
+  Serial.println(F("Sleep Callback!"));
+  mSwitch.ledState(0);
+  sleep(1800, 2400); //sleep between 30 and 40 minutes
+  mSwitch.ledState(1);
+  setNextPauseTime();
+  setNextRestTime();
+  setNextSleepTime();
+}
+
+void setup() {
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
 
+  schedule.addTask(&pauseTask);
+  schedule.addTask(&restTask);
+  schedule.addTask(&sleepTask);
+  randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
 
@@ -86,30 +158,33 @@ void setup() {
   panTiltX.angle = panTiltX.minAngle;
   panTiltY.angle = panTiltY.minAngle;
   panTilt.updateAngles();
-  delay(1000);
+  delay(500);
 
   panTiltX.angle = panTiltX.maxAngle;
   panTiltY.angle = panTiltY.maxAngle;
   panTilt.updateAngles();
-  delay(1000);
+  delay(500);
 
 
   panTiltX.angle = panTiltX.midAngle;
   panTiltY.angle = panTiltY.midAngle;
   panTilt.updateAngles();
 
-  delay(2000);
+  delay(1000);
   laser.fire(1);
+
   Serial.println(F("setup complete"));
 
+  setNextPauseTime();
+  setNextRestTime();
+  setNextSleepTime();
 }
 
 
 
 void loop() {
-
+  schedule.run();
   if(!mSwitch.switchState()){
-
     laser.fire(0);
     mSwitch.ledState(0);
     panTiltX.angle = 90;
@@ -127,13 +202,13 @@ void loop() {
     mSwitch.ledState(1);
     panTilt.begin();
     laser.fire(1);
-
+    schedule.restart();
   }
 
   static unsigned long timePassed;
   static int changeVal;
   static int markovShakeState;
-  delay(10);
+
 
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
@@ -152,27 +227,16 @@ void loop() {
     timePassed = millis();
   }
 
-if(millis() - timePassed >= 1000){
-    randomSeed(analogRead(4));
+if(millis() - timePassed >= 1200){
+
     changeVal = getMarkovSpeed(changeVal);
-    markovShakeState = markovState(10, 20);
-
-    if(random(101) < 6){
-      delay(markovPause());
-
-    }
-
-    if(random(1001) <= 5){
-      sleep(5, 10);
-    }
-
-    else if(random(3001) < 10){
-      sleep(1800, 2400); //sleep between 30 and 40 minutes
-    }
+    markovShakeState = markovState(5, 30);
     timePassed = millis();
-  }
-  laser.fire(1);
+}
 
+
+  laser.fire(1);
+  delay(5);
 }
 
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
@@ -294,15 +358,16 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
 
 void shake(){
   int moveVal = 10;
+  const int shakeDelay = 5;
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
-  delay(10);
+  delay(shakeDelay);
   panTiltX.angle -= 2*moveVal;
   panTilt.updateAngles();
-  delay(10);
+  delay(shakeDelay);
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
-  delay(10);
+  delay(shakeDelay);
 }
 
 
@@ -324,19 +389,4 @@ int markovState(int prob1, int prob2){
   }
 
   return markovState;
-}
-
-
-void sleepInt(){
-  detachInterrupt(0);
-  sleepState = 1;
-  mSwitch.ledState(0);
-
-
-}
-
-void wake(){
-  detachInterrupt(0);
-  sleepState = 0;
-  mSwitch.ledState(1);
 }
