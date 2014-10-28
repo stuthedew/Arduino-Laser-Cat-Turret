@@ -18,7 +18,7 @@
     v1.3.0 - Added laser shake to enhance cat enjoyment
     v1.3.1 - Changed probability polling frequency to once a second
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
-    v1.5.0 -
+    v1.5.0 - Added scheduler and gaussian library for random values
 */
 /**************************************************************************/
 
@@ -72,7 +72,7 @@ Task sleepTask(&sleepCB);
 StuScheduler schedule;
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=20){
+void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
@@ -95,8 +95,8 @@ void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
 
 
 //turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_sec_to_sleep=36, double variance = 9){
-  unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*100000;
+void setNextSleepTime(unsigned long avg_sec_to_sleep=360, double variance = 100){
+  unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*10000;
   Serial.print(F("Next sleep in "));
   Serial.print(temp/1000);
   Serial.println(F(" seconds.\n"));
@@ -227,7 +227,7 @@ void loop() {
     timePassed = millis();
   }
 
-if(millis() - timePassed >= 1000){
+if(millis() - timePassed >= 1200){
 
     changeVal = getMarkovSpeed(changeVal);
     markovShakeState = markovState(5, 30);
