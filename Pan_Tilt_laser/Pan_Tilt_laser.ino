@@ -78,7 +78,7 @@ StuScheduler schedule;
 
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=30, double variance=20){
+void setNextPauseTime(unsigned long avg_sec_to_pause=30, double variance=10){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
@@ -131,14 +131,14 @@ void sleepCB(){
 void setup() {
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
-  randomSeed(analogRead(5));
+
   schedule.addTask(&pauseTask);
   schedule.addTask(&restTask);
   schedule.addTask(&sleepTask);
-
+  randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
-/*
+
   if(!mSwitch.switchState()) {
     mSwitch.ledState(0);
     while(!mSwitch.switchState()){
@@ -171,7 +171,7 @@ void setup() {
 
   delay(1000);
   laser.fire(1);
-  */
+
   Serial.println(F("setup complete"));
 
   setNextPauseTime();
@@ -227,7 +227,7 @@ void loop() {
   }
 
 if(millis() - timePassed >= 1000){
-    randomSeed(analogRead(4));
+
     changeVal = getMarkovSpeed(changeVal);
     markovShakeState = markovState(10, 20);
 }
