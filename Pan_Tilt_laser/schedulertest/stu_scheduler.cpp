@@ -18,8 +18,7 @@
 
 #include "stu_scheduler.h"
 
-Task::Task(void (*cbFunc)()){
-  _callback = cbFunc;
+Task::Task(void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc),_timeBetweenRuns(interval),_enabled(enable) {
 
 }
 
@@ -58,13 +57,19 @@ void Task::enable(){
   resetPeriodic();
 }
 
-Callback Task::run(){
-  return _callback;
+void Task::run(){
+  _callback();
 }
 
 bool Task::enabled(){
   return _enabled;
 }
+
+void Task::changeCallback(void (*cbFunc)()){
+  _callback = cbFunc;
+}
+
+
 
 
 StuScheduler::StuScheduler(){
@@ -77,10 +82,18 @@ _tItr++;
 
 }
 
+void StuScheduler::restart(){
+  for(uint8_t i = 0; i < _tItr; i++){
+    if(_Task[i]->enabled()){
+      _Task[i]->resetPeriodic();
+    }
+  }
+}
+
 void StuScheduler::run(){
 
   for(uint8_t i = 0; i < _tItr; i++){
-    if(_Task[i]->enabled() && _Task[i]->nextRunTime() >= millis()){
+    if(_Task[i]->enabled() && _Task[i]->nextRunTime() <= millis()){
       _Task[i]->run();
       _Task[i]->resetPeriodic();
     }

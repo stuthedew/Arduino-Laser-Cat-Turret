@@ -26,16 +26,16 @@ typedef void (*Callback)(void);
 class Task{
 public:
 
-  Task(void (*cbFunc)());
+  Task(void (*callback)(), unsigned long interval, bool enable=1);
 
   void
     resetPeriodic(),
     setInterval(unsigned long mSec),
     setNextRunTime(unsigned long mSec),
     disable(),
-    enable();
-  Callback
-    run();
+    enable(),
+    run(),
+    changeCallback(void (*callback)());
 
   bool
     enabled();
@@ -65,7 +65,8 @@ public:
 
   void
     addTask(Task *t),
-    run();
+    run(),
+    restart();
 
 
 
