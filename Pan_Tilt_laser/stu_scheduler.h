@@ -26,7 +26,7 @@ typedef void (*Callback)(void);
 class Task{
 public:
 
-  Task(void (*callback)(), unsigned long interval, bool enable=1);
+  Task(void (*callback)(), unsigned long interval=100, bool enable=1);
 
   void
     resetPeriodic(),

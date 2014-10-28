@@ -27,8 +27,6 @@ unsigned long StuGauss::gRandom(unsigned long zero, double variance){
   _gauss.setVariance(variance);
   _gauss.setMean(zero);
   double temp = _gauss.random();
-  if(temp < 0 && abs(temp) >= zero){
-    return 0;
-  }
-  return temp;
+  Serial.println(temp);
+  return round(max(temp, 0));
 }
