@@ -3,7 +3,7 @@
 /*!
     @file     stuLaser.cpp
     @author   Stuart Feichtinger
-    @license  BSD (see license.txt)
+    @license  MIT (see license.txt)
 
     Simple library for controlling laser diode
     (https://www.adafruit.com/products/1054) with NPN Transistor (e.g.

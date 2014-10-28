@@ -3,7 +3,7 @@
 /*!
     @file     stuPanTilt.cpp
     @author   Stuart Feichtinger
-    @license  BSD (see license.txt)
+    @license  MIT (see license.txt)
 
     Library for controlling dual servo pan-tilt rig
     (https://www.adafruit.com/products/1967) with an Arduino Uno (Atmel

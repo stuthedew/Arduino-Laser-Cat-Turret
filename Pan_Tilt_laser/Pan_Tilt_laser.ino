@@ -2,7 +2,7 @@
 /*!
     @file     Pan_Tilt_laser.ino
     @author   Stuart Feichtinger
-    @license  BSD (see license.txt)
+    @license  MIT (see license.txt)
 
     Main program running an automatic laser-turret cat toy using a pan-tilt
     rig (https://www.adafruit.com/products/1967) and laser diode
