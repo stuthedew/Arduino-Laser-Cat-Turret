@@ -1,6 +1,7 @@
+
 /**************************************************************************/
 /*!
-    @file     stu_gauss.cpp
+    @file     stu_gauss.h
     @author   Stuart Feichtinger
     @license  MIT (see license.txt)
 
@@ -15,16 +16,29 @@
 */
 /**************************************************************************/
 
-#include "stu_gauss.h"
+#ifndef _STU_GAUSS_H_
+#define _STU_GAUSS_H_
+
+#include "Arduino.h"
+#include <Gaussian.h>
+
+class StuGauss {
+
+public:
+
+  StuGauss();
 
 
-StuGauss::StuGauss():_gauss(){
+  unsigned long
+    gRandom(unsigned long zero, double variance);
 
 
-}
 
-unsigned int StuGauss::gRandom(unsigned int zero, double variance){
-  _gauss.setVariance(variance);
+private:
 
-  return _gauss.random() + zero;
-}
+  Gaussian _gauss;
+
+
+};
+
+#endif

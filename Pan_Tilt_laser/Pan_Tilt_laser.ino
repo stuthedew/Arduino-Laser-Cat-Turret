@@ -30,6 +30,8 @@
 #include "stuLaser.h"
 #include "stu_scheduler.h"
 #include "missileswitch.h"
+#include "stu_gauss.h"
+#include <Gaussian.h>
 
 
 #define BAUD_RATE 115200
@@ -47,6 +49,11 @@
 
 int sleepState = 0;
 
+
+
+
+StuGauss gauss;
+
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
 
@@ -60,21 +67,75 @@ StuLaser laser(LASER_PIN);
 
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
-Task testTask;
+Task pauseTask(&pauseCB, 100, 0);
+Task restTask(&restCB, 100, 0);
+Task sleepTask(&sleepCB, 100, 0);
 
-void foo2(struct Task *t){
-  Serial.println(F("Foo 2"));
+StuScheduler schedule;
+
+
+
+
+//halt laser at certain spot for a few moments at this time
+void setNextPauseTime(unsigned int avg_sec_to_pause=30, double variance=15){
+  unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
+
+  Serial.print(F("Next pause in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  pauseTask.setInterval(temp);
+
 }
 
-TaskCallback foo(struct Task *t, TaskCallback func);
+//turn off laser for a few moments at this time
+void setNextRestTime(unsigned int avg_sec_to_rest=120, double variance=60){
+  unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
+
+  Serial.print(F("Next rest in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  restTask.setInterval(temp);
+}
+
+
+//turn of laser for a minutes to hours at this time
+void setNextSleepTime(unsigned int avg_sec_to_sleep=3600, double variance = 900){
+  unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*1000;
+  Serial.print(F("Next sleep in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  sleepTask.setInterval(temp);
+
+}
+
+void pauseCB(){
+  Serial.print(F("Pause Callback!"));
+  delay(markovPause());
+  setNextPauseTime();
+}
+
+void restCB(){
+  Serial.print(F("Rest Callback!"));
+  sleep(5, 10);
+  setNextRestTime();
+}
+
+void sleepCB(){
+  Serial.print(F("Sleep Callback!"));
+  sleep(1800, 2400); //sleep between 30 and 40 minutes
+  setNextSleepTime();
+}
 
 void setup() {
-  void (*f)(struct Task *, TaskCallback func);
+
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
-  f = foo(&testTask);
-  //foo2(&testTask);
-  testTask.callback;
+  schedule.addTask(&pauseTask);
+  schedule.addTask(&restTask);
+  schedule.addTask(&sleepTask);
+  setNextPauseTime();
+  setNextRestTime();
+  setNextSleepTime();
 
   mSwitch.heartBeat(3);
 
@@ -112,6 +173,7 @@ void setup() {
   laser.fire(1);
   Serial.println(F("setup complete"));
 
+  schedule.restart();
 }
 
 
@@ -166,7 +228,9 @@ if(millis() - timePassed >= 1000){
     randomSeed(analogRead(4));
     changeVal = getMarkovSpeed(changeVal);
     markovShakeState = markovState(10, 20);
+}
 
+  schedule.run();
     if(random(101) < 6){
       delay(markovPause());
 
@@ -180,7 +244,7 @@ if(millis() - timePassed >= 1000){
       sleep(1800, 2400); //sleep between 30 and 40 minutes
     }
     timePassed = millis();
-  }
+
   laser.fire(1);
 
 }
@@ -334,19 +398,4 @@ int markovState(int prob1, int prob2){
   }
 
   return markovState;
-}
-
-
-void sleepInt(){
-  detachInterrupt(0);
-  sleepState = 1;
-  mSwitch.ledState(0);
-
-
-}
-
-void wake(){
-  detachInterrupt(0);
-  sleepState = 0;
-  mSwitch.ledState(1);
 }
