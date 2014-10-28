@@ -182,7 +182,7 @@ void setup() {
 
 
 void loop() {
-  schedule.run();/*
+  schedule.run();
   if(!mSwitch.switchState()){
     laser.fire(0);
     mSwitch.ledState(0);
@@ -203,7 +203,7 @@ void loop() {
     laser.fire(1);
     schedule.restart();
   }
-*/
+
   static unsigned long timePassed;
   static int changeVal;
   static int markovShakeState;
@@ -248,6 +248,7 @@ if(millis() - timePassed >= 1000){
     }
     timePassed = millis();
 */
+
   laser.fire(1);
 
 }
