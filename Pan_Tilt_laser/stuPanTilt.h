@@ -51,18 +51,12 @@ class PanTilt {
 
 public:
 
-  PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos,  int height);
+  PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos);
 
   void
     begin(),
     detach(),
-    setPosition(int, int),
-    updatePosition(),     //absolute
-    updateAngles(),
-    rMove(int dX, int dY); //relative
-
-  int
-    getHeight();
+    updateAngles();
 
 private:
 
@@ -75,22 +69,11 @@ private:
     _yPin;
 
   void
-    _setAnglesFromPosition(),
-    _setPositionFromAngles(),
     _update();
-
-  float
-    _rad2Deg(float),
-    _deg2Rad(float);
 
   panTiltPos_t
     *_Xpos,
     *_Ypos;
-
-
-  const int
-    _height; //in cm
-
 
 };
 

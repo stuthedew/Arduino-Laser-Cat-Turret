@@ -59,7 +59,7 @@ panTiltPos_t panTiltX(0, 50, 120, -30);
 panTiltPos_t panTiltY(0, 7, 45, 0, 10);
 
 
-PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY, 98);
+PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY);
 
 StuLaser laser(LASER_PIN);
 
