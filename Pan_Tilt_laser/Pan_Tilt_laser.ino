@@ -18,6 +18,7 @@
     v1.3.0 - Added laser shake to enhance cat enjoyment
     v1.3.1 - Changed probability polling frequency to once a second
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
+    v1.5.0 -
 */
 /**************************************************************************/
 
@@ -67,9 +68,9 @@ StuLaser laser(LASER_PIN);
 
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
-Task pauseTask(&pauseCB, 100, 0);
-Task restTask(&restCB, 100, 0);
-Task sleepTask(&sleepCB, 100, 0);
+Task pauseTask(&pauseCB, 100);
+Task restTask(&restCB, 100);
+Task sleepTask(&sleepCB, 100);
 
 StuScheduler schedule;
 
@@ -77,7 +78,8 @@ StuScheduler schedule;
 
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned int avg_sec_to_pause=30, double variance=15){
+void setNextPauseTime(unsigned int avg_sec_to_pause=30, double variance=20){
+
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
   Serial.print(F("Next pause in "));
@@ -127,7 +129,7 @@ void sleepCB(){
 }
 
 void setup() {
-
+  randomSeed(analogRead(4));
   Serial.begin(BAUD_RATE);
   mSwitch.begin();
   schedule.addTask(&pauseTask);
@@ -179,9 +181,8 @@ void setup() {
 
 
 void loop() {
-
+  schedule.run();/*
   if(!mSwitch.switchState()){
-
     laser.fire(0);
     mSwitch.ledState(0);
     panTiltX.angle = 90;
@@ -199,9 +200,9 @@ void loop() {
     mSwitch.ledState(1);
     panTilt.begin();
     laser.fire(1);
-
+    schedule.restart();
   }
-
+*/
   static unsigned long timePassed;
   static int changeVal;
   static int markovShakeState;
@@ -230,7 +231,8 @@ if(millis() - timePassed >= 1000){
     markovShakeState = markovState(10, 20);
 }
 
-  schedule.run();
+
+  /*
     if(random(101) < 6){
       delay(markovPause());
 
@@ -244,7 +246,7 @@ if(millis() - timePassed >= 1000){
       sleep(1800, 2400); //sleep between 30 and 40 minutes
     }
     timePassed = millis();
-
+*/
   laser.fire(1);
 
 }

@@ -26,5 +26,5 @@ StuGauss::StuGauss():_gauss(){
 unsigned long StuGauss::gRandom(unsigned long zero, double variance){
   _gauss.setVariance(variance);
 
-  return _gauss.random() + zero;
+  return max(_gauss.random() + zero, 0);
 }
