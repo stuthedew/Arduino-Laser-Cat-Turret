@@ -64,8 +64,6 @@ public:
   int
     getHeight();
 
-
-
 private:
 
   StuServo
