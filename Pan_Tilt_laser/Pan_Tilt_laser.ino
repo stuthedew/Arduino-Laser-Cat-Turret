@@ -187,7 +187,12 @@ void setup() {
 
 
 void loop() {
+  static unsigned long timePassed;
+  static int changeVal;
+  static int markovShakeState;
+
   schedule.run();
+
   if(!mSwitch.switchState()){
     laser.fire(0);
     mSwitch.ledState(0);
@@ -196,7 +201,6 @@ void loop() {
     panTilt.updateAngles();
 
     delay(50);
-
 
     panTilt.detach();
     while(!mSwitch.switchState()){
@@ -209,18 +213,10 @@ void loop() {
     schedule.restart();
   }
 
-  static unsigned long timePassed;
-  static int changeVal;
-  static int markovShakeState;
-
-
-
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
-
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
-
-
   panTilt.updateAngles();
+
 
   if(markovShakeState == 2){
     shake();
@@ -237,7 +233,6 @@ if(millis() - timePassed >= 1200){
     markovShakeState = markovState(5, 30);
     timePassed = millis();
 }
-
 
   laser.fire(1);
   delay(5);
@@ -317,11 +312,11 @@ int getMarkovSpeed(int oldSpeed){
 int markovPause(){
   int val = random(101);
 
-  if(val < 35){
-    return random(1000, 2000);
+  if(val < 25){
+    return random(1500, 2000);
   }
-  else if(val < 80){
-    return random(750, 1000);
+  else if(val < 90){
+    return random(1000, 1500);
   }
   else{
     return random(500, 750);
