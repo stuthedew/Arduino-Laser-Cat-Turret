@@ -75,10 +75,11 @@ StuScheduler schedule;
 void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
-
+  /*
   Serial.print(F("Next pause in "));
   Serial.print(temp/1000);
   Serial.println(F(" seconds.\n"));
+  */
   pauseTask.setInterval(temp);
 
 }
@@ -86,10 +87,11 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
 //turn off laser for a few moments at this time
 void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
   unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
-
+  /*
   Serial.print(F("Next rest in "));
   Serial.print(temp/1000);
   Serial.println(F(" seconds.\n"));
+  */
   restTask.setInterval(temp);
 }
 
@@ -97,21 +99,23 @@ void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
 //turn of laser for a minutes to hours at this time
 void setNextSleepTime(unsigned long avg_sec_to_sleep=360, double variance = 100){
   unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*10000;
+  /*
   Serial.print(F("Next sleep in "));
   Serial.print(temp/1000);
   Serial.println(F(" seconds.\n"));
+  */
   sleepTask.setInterval(temp);
 
 }
 
 void pauseCB(){
-  Serial.println(F("Pause Callback!"));
+//  Serial.println(F("Pause Callback!"));
   delay(markovPause());
   setNextPauseTime();
 }
 
 void restCB(){
-  Serial.println(F("Rest Callback!"));
+//  Serial.println(F("Rest Callback!"));
   mSwitch.ledState(0);
   sleep(5, 10);
   mSwitch.ledState(1);
@@ -120,7 +124,7 @@ void restCB(){
 }
 
 void sleepCB(){
-  Serial.println(F("Sleep Callback!"));
+//  Serial.println(F("Sleep Callback!"));
   mSwitch.ledState(0);
   sleep(1800, 2400); //sleep between 30 and 40 minutes
   mSwitch.ledState(1);
