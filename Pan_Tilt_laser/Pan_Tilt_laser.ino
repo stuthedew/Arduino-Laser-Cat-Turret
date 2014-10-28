@@ -336,7 +336,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned long startTime = millis();
   for(unsigned long i = 0; i < delayVal; i++){
     while(millis() - startTime < 1000){
-      heartBeat(millis(), 10000);
+      heartBeat(millis(), 5000);
       if(startTime > millis()){ //check for rollovers
         startTime = millis();
         break;
