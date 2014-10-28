@@ -19,6 +19,7 @@
     v1.3.1 - Changed probability polling frequency to once a second
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
     v1.5.0 - Added scheduler and gaussian library for random values
+    v1.5.1 - Converted speed and direction function to scheduled task
 */
 /**************************************************************************/
 
@@ -48,7 +49,9 @@
 
 #define DIRECTION_CHANGE_PROBABILITY 15
 
-int sleepState = 0;
+
+int markovShakeState =1;
+int changeVal;
 
 StuGauss gauss;
 
@@ -68,8 +71,15 @@ Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 Task pauseTask(&pauseCB);
 Task restTask(&restCB);
 Task sleepTask(&sleepCB);
+Task speedAndDirTask(&updateSpeedAndDir, 750);
 
 StuScheduler schedule;
+
+void updateSpeedAndDir(){
+  changeVal = getMarkovSpeed(changeVal);
+  markovShakeState = markovState(5, 30);
+
+}
 
 //halt laser at certain spot for a few moments at this time
 void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
@@ -140,6 +150,7 @@ void setup() {
   schedule.addTask(&pauseTask);
   schedule.addTask(&restTask);
   schedule.addTask(&sleepTask);
+  schedule.addTask(&speedAndDirTask);
   randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
@@ -184,15 +195,11 @@ void setup() {
   setNextSleepTime();
 }
 
-
-
 void loop() {
-  static unsigned long timePassed;
-  static int changeVal;
-  static int markovShakeState;
 
   schedule.run();
 
+  //check if switch is on or off and pause if off
   if(!mSwitch.switchState()){
     laser.fire(0);
     mSwitch.ledState(0);
@@ -222,21 +229,13 @@ void loop() {
     shake();
   }
 
-  //check for rollovers
-  if(timePassed > millis()){
-    timePassed = millis();
-  }
-
-if(millis() - timePassed >= 1200){
-
-    changeVal = getMarkovSpeed(changeVal);
-    markovShakeState = markovState(5, 30);
-    timePassed = millis();
-}
 
   laser.fire(1);
   delay(5);
 }
+
+
+
 
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
