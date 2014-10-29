@@ -62,6 +62,27 @@ SVector SVector::sub(SVector *v){
   return rV;
 }
 
+SVector SVector::set(int x, int y){
+  SVector rV(x, y);
+
+  return rV;
+}
+
+SVector SVector::set(SVector *v){
+  SVector rV(v->x(), v->y());
+
+  return rV;
+}
+
+float SVector::distance(int x, int y){
+
+  return sqrt(pow((x - _x), 2) + pow((y - _y),2));
+}
+
+float SVector::distance(SVector *v){
+
+  return sqrt(pow((v->x() - _x), 2) + pow((v->y() - _y),2));
+}
 
 float SVector::getMag(){
 

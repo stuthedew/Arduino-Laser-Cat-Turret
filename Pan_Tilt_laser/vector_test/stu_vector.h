@@ -36,13 +36,18 @@ public:
     add(int x, int y),
     add(SVector *),
     sub(int x, int y),
-    sub(SVector *);
+    sub(SVector *),
+    set(int x, int y),
+    set(SVector *);
+
 
   int
     x(),
     y();
 
   float
+    distance(int x, int y),
+    distance(SVector *),
     getMag();
 
 private:
