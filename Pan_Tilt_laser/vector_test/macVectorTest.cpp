@@ -7,16 +7,21 @@
 using namespace std;
 
 
-SVector s(10, 20);
-SVector t(60, 80);
+SVector s(100, 200);
+SVector t(600, 800);
 int main(int argc, char *argv[]) {
  
 
 cout << s.x() << endl << s.y() << endl;
-s = s.rotate(M_PI_4);
+cout << s.mag() << endl;
 
+s = s.setMag(500);
 cout << s.x() << endl << s.y() << endl;
+cout << s.mag() << endl;
+
 return(0);
+cout << s.x() << endl << s.y() << endl;
+
 
 s = s.mult(2);
 cout << s.x() << endl << s.y() << endl;

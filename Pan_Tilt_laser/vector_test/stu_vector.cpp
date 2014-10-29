@@ -97,6 +97,12 @@ SVector SVector::mult(int val){
   return rV;
 }
 
+SVector SVector::div(float val){
+  SVector rV(round(_x / val), round(_y / val));
+
+  return rV;
+}
+
 float SVector::distance(int x, int y){
 
   return sqrt(pow((x - _x), 2) + pow((y - _y),2));
@@ -107,7 +113,7 @@ float SVector::distance(SVector *v){
   return distance(v->x(), v->y());
 }
 
-float SVector::getMag(){
+float SVector::mag(){
 
   return sqrt(_x*_x + _y*_y);
 }
@@ -125,31 +131,38 @@ float SVector::heading(){
   return -1*atan2(-1*_y, _x);
 }
 
+SVector SVector::setMag(float newMag){
+  SVector  rV = mult(newMag);
+  rV = rV.div(mag());
+
+  return rV;
+}
+
 float SVector::angleBetween(SVector *v){
   // We get NaN if we pass in a zero vector which can cause problems
-    // Zero seems like a reasonable angle between a (0,0) vector and something else
-    if (_x == 0 && _y == 0) return 0;
-    if (v->x() == 0 && v->y() == 0) return 0;
+  // Zero seems like a reasonable angle between a (0,0) vector and something else
+  if (_x == 0 && _y == 0) return 0;
+  if (v->x() == 0 && v->y() == 0) return 0;
 
-    // This should be a number between -1 and 1, since it's "normalized"
-    float amt = dot(v) / (getMag() * v->getMag());
+  // This should be a number between -1 and 1, since it's "normalized"
+  float amt = dot(v) / (mag() * v->mag());
 
-     // But if it's not, due to rounding error, then we need to fix it
-    // http://code.google.com/p/processing/issues/detail?id=340
-    // Otherwise if outside the range, acos() will return NaN
-    // http://www.cppreference.com/wiki/c/math/acos
-    if (amt <= -1) {
-      return M_PI;
-    } else if (amt >= 1) {
+  // But if it's not, due to rounding error, then we need to fix it
+  // http://code.google.com/p/processing/issues/detail?id=340
+  // Otherwise if outside the range, acos() will return NaN
+  // http://www.cppreference.com/wiki/c/math/acos
+  if (amt <= -1) {
+    return M_PI;
+  } else if (amt >= 1) {
 
-      return 0;
-    }
-    return acos(amt);
+    return 0;
+  }
+  return acos(amt);
 }
 
 float SVector::angleBetween(int x, int y){
-SVector rV(x, y);
-return angleBetween(&rV);
+  SVector rV(x, y);
+  return angleBetween(&rV);
 }
 
 SVector SVector::rotate(float theta){
