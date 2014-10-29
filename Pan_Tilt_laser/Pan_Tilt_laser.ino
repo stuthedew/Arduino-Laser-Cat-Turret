@@ -107,7 +107,7 @@ void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
 
 
 //turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_sec_to_sleep=360, double variance = 100){
+void setNextSleepTime(unsigned long avg_sec_to_sleep=60, double variance = 10){
   unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*10000;
   /*
   Serial.print(F("Next sleep in "));
@@ -330,7 +330,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned long startTime = millis();
   for(unsigned long i = 0; i < delayVal; i++){
     while(millis() - startTime < 1000){
-      heartBeat(millis(), 5000);
+      heartBeat(millis(), 10000);
       if(startTime > millis()){ //check for rollovers
         startTime = millis();
         break;
@@ -349,7 +349,7 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
   if(mSeconds - oldTime > hbInterval){
 
 
-    mSwitch.heartBeat(3);
+    mSwitch.heartBeat(1);
     oldTime = mSeconds;
   }
 }
