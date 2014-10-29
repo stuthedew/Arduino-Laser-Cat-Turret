@@ -38,17 +38,25 @@ public:
     sub(int x, int y),
     sub(SVector *),
     set(int x, int y),
-    set(SVector *);
+    set(SVector *),
+    mult(int),
+    rotate(float theta);
 
 
   int
     x(),
-    y();
+    y(),
+    dot(int x, int y),
+    dot(SVector *);
 
   float
     distance(int x, int y),
     distance(SVector *),
-    getMag();
+    getMag(),
+    heading(),
+    angleBetween(SVector *),
+    angleBetween(int x, int y);
+
 
 private:
   int
