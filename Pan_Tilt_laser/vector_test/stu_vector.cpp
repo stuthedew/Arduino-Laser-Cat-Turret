@@ -24,22 +24,6 @@
 #include "stu_vector.h"
 
 
-float _checkForRoundErr(float val2Check){
-  if (val2Check <= -1) {
-    return M_PI;
-  } else if (val2Check >= 1) {
-
-    return 0;
-  }
-  else{
-    return val2Check;
-  }
-}
-
-
-
-
-
 SVector::SVector(int x, int y){
   _x = x;
   _y = y;
