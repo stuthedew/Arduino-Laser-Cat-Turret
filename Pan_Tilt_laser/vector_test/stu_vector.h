@@ -21,10 +21,9 @@
 #ifndef _STU_VECTOR_H_
 #define _STU_VECTOR_H_
 
-#if(ARDUINO > 100)
 #include "Arduino.h"
 #include <math.h>
-#endif
+
 
 class SVector {
 
