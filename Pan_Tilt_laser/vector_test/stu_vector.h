@@ -21,15 +21,34 @@
 #ifndef _STU_VECTOR_H_
 #define _STU_VECTOR_H_
 
+#if(ARDUINO > 100)
 #include "Arduino.h"
 #include <math.h>
+#endif
 
-class sVector {
+class SVector {
 
 public:
 
+  SVector(int x, int y);
+
+  SVector
+    add(int x, int y),
+    add(SVector *),
+    sub(int x, int y),
+    sub(SVector *);
+
+  int
+    x(),
+    y();
+
+  float
+    getMag();
 
 private:
+  int
+    _x,
+    _y;
 
 };
 
