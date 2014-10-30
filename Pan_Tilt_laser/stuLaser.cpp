@@ -33,7 +33,8 @@ void StuLaser::begin(){
 }
 
 void StuLaser::setOrigin(int vX, int vY){
-  _vOrigin = _vOrigin.set(vX, vY);
+  _vDot = _vDot.set(0, -1*vY);
+  _vOrigin = _vOrigin.set(0, -1*vY);
 }
 
 void StuLaser::fire(boolean state){
@@ -43,7 +44,8 @@ void StuLaser::fire(boolean state){
 
 void StuLaser::setPosition(int hX, int hY){
   _hDot = _hDot.set(hX, hY);
-  _vDot = _vDot.set(_hDot.mag(), 1);
+  _vDot = _vDot.set(_hDot.mag(), _vDot.y());
+  _hOrigin = _hOrigin.set(hX, 0);
 }
 
 int StuLaser::hX(){
@@ -66,5 +68,18 @@ int StuLaser::vY(){
 }
 
 float StuLaser::vAngle(){
-  return _vDot.angleBetween(&_vOrigin);
+  return M_PI_2 - _vDot.angleBetween(&_vOrigin);
+}
+
+int StuLaser::vAngleDeg(){
+
+  return round((M_PI_2 - _vDot.angleBetween(&_vOrigin))* 180 / M_PI);
+}
+
+float StuLaser::hAngle(){
+  return _hDot.angleBetween(&_hOrigin);
+}
+
+int StuLaser::hAngleDeg(){
+  return round(_hDot.angleBetween(&_hOrigin) * 180 / M_PI);
 }

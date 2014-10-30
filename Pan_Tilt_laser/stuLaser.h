@@ -20,7 +20,7 @@
 #define _STULASER_H_
 
 #include "Arduino.h"
-#include "stu_vector.h"
+#include <AVector.h>
 
 class StuLaser {
 
@@ -39,10 +39,13 @@ public:
     vX(),
     vY(),
     hX(),
-    hY();
+    hY(),
+    vAngleDeg(),
+    hAngleDeg();
 
   float
-    vAngle();
+    vAngle(),
+    hAngle();
 
 private:
 

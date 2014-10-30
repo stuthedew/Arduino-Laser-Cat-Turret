@@ -33,7 +33,7 @@
 #include "stu_scheduler.h"
 #include "missileswitch.h"
 #include "stu_gauss.h"
-#include "stu_vector.h"
+#include <AVector.h>
 #include <Gaussian.h>
 
 
@@ -69,12 +69,11 @@ Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 void setup() {
   Serial.begin(BAUD_RATE);
   panTilt.begin();
-  laser.setOrigin(1, 38);
-  laser.setPosition(13, 200);
-  //Serial.println(laser.vX());
-  //Serial.println(laser.vY());
+  laser.setOrigin(0, 99);
+  laser.setPosition(-50, 10);
 
-  Serial.println(laser.vAngle());
+  Serial.println(laser.hAngleDeg());
+  Serial.println(laser.vAngleDeg());
 
 }
 

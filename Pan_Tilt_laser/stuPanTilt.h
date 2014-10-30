@@ -24,7 +24,6 @@
 #include <Servo.h>
 #include "Arduino.h"
 #include <math.h>
-#include "stu_vector.h"
 
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
