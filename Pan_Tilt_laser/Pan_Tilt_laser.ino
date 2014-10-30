@@ -70,7 +70,7 @@ void setup() {
   Serial.begin(BAUD_RATE);
   panTilt.begin();
   laser.setOrigin(1, 38);
-  laser.setPosition(1, 45);
+  laser.setPosition(13, 200);
   //Serial.println(laser.vX());
   //Serial.println(laser.vY());
 

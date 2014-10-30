@@ -43,7 +43,7 @@ void StuLaser::fire(boolean state){
 
 void StuLaser::setPosition(int hX, int hY){
   _hDot = _hDot.set(hX, hY);
-  _vDot = _vDot.set(_hDot.mag(), 0);
+  _vDot = _vDot.set(_hDot.mag(), 1);
 }
 
 int StuLaser::hX(){
