@@ -57,14 +57,9 @@ public:
   void
     begin(),
     detach(),
-    updateAngles(),
-    setHeight(int);
+    updateAngles();
 
 private:
-
-  StuServo
-    _xServo,
-    _yServo;
 
   uint8_t
     _xPin,
@@ -77,9 +72,11 @@ private:
     *_Xpos,
     *_Ypos;
 
-  SVector
-    _hPos,
-    _vPos;
+  StuServo
+    _xServo,
+    _yServo;
+
+
 
 };
 

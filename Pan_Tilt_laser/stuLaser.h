@@ -30,7 +30,19 @@ public:
 
   void
     begin(),
-    fire(boolean state);
+    fire(boolean state),
+    setOrigin(int vX, int vY),
+    setPosition(int hX, int hY);
+
+
+  int
+    vX(),
+    vY(),
+    hX(),
+    hY();
+
+  float
+    vAngle();
 
 private:
 
@@ -38,8 +50,10 @@ private:
     _pin;
 
   SVector
-    _vPos,
-    _hPos;
+    _vDot,
+    _hDot,
+    _hOrigin,
+    _vOrigin;
 
 };
 

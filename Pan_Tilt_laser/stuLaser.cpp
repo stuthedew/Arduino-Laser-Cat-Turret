@@ -20,12 +20,10 @@
 
 #include "stuLaser.h"
 
-StuLaser::StuLaser(uint8_t pin):
-  _vPos(0, -30), _hPos(0, 100){
+StuLaser::StuLaser(uint8_t pin){
   _pin = pin;
 
 }
-
 
 void StuLaser::begin(){
   pinMode(_pin, OUTPUT);
@@ -34,7 +32,39 @@ void StuLaser::begin(){
   digitalWrite(_pin, LOW);
 }
 
+void StuLaser::setOrigin(int vX, int vY){
+  _vOrigin = _vOrigin.set(vX, vY);
+}
+
 void StuLaser::fire(boolean state){
   digitalWrite(_pin, state);
 
+}
+
+void StuLaser::setPosition(int hX, int hY){
+  _hDot = _hDot.set(hX, hY);
+  _vDot = _vDot.set(_hDot.mag(), 0);
+}
+
+int StuLaser::hX(){
+  return _hDot.x();
+}
+
+int StuLaser::hY(){
+  return _hDot.y();
+
+}
+
+int StuLaser::vX(){
+  return _vDot.x();
+
+}
+
+int StuLaser::vY(){
+  return _vDot.y();
+
+}
+
+float StuLaser::vAngle(){
+  return _vDot.angleBetween(&_vOrigin);
 }

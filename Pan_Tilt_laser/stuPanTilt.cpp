@@ -34,10 +34,6 @@ PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *y
 
 }
 
-void PanTilt::setHeight(int height){
-  _vPos.set(0, height);
-
-}
 
 void PanTilt::begin(){
   _xServo.attach(_xPin);
@@ -52,7 +48,6 @@ void PanTilt::detach(){
 
 void PanTilt::updateAngles(){
   _update();
-
 }
 
 void PanTilt::_update(){

@@ -27,7 +27,6 @@ void StuServo::setCalibration(int min, int max){
   _position.min = min;
   _position.max = max;
 
-
 }
 
 

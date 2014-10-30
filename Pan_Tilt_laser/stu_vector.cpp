@@ -107,11 +107,11 @@ float SVector::magSq(){
   return (_x*_x + _y*_y);
 }
 
-int SVector::dot(int x, int y){
+float SVector::dot(int x, int y){
   return(_x*x + _y*y);
 }
 
-int SVector::dot(SVector *v){
+float SVector::dot(SVector *v){
   return dot(v->x(), v->y());
 }
 
@@ -141,6 +141,8 @@ float SVector::angleBetween(SVector *v){
   // This should be a number between -1 and 1, since it's "normalized"
   float amt = dot(v) / (mag() * v->mag());
 
+  Serial.println(v->mag());
+  Serial.println(mag());
   // But if it's not, due to rounding error, then we need to fix it
   // http://code.google.com/p/processing/issues/detail?id=340
   // Otherwise if outside the range, acos() will return NaN

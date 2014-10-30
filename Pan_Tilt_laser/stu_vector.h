@@ -47,9 +47,8 @@ public:
 
   int
     x(),
-    y(),
-    dot(int x, int y),
-    dot(SVector *);
+    y();
+
 
   float
     distance(int x, int y),
@@ -58,7 +57,9 @@ public:
     magSq(),
     heading(),
     angleBetween(SVector *),
-    angleBetween(int x, int y);
+    angleBetween(int x, int y),
+    dot(int x, int y),
+    dot(SVector *);
 
 
 private:
