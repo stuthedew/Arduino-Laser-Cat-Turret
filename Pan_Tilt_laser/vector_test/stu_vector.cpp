@@ -102,6 +102,11 @@ float SVector::mag(){
   return sqrt(_x*_x + _y*_y);
 }
 
+float SVector::magSq(){
+
+  return (_x*_x + _y*_y);
+}
+
 int SVector::dot(int x, int y){
   return(_x*x + _y*y);
 }
@@ -119,6 +124,11 @@ SVector SVector::setMag(float newMag){
   SVector  rV = mult(newMag);
   rV = rV.div(mag());
 
+  return rV;
+}
+
+SVector SVector::fromAngle(float theta){
+  SVector rV(round(cos(theta)*100), round(sin(theta)*100));
   return rV;
 }
 

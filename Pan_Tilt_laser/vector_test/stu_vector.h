@@ -41,7 +41,8 @@ public:
     mult(int),
     div(float),
     rotate(float theta),
-    setMag(float);
+    setMag(float),
+    fromAngle(float theta);
 
 
   int
@@ -54,6 +55,7 @@ public:
     distance(int x, int y),
     distance(SVector *),
     mag(),
+    magSq(),
     heading(),
     angleBetween(SVector *),
     angleBetween(int x, int y);
