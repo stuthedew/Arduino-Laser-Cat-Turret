@@ -20,8 +20,8 @@
 #include "stuPanTilt.h"
 
 
-
-PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):_xServo(), _yServo(){
+PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):
+  _xServo(), _yServo(){
 
   _xPin = xPin;
   _yPin = yPin;
@@ -32,6 +32,10 @@ PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *y
   _xServo.setCalibration(_Xpos->minAngle, _Xpos->maxAngle);
   _yServo.setCalibration(_Ypos->minAngle, _Ypos->maxAngle);
 
+}
+
+void PanTilt::setHeight(int height){
+  _vPos.set(0, height);
 
 }
 

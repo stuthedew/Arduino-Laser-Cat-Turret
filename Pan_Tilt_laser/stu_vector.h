@@ -29,7 +29,7 @@ class SVector {
 
 public:
 
-  SVector(int x, int y);
+  SVector(int x = 0, int y = 0);
 
   SVector
     add(int x, int y),

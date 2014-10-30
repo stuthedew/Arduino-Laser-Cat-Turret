@@ -24,25 +24,26 @@
 #include <Servo.h>
 #include "Arduino.h"
 #include <math.h>
+#include "stu_vector.h"
 
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
 struct panTiltPos_t {
   int
-    pos,
     angle,
-    dir;
+    dir,
+    pbOffset,
+    midOffset;
 
   const int
     minAngle,
     maxAngle,
-    midOffset,
-    midAngle,
-    probOffset;
+    midAngle;
 
 
-  panTiltPos_t(int p, int mn, int mx, int mdOff = 0, int pbOff = 1): pos(p), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
+  panTiltPos_t(int mn, int mx):dir(1), minAngle(mn), maxAngle(mx),
+    midAngle(((mx-mn) >>1) + mn){}
 
 };
 
@@ -56,7 +57,8 @@ public:
   void
     begin(),
     detach(),
-    updateAngles();
+    updateAngles(),
+    setHeight(int);
 
 private:
 
@@ -74,6 +76,10 @@ private:
   panTiltPos_t
     *_Xpos,
     *_Ypos;
+
+  SVector
+    _hPos,
+    _vPos;
 
 };
 

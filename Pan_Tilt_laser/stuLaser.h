@@ -20,6 +20,7 @@
 #define _STULASER_H_
 
 #include "Arduino.h"
+#include "stu_vector.h"
 
 class StuLaser {
 
@@ -32,9 +33,13 @@ public:
     fire(boolean state);
 
 private:
-  
+
   uint8_t
     _pin;
+
+  SVector
+    _vPos,
+    _hPos;
 
 };
 

@@ -36,6 +36,7 @@
 #include <Gaussian.h>
 
 
+
 #define BAUD_RATE 115200
 
 #define MS_SWITCH_PIN 3
@@ -163,10 +164,9 @@ void setup() {
   }
 
   panTilt.begin();
-
+  panTilt.setHeight(38);
   Serial.println(F("setup starting..."));
   mSwitch.ledState(1);
-
 
   laser.begin();
 
