@@ -62,6 +62,7 @@ PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY);
 
 StuLaser laser(LASER_PIN);
 
+
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
 
@@ -84,7 +85,7 @@ unsigned long timeFunc2(StuLaser& L, int x, int y){
   endTime = micros();
 
   return endTime - startTime;
-}
+  }
 AVector p0(2, 8);
 AVector p1(5, 17);
 
@@ -100,9 +101,15 @@ unsigned long timeFunc3(){
 
 struct valTime_s{
   int
-    val;
+    x,
+    y;
+
   unsigned long
     time;
+
+  double
+    vDeg,
+    hDeg;
 };
 
 struct case_s{
@@ -122,38 +129,63 @@ struct case_s{
 
 
 
-void setTimes(struct case_s *set, struct case_s *comp){
+void setVals(struct case_s *set, struct case_s *comp){
 
   if(set->worstCase.time < set->current.time){
 
       set->worstCase.time = set->current.time;
-      set->worstCase.val = set->current.val;
+      set->worstCase.x = set->current.x;
+      set->worstCase.y = set->current.y;
 
       set->worstComp.time = comp->current.time;
-      set->worstComp.val = set->current.val;
+      set->worstCase.x = set->current.x;
+      set->worstCase.y = set->current.y;
   }
   if(set->bestCase.time > set->current.time){
 
       set->bestCase.time = set->current.time;
-      set->bestCase.val = set->current.val;
+      set->bestCase.x = set->current.x;
+      set->bestCase.y = set->current.y;
 
       set->bestComp.time = comp->current.time;
-      set->bestComp.val = set->current.val;
+      set->bestComp.x = set->current.x;
+      set->bestComp.y = set->current.y;
   }
   set->avgCase.time += set->current.time;
   set->itr += 1;
 }
 
 
+inline double getAngleDiff(double a1, double a2){
+  return abs(a2 - a1) * 100 / a2;
+
+}
+
+
+void diffCheck(double diff, double fastDeg, double oldDeg){
+  if(diff > 1){
+    Serial.println(F("Greater than 1% difference!"));
+    Serial.print(F("Old acos:    "));
+    Serial.println(oldDeg);
+    Serial.print(F("Fast acos:   "));
+    Serial.println(fastDeg);
+    Serial.print(F("DIFFERENCE:  "));
+    Serial.println(diff);
+    Serial.println();
+  }
+
+}
 
 
 void setup() {
   Serial.begin(BAUD_RATE);
   panTilt.begin();
   laser.begin();
+
   mSwitch.begin();
   randomSeed(analogRead(4));
   laser.setOrigin(0, 99);
+
   laser.setDotPosition(0, 30);
 
   //Serial.print(F("Calc angles time: "));
@@ -190,26 +222,27 @@ for(int i = -1000; i < 1000; i+= 20){
   unsigned long tempFast = 0;
   int x = random(0, 180);
   int y = random(0, 180);
-  oldAcos.current.val = x;
-  fastAcos.current.val = x;
-  oldAcos.current.time = timeFunc1(laser, x, y);
+  oldAcos.current.x = x;
+  oldAcos.current.y = y;
+  fastAcos.current.x = x;
+  fastAcos.current.y = y;
+
   fastAcos.current.time = timeFunc2(laser, x, y);
 
-/*
-  Serial.print(F("Old acos: "));
-  Serial.println(oldAcos.current.time);
-  Serial.println(laser.hAngleDeg());
-  Serial.println(laser.vAngleDeg());
+  fastAcos.current.hDeg = laser.hAngleDeg();
+  fastAcos.current.vDeg = laser.vAngleDeg();
 
-  Serial.print(F("\nfast acos: "));
-  Serial.println(fastAcos.current.time);
+  oldAcos.current.time = timeFunc1(laser, x, y);
+  oldAcos.current.hDeg = laser.hAngleDeg();
+  oldAcos.current.vDeg = laser.vAngleDeg();
 
-  Serial.println(laser.hAngleDeg());
-  Serial.println(laser.vAngleDeg());
-  Serial.println();
-*/
-  setTimes(&fastAcos, &oldAcos);
-  setTimes(&oldAcos, &fastAcos);
+  setVals(&fastAcos, &oldAcos);
+  setVals(&oldAcos, &fastAcos);
+
+  double hDiff = getAngleDiff(fastAcos.current.hDeg, oldAcos.current.hDeg);
+  double vDiff = getAngleDiff(fastAcos.current.vDeg, oldAcos.current.vDeg);
+
+  diffCheck(hDiff, fastAcos.current.hDeg, oldAcos.current.hDeg);
 
 itr++;
 }
@@ -228,47 +261,62 @@ Serial.println();
 
 Serial.println(F("Fast acos Best Case: "));
 Serial.print(F("Value: "));
-Serial.println(fastAcos.bestCase.val);
+Serial.print(fastAcos.bestCase.x);
+Serial.print(F(", "));
+Serial.print(fastAcos.bestCase.y);
 Serial.print(F("Time: "));
 Serial.println(fastAcos.bestCase.time);
 Serial.print(F("old acos time for "));
-Serial.print(fastAcos.bestCase.val);
+Serial.print(fastAcos.bestCase.x);
+Serial.print(F(", "));
+Serial.print(fastAcos.bestCase.y);
 Serial.println(F(": "));
 Serial.print(fastAcos.bestComp.time);
 Serial.println();
 
 Serial.println(F("Fast acos Worst Case: "));
 Serial.print(F("Value: "));
-Serial.println(fastAcos.worstCase.val);
+Serial.print(fastAcos.worstCase.x);
+Serial.print(F(", "));
+Serial.print(fastAcos.worstCase.y);
 Serial.print(F("Time: "));
 Serial.println(fastAcos.worstCase.time);
 Serial.print(F("old acos time for "));
-Serial.print(fastAcos.worstCase.val);
+Serial.print(fastAcos.worstCase.x);
+Serial.print(F(", "));
+Serial.print(fastAcos.worstCase.y);
 Serial.print(F(": "));
 Serial.println(fastAcos.worstComp.time);
 Serial.println();
 
 Serial.println(F("Old acos Best Case: "));
 Serial.print(F("Value: "));
-Serial.println(oldAcos.bestCase.val);
+Serial.print(oldAcos.bestCase.x);
+Serial.print(F(", "));
+Serial.print(oldAcos.bestCase.y);
 Serial.print(F("Time: "));
 Serial.println(oldAcos.bestCase.time);
-Serial.print(F("fast acos time for "));
-Serial.print(oldAcos.bestCase.val);
+Serial.print(F("old acos time for "));
+Serial.print(oldAcos.bestCase.x);
+Serial.print(F(", "));
+Serial.print(oldAcos.bestCase.y);
 Serial.print(F(": "));
 Serial.println(oldAcos.bestComp.time);
 Serial.println();
 
 Serial.println(F("Old acos Worst Case: "));
 Serial.print(F("Value: "));
-Serial.println(oldAcos.worstCase.val);
+Serial.print(oldAcos.worstCase.x);
+Serial.print(F(", "));
+Serial.print(oldAcos.worstCase.y);
 Serial.print(F("Time: "));
-Serial.println(oldAcos.worstCase.time);
-Serial.print(F("fast acos time for "));
-Serial.print(oldAcos.worstCase.val);
-Serial.print(F(": "));
-Serial.println(oldAcos.worstComp.time);
+Serial.println(fastAcos.worstCase.time);
+Serial.print(F("old acos time for "));
+Serial.print(oldAcos.worstCase.x);
+Serial.print(F(", "));
+Serial.print(oldAcos.worstCase.y);
 Serial.println();
+
 double tempPer = oldAcos.avgCase.time - fastAcos.avgCase.time;
 tempPer *= 100;
 tempPer /= oldAcos.avgCase.time;
