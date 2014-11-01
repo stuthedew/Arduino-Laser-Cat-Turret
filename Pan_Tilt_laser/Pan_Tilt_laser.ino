@@ -23,7 +23,7 @@
 */
 /**************************************************************************/
 
-
+#define PROGMEM_ __attribute__((section(".progmem.data")))
 
 #include <Servo.h>
 #include <math.h>
@@ -33,8 +33,10 @@
 #include "stu_scheduler.h"
 #include "missileswitch.h"
 #include "stu_gauss.h"
+#include <avr/pgmspace.h>
 #include <AVector.h>
 #include <Gaussian.h>
+#include <Flash.h>
 
 
 #define BAUD_RATE 115200
@@ -49,6 +51,11 @@
 
 
 #define DIRECTION_CHANGE_PROBABILITY 15
+
+
+
+FLASH_STRING(vTitle, "Vertical");
+FLASH_STRING(hTitle, "Horizontal");
 
 
 //X Position: lower numbers == Right
@@ -110,6 +117,7 @@ struct valTime_s{
   double
     vDeg,
     hDeg;
+
 };
 
 struct case_s{
@@ -124,6 +132,12 @@ struct case_s{
 
   int
     itr;
+
+  const char
+      *hName,
+      *vName;
+
+  case_s():hName(hTitle.access()), vName(vTitle.access()){}
 
 }oldAcos, fastAcos;
 
@@ -157,27 +171,46 @@ void setVals(struct case_s *set, struct case_s *comp){
 
 
 inline double getAngleDiff(double a1, double a2){
-  return abs(a2 - a1) * 100 / a2;
+  return abs(a2 - a1);// * 100 / a2;
 
 }
 
+int offItr = 0;
 
-void diffCheck(double diff, double fastDeg, double oldDeg){
-  if(diff > 1){
-    Serial.println(F("Greater than 1% difference!"));
-    Serial.print(F("Old acos:    "));
-    Serial.println(oldDeg);
-    Serial.print(F("Fast acos:   "));
-    Serial.println(fastDeg);
-    Serial.print(F("DIFFERENCE:  "));
+void angleCheck(double diff, double fastDeg, double oldDeg, const char *s, int x, int y){
+
+  if(diff > 2){
+    Serial.print(F("Greater than 1% difference in "));
+    while (pgm_read_byte(s) != '\0'){
+      Serial.print((char)pgm_read_byte(s++));
+    }
+    Serial.print(F(" angle for ("));
+    Serial.print(x);
+    Serial.print(F(", "));
+    Serial.print(y);
+    Serial.print(F(")!!!\nOld acos:    "));
+    Serial.print(oldDeg);
+    Serial.print(F("\nFast acos:   "));
+    Serial.print(fastDeg);
+    Serial.print(F("\nDIFFERENCE:  "));
     Serial.println(diff);
     Serial.println();
+    offItr++;
   }
+}
+
+void diffCheck(struct case_s *fast, struct case_s *old){
+  double hDiff = getAngleDiff(fast->current.hDeg, old->current.hDeg);
+  double vDiff = getAngleDiff(fast->current.vDeg, old->current.vDeg);
+
+  angleCheck(hDiff, fast->current.hDeg, old->current.hDeg, fast->hName, fast->current.x, fast->current.y);
+  angleCheck(vDiff, fast->current.vDeg, old->current.vDeg, fast->vName, fast->current.x, fast->current.y);
 
 }
 
 
 void setup() {
+
   Serial.begin(BAUD_RATE);
   panTilt.begin();
   laser.begin();
@@ -206,6 +239,7 @@ void setup() {
 
   laser.fire(1);
   int itr = 0;
+
   oldAcos.itr = 0;
   oldAcos.avgCase.time = 0;
   fastAcos.itr = 0;
@@ -220,8 +254,8 @@ void setup() {
 for(int i = -1000; i < 1000; i+= 20){
   unsigned long tempOld = 0;
   unsigned long tempFast = 0;
-  int x = random(0, 180);
-  int y = random(0, 180);
+  int x = random(-90, 90);
+  int y = random(0, 1000);
   oldAcos.current.x = x;
   oldAcos.current.y = y;
   fastAcos.current.x = x;
@@ -233,17 +267,15 @@ for(int i = -1000; i < 1000; i+= 20){
   fastAcos.current.vDeg = laser.vAngleDeg();
 
   oldAcos.current.time = timeFunc1(laser, x, y);
-  oldAcos.current.hDeg = laser.hAngleDeg();
-  oldAcos.current.vDeg = laser.vAngleDeg();
+  oldAcos.current.hDeg = round(laser.hAngleDeg());
+  oldAcos.current.vDeg = round(laser.vAngleDeg());
 
   setVals(&fastAcos, &oldAcos);
   setVals(&oldAcos, &fastAcos);
 
-  double hDiff = getAngleDiff(fastAcos.current.hDeg, oldAcos.current.hDeg);
-  double vDiff = getAngleDiff(fastAcos.current.vDeg, oldAcos.current.vDeg);
 
-  diffCheck(hDiff, fastAcos.current.hDeg, oldAcos.current.hDeg);
-
+  diffCheck(&fastAcos, &oldAcos);
+Serial.println();
 itr++;
 }
 
@@ -251,67 +283,72 @@ oldAcos.avgCase.time /= oldAcos.itr;
 
 fastAcos.avgCase.time /= fastAcos.itr;
 
+double offPercent = offItr *100;
+offPercent /= itr;
+
+Serial.print(F("% off: "));
+Serial.println(offPercent);
 
 
 Serial.println(F("Fast acos average: "));
 Serial.println(fastAcos.avgCase.time);
-Serial.println(F("\nold acos average: "));
+Serial.print(F("\nold acos average: "));
 Serial.println(oldAcos.avgCase.time);
 Serial.println();
 
 Serial.println(F("Fast acos Best Case: "));
-Serial.print(F("Value: "));
+Serial.print(F("Value: ("));
 Serial.print(fastAcos.bestCase.x);
 Serial.print(F(", "));
 Serial.print(fastAcos.bestCase.y);
-Serial.print(F("Time: "));
+Serial.print(F(")\nTime: "));
 Serial.println(fastAcos.bestCase.time);
-Serial.print(F("old acos time for "));
-Serial.print(fastAcos.bestCase.x);
+Serial.print(F("old acos time for ("));
+Serial.println(fastAcos.bestCase.x);
 Serial.print(F(", "));
 Serial.print(fastAcos.bestCase.y);
-Serial.println(F(": "));
+Serial.print(F("): "));
 Serial.print(fastAcos.bestComp.time);
 Serial.println();
 
 Serial.println(F("Fast acos Worst Case: "));
-Serial.print(F("Value: "));
+Serial.print(F("Value: ("));
 Serial.print(fastAcos.worstCase.x);
 Serial.print(F(", "));
 Serial.print(fastAcos.worstCase.y);
-Serial.print(F("Time: "));
+Serial.print(F(")\nTime: "));
 Serial.println(fastAcos.worstCase.time);
-Serial.print(F("old acos time for "));
+Serial.print(F("old acos time for ("));
 Serial.print(fastAcos.worstCase.x);
 Serial.print(F(", "));
 Serial.print(fastAcos.worstCase.y);
-Serial.print(F(": "));
+Serial.print(F("): "));
 Serial.println(fastAcos.worstComp.time);
 Serial.println();
 
 Serial.println(F("Old acos Best Case: "));
-Serial.print(F("Value: "));
+Serial.print(F("Value: ("));
 Serial.print(oldAcos.bestCase.x);
 Serial.print(F(", "));
 Serial.print(oldAcos.bestCase.y);
-Serial.print(F("Time: "));
+Serial.print(F(")\nTime: "));
 Serial.println(oldAcos.bestCase.time);
-Serial.print(F("old acos time for "));
+Serial.print(F("fast acos time for ("));
 Serial.print(oldAcos.bestCase.x);
 Serial.print(F(", "));
 Serial.print(oldAcos.bestCase.y);
-Serial.print(F(": "));
+Serial.print(F("): "));
 Serial.println(oldAcos.bestComp.time);
 Serial.println();
 
 Serial.println(F("Old acos Worst Case: "));
-Serial.print(F("Value: "));
+Serial.print(F("Value: ("));
 Serial.print(oldAcos.worstCase.x);
 Serial.print(F(", "));
 Serial.print(oldAcos.worstCase.y);
-Serial.print(F("Time: "));
+Serial.print(F(")\nTime: "));
 Serial.println(fastAcos.worstCase.time);
-Serial.print(F("old acos time for "));
+Serial.print(F("fast acos time for ("));
 Serial.print(oldAcos.worstCase.x);
 Serial.print(F(", "));
 Serial.print(oldAcos.worstCase.y);

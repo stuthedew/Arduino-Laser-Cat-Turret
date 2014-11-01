@@ -52,8 +52,9 @@ void StuLaser::setDotPosition(int hX, int hY){
   _vDot.set(_hDot.mag(), _vDot.y());
   _hOrigin.set(hX, 0);
 
+  _servoAngle.hRad =_hDot.angleBetween(&_hOrigin);
   _servoAngle.vRad = M_PI_2 - _vDot.angleBetween(&_vOrigin);
-  _servoAngle.hRad = M_PI_2 + _hDot.angleBetween(&_hOrigin);
+
   _servoAngle.hDeg = RAD_2_DEG_CONST * _servoAngle.hRad;
   _servoAngle.vDeg = RAD_2_DEG_CONST * _servoAngle.vRad;
 
@@ -67,7 +68,7 @@ void StuLaser::setDotPositionFast(int hX, int hY){
   //_servoAngle.hRad = M_PI_2 + _hDot.angleBetweenFast(&_hOrigin);
   //_servoAngle.vRad = M_PI_2 - _vDot.angleBetweenFast(&_vOrigin);
 
-  _servoAngle.hDeg = 90 + _hDot.angleBetweenFast(&_hOrigin);
+  _servoAngle.hDeg = _hDot.angleBetweenFast(&_hOrigin);
   _servoAngle.vDeg = 90 - _vDot.angleBetweenFast(&_vOrigin);
 
 }
