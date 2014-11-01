@@ -21,6 +21,19 @@
 
 #include "Arduino.h"
 #include <AVector.h>
+#include <math.h>
+
+
+struct angle_t{
+  float
+    hRad,
+    vRad;
+
+  int
+    hDeg,
+    vDeg;
+
+};
 
 class StuLaser {
 
@@ -32,7 +45,11 @@ public:
     begin(),
     fire(boolean state),
     setOrigin(int vX, int vY),
-    setPosition(int hX, int hY);
+    setDotPosition(int hX, int hY),
+    setDotPositionFast(int hX, int hY);
+
+    void
+      calcAngles();
 
 
   int
@@ -47,16 +64,26 @@ public:
     vAngle(),
     hAngle();
 
+  inline int
+    rad2Deg(float);
+
 private:
 
   uint8_t
     _pin;
 
-  SVector
+  AVector
     _vDot,
     _hDot,
     _hOrigin,
     _vOrigin;
+
+  angle_t
+    _servoAngle;
+
+
+
+
 
 };
 
