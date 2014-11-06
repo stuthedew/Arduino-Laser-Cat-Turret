@@ -36,7 +36,7 @@
 #include <avr/pgmspace.h>
 #include <AVector.h>
 #include <Gaussian.h>
-#include <Flash.h>
+
 
 
 #define BAUD_RATE 115200
@@ -54,9 +54,11 @@
 
 
 
-FLASH_STRING(vTitle, "Vertical");
-FLASH_STRING(hTitle, "Horizontal");
+//FLASH_STRING(vTitle, "Vertical");
+//FLASH_STRING(hTitle, "Horizontal");
 
+const char vTitle[]PROGMEM = "Vertical";
+const char hTitle[]PROGMEM = "Horizontal";
 
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
@@ -137,7 +139,7 @@ struct case_s{
       *hName,
       *vName;
 
-  case_s():hName(hTitle.access()), vName(vTitle.access()){}
+  case_s():hName(hTitle), vName(vTitle){}
 
 }oldAcos, fastAcos;
 
@@ -195,6 +197,7 @@ void angleCheck(double diff, double fastDeg, double oldDeg, const char *s, int x
     Serial.print(F("\nDIFFERENCE:  "));
     Serial.println(diff);
     Serial.println();
+    Serial.println();
     offItr++;
   }
 }
@@ -219,7 +222,7 @@ void setup() {
   randomSeed(analogRead(4));
   laser.setOrigin(0, 99);
 
-  laser.setDotPosition(0, 30);
+  laser.setDotPositionFast(-100, 123);
 
   //Serial.print(F("Calc angles time: "));
 
@@ -234,6 +237,18 @@ void setup() {
 
 
 //Serial.println(p0.lerp(&p1, 3));
+
+Serial.print(F("Fast acos value: ("));
+Serial.print(F("-100, 123"));
+Serial.print(F(")\nDegree: "));
+Serial.println(laser.vAngleDeg());
+laser.setDotPosition(-100, 123);
+Serial.print(F("old acos value :"));
+Serial.println(laser.vAngleDeg());
+
+Serial.println();
+
+while(1);
 
 
 
@@ -251,11 +266,11 @@ void setup() {
   Serial.println();
   Serial.println();
 
-for(int i = -1000; i < 1000; i+= 20){
+for(int i = 0; i < 1000; i+= 20){
   unsigned long tempOld = 0;
   unsigned long tempFast = 0;
-  int x = random(-90, 90);
-  int y = random(0, 1000);
+  int x = random(-100, -100);
+  int y = random(0, 500);
   oldAcos.current.x = x;
   oldAcos.current.y = y;
   fastAcos.current.x = x;
@@ -275,7 +290,7 @@ for(int i = -1000; i < 1000; i+= 20){
 
 
   diffCheck(&fastAcos, &oldAcos);
-Serial.println();
+
 itr++;
 }
 
@@ -283,7 +298,7 @@ oldAcos.avgCase.time /= oldAcos.itr;
 
 fastAcos.avgCase.time /= fastAcos.itr;
 
-double offPercent = offItr *100;
+double offPercent = offItr * 100;
 offPercent /= itr;
 
 Serial.print(F("% off: "));
