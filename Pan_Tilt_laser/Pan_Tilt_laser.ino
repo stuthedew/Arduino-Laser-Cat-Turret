@@ -23,10 +23,10 @@
     v1.6.0 - Switched Markov speed change to circuler linked list
 */
 /**************************************************************************/
+
 #include "panTilt_config.h"
 #include <Servo.h>
 #include <Gaussian.h>
-
 
 
 int markovShakeState = 1;
