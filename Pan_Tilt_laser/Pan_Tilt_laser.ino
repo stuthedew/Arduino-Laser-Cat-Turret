@@ -22,32 +22,13 @@
     v1.5.1 - Converted speed and direction function to scheduled task
 */
 /**************************************************************************/
-
-
-
+#include "panTilt_config.h"
 #include <Servo.h>
-#include <math.h>
-#include "stuServo.h"
-#include "stuPanTilt.h"
-#include "stuLaser.h"
-#include "stu_scheduler.h"
-#include "missileswitch.h"
-#include "stu_gauss.h"
 #include <Gaussian.h>
 
 
-#define BAUD_RATE 115200
-
-#define MS_SWITCH_PIN 3
-#define MS_LED_PIN 4
-
-#define LASER_PIN 5
-
-#define SERVO_X_PIN A0
-#define SERVO_Y_PIN A1
 
 
-#define DIRECTION_CHANGE_PROBABILITY 15
 
 
 int markovShakeState =1;
@@ -81,44 +62,7 @@ void updateSpeedAndDir(){
 
 }
 
-//halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
 
-  unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
-/*
-  Serial.print(F("Next pause in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
-*/
-  pauseTask.setInterval(temp);
-
-}
-
-//turn off laser for a few moments at this time
-void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
-  unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
-/*
-  Serial.print(F("Next rest in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
-*/
-  restTask.setInterval(temp);
-}
-
-
-//turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
-  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
-
-//  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
-/*
-  Serial.print(F("Next sleep in "));
-  Serial.print(mSecToSleep/1000);
-  Serial.println(F(" seconds.\n"));
-*/
-  sleepTask.setInterval(mSecToSleep);
-
-}
 
 void pauseCB(){
   //Serial.println(F("Pause Callback!"));
@@ -144,6 +88,8 @@ void sleepCB(){
   setNextRestTime();
   setNextSleepTime();
 }
+
+
 
 void setup() {
   Serial.begin(BAUD_RATE);
