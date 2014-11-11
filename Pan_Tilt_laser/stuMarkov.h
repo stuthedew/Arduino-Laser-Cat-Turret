@@ -13,10 +13,16 @@
 
 */
 /**************************************************************************/
+
 #ifndef _STUMARKOV_H_
 #define _STUMARKOV_H_
 
+#define LINKED_LIST_SIZE 5
+
+#ifdef ARDUINO
 #include "Arduino.h"
+#endif
+
 #include <assert.h>
 
 struct markovLink_t;
@@ -45,20 +51,25 @@ typedef struct markovLink_t{
 class LinkedMarkov {
 
 public:
-                        LinkedMarkov();
+                           LinkedMarkov( void ) ;
 
-            void        begin();
-            void        addLink( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) ;
+            void           begin( void ) ;
+            void           addLink( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) ;
 
-  unsigned  int     getNextSpeed( int randVal ) ;
+  unsigned  int            getNextSpeed( uint8_t randVal ) ;
+            int            getListSize( void ) const ;
+
+ markovLink_t*             getMarkovPtr( uint8_t relativePos ) ;
 
 
 private:
 
-        markovLink_t     _mSpeed[ 5 ] ;
+        markovLink_t     _mSpeed[ LINKED_LIST_SIZE ] ;
         markovLink_t*    _head ;
+        markovLink_t*    _tail ;
         markovLink_t*    _current ;
-        uint8_t           _itr ;
+
+        int8_t           _itr ;
 
 };
 

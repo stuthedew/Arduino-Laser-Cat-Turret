@@ -28,7 +28,7 @@
 
 
 
-int markovShakeState =1;
+int markovShakeState = 1;
 int changeVal;
 
 StuGauss gauss;

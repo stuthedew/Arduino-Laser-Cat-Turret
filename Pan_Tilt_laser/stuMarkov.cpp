@@ -25,6 +25,7 @@ void LinkedMarkov::begin(){
   _itr = 0 ;
   _head = &_mSpeed[ _itr ] ;
   _current = _head ;
+  _tail = _head ;
   _current->previous.markovLink = _head ;
   _current->next.markovLink = _head ;
 
@@ -34,23 +35,24 @@ void LinkedMarkov::begin(){
 void LinkedMarkov::addLink( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) {
 
   assert( prevVal + nextVal <= 100 );             //make sure that change probabilites are less than one hundred
+  assert( _itr < LINKED_LIST_SIZE ) ;             // prevent overflow.
 
-  markovLink_t* oldLink = &_mSpeed[ _itr++ ] ;   //get pointer to current spot in linked list and iterate one spot.
+  _current = &_mSpeed[ _itr++ ] ;                 //get pointer to current spot in linked list and iterate pointer.
 
-  markovLink_t* current = &_mSpeed[ _itr ] ;   //get pointer to new current spot in linked list.
+  _current->speed = speed ;
 
-  current->speed = speed ;
+  _current->next.markovLink = _head ;             // new last element (tail), so set next to head.
+  _current->next.probability = nextVal ;
 
-  current->next.markovLink = _head ;             // new last element, so set next to head.
-  current->next.probability = nextVal ;
+  _current->previous.markovLink = _tail ;         // set current (new tail) previous-link to old tail
+  _current->previous.probability = prevVal ;
 
-  current->previous.markovLink = oldLink ;
-  current->previous.probability = prevVal ;
-  oldLink->next.markovLink = current ;
+  _tail->next.markovLink = _current ;             // set old tail next-link to current (new tail)
+  _tail = _current ;                              // set tail pointer to new tail (current)
 
 }
 
-unsigned  int LinkedMarkov::getNextSpeed( int randVal ){
+unsigned int LinkedMarkov::getNextSpeed( uint8_t randVal ) {
 
   assert( randVal >= 0 ) ;
   assert( randVal <= 100 ) ;
@@ -64,5 +66,19 @@ unsigned  int LinkedMarkov::getNextSpeed( int randVal ){
   }
 
   return _current->speed ;
+
+}
+
+int LinkedMarkov::getListSize( void ) const {
+    return _itr;
+
+}
+
+
+markovLink_t* LinkedMarkov::getMarkovPtr( uint8_t Pos ) {
+    assert( Pos < _itr );
+    markovLink_t* temp = &_mSpeed[ Pos ] ;
+
+    return  temp;
 
 }
