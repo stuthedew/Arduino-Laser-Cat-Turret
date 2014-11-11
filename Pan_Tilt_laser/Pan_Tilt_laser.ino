@@ -20,7 +20,9 @@
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
     v1.5.0 - Added scheduler and gaussian library for random values
     v1.5.1 - Converted speed and direction function to scheduled task
-    v1.6.0 - Switched Markov speed change to circuler linked list
+    v1.6.0 - Switched Markov speed change to Markov handler using circuler
+             linked list.
+    v1.6.1 - Switched Markov state to Markov handler
 */
 /**************************************************************************/
 
