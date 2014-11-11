@@ -54,9 +54,9 @@ public:
                            LinkedMarkov( void ) ;
 
             void           begin( void ) ;
-            void           addLink( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) ;
+            void           addLinkToBack( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) ;
 
-  unsigned  int            getNextSpeed( uint8_t randVal ) ;
+  unsigned  int            getNextSpeed( void ) ;
             int            getListSize( void ) const ;
 
  markovLink_t*             getMarkovPtr( uint8_t relativePos ) ;

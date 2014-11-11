@@ -20,6 +20,7 @@
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
     v1.5.0 - Added scheduler and gaussian library for random values
     v1.5.1 - Converted speed and direction function to scheduled task
+    v1.6.0 - Switched Markov speed change to circuler linked list
 */
 /**************************************************************************/
 #include "panTilt_config.h"
@@ -30,6 +31,8 @@
 
 int markovShakeState = 1;
 int changeVal;
+
+LinkedMarkov lmSpeed;
 
 StuGauss gauss;
 
@@ -54,7 +57,7 @@ Task speedAndDirTask(&updateSpeedAndDir, 750);
 StuScheduler schedule;
 
 void updateSpeedAndDir(){
-  changeVal = getMarkovSpeed(changeVal);
+  changeVal = lmSpeed.getNextSpeed();
   markovShakeState = markovState(5, 30);
 
 }
@@ -90,12 +93,29 @@ void sleepCB(){
 
 void setup() {
   Serial.begin(BAUD_RATE);
+
+  lmSpeed.begin();
+
   mSwitch.begin();
 
   schedule.addTask(&pauseTask);
   schedule.addTask(&restTask);
   schedule.addTask(&sleepTask);
   schedule.addTask(&speedAndDirTask);
+
+//addLinkToBack(speed, previous_state_probability, next_state_probability)
+  lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
+//                      ^  ||
+//                      |  \/
+  lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
+//                      ^  ||
+//                      |  \/
+  lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
+//                      ^  ||
+//                      |  \/
+//                     | Slow |
+
+
   randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
@@ -182,8 +202,6 @@ void loop() {
 }
 
 
-
-
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
     int prob = changeProb;
@@ -257,6 +275,7 @@ int getMarkovSpeed(int oldSpeed){
     return midVal;
   }
 }
+
 
 int markovPause(){
   int val = random(101);

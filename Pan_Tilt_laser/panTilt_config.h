@@ -18,6 +18,7 @@
 #include <Gaussian.h>
 #include "stutility.h"
 #include <assert.h>
+#include "stuMarkov.h"
 
 
 #define MS_SWITCH_PIN 3
