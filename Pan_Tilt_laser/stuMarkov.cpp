@@ -23,7 +23,7 @@ LinkedMarkov::LinkedMarkov(){
 
 void LinkedMarkov::begin(){
   _itr = 0 ;
-  _head = &_mSpeed[ _itr ] ;
+  _head = &_mValue[ _itr ] ;
   _current = _head ;
   _tail = _head ;
   _current->previous.markovLink = _head ;
@@ -31,16 +31,16 @@ void LinkedMarkov::begin(){
 
 }
 
-void LinkedMarkov::addLinkToBack( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) {
+void LinkedMarkov::addLinkToBack( unsigned int value, unsigned int prevVal, unsigned int nextVal ) {
 
   assert( prevVal + nextVal <= 100 );       // make sure that change probabilites are less than one hundred
   assert( _itr < LINKED_LIST_SIZE ) ;       // prevent overflow.
 
   markovLink_t* newLinkPtr;
 
-  newLinkPtr = &_mSpeed[ _itr++ ] ;         // get pointer to current spot in linked list and iterate pointer for next time.
+  newLinkPtr = &_mValue[ _itr++ ] ;         // get pointer to current spot in linked list and iterate pointer for next time.
 
-  newLinkPtr->speed = speed ;
+  newLinkPtr->value = value ;
 
   newLinkPtr->next.markovLink = _head ;     // new last element (tail), so set next to head.
   newLinkPtr->next.probability = nextVal ;
@@ -53,7 +53,7 @@ void LinkedMarkov::addLinkToBack( unsigned int speed, unsigned int prevVal, unsi
 
 }
 
-unsigned int LinkedMarkov::getNextSpeed( void ) {
+unsigned int LinkedMarkov::getNextValue( void ) {
   uint8_t randVal = random( 101 ) ;
   assert( randVal >= 0 ) ;
   assert( randVal <= 100 ) ;
@@ -65,7 +65,7 @@ unsigned int LinkedMarkov::getNextSpeed( void ) {
     _current = _current->next.markovLink ;
   }
 
-  return _current->speed ;
+  return _current->value ;
 
 }
 
@@ -76,7 +76,7 @@ int LinkedMarkov::getListSize( void ) const {
 
 markovLink_t* LinkedMarkov::getMarkovPtr( uint8_t Pos ) {
     assert( Pos < _itr ) ;
-    markovLink_t* temp = &_mSpeed[ Pos ] ;
+    markovLink_t* temp = &_mValue[ Pos ] ;
 
     return  temp ;
 

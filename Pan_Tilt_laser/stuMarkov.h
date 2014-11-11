@@ -30,14 +30,14 @@ struct markovLink_t;
 typedef struct markovPair_t{
 
           unsigned  int       probability;
-          markovLink_t*      markovLink;
+          markovLink_t*       markovLink;
 
 }markovPair_t;
 
 
 typedef struct markovLink_t{
 
-          unsigned  int      speed;
+          unsigned  int      value;
 
 
           markovPair_t       previous;
@@ -54,9 +54,9 @@ public:
                            LinkedMarkov( void ) ;
 
             void           begin( void ) ;
-            void           addLinkToBack( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) ;
+            void           addLinkToBack( unsigned int value, unsigned int prevVal, unsigned int nextVal ) ;
 
-  unsigned  int            getNextSpeed( void ) ;
+  unsigned  int            getNextValue( void ) ;
             int            getListSize( void ) const ;
 
  markovLink_t*             getMarkovPtr( uint8_t relativePos ) ;
@@ -64,7 +64,7 @@ public:
 
 private:
 
-        markovLink_t     _mSpeed[ LINKED_LIST_SIZE ] ;
+        markovLink_t     _mValue[ LINKED_LIST_SIZE ] ;
         markovLink_t*    _head ;
         markovLink_t*    _tail ;
         markovLink_t*    _current ;

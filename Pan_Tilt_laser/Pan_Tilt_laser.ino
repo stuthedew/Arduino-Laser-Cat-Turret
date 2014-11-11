@@ -33,6 +33,7 @@ int markovShakeState = 1;
 int changeVal;
 
 LinkedMarkov lmSpeed;
+LinkedMarkov lmShake;
 
 StuGauss gauss;
 
@@ -57,8 +58,8 @@ Task speedAndDirTask(&updateSpeedAndDir, 750);
 StuScheduler schedule;
 
 void updateSpeedAndDir(){
-  changeVal = lmSpeed.getNextSpeed();
-  markovShakeState = markovState(5, 30);
+  changeVal = lmSpeed.getNextValue();
+  markovShakeState = lmShake.getNextValue();
 
 }
 
@@ -114,6 +115,13 @@ void setup() {
 //                      ^  ||
 //                      |  \/
 //                     | Slow |
+
+
+//addLinkToBack(state, previous_state_probability, next_state_probability)
+  lmShake.addLinkToBack( 1,  5, 0 ); // No shake
+//                       ^  ||
+//                       |  \/
+  lmShake.addLinkToBack( 2, 30, 0 ); // Shake
 
 
   randomSeed(analogRead(5));
