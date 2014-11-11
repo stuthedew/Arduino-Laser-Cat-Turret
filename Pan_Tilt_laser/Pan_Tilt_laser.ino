@@ -85,47 +85,49 @@ void updateSpeedAndDir(){
 void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
-  /*
+/*
   Serial.print(F("Next pause in "));
   Serial.print(temp/1000);
   Serial.println(F(" seconds.\n"));
-  */
+*/
   pauseTask.setInterval(temp);
 
 }
 
 //turn off laser for a few moments at this time
-void setNextRestTime(unsigned long avg_sec_to_rest=120, double variance=60){
+void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
   unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
-  /*
+/*
   Serial.print(F("Next rest in "));
   Serial.print(temp/1000);
   Serial.println(F(" seconds.\n"));
-  */
+*/
   restTask.setInterval(temp);
 }
 
 
 //turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_sec_to_sleep=60, double variance = 10){
-  unsigned long temp = gauss.gRandom(avg_sec_to_sleep, variance)*10000;
-  /*
+void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
+  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
+
+//  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
+/*
   Serial.print(F("Next sleep in "));
-  Serial.print(temp/1000);
+  Serial.print(mSecToSleep/1000);
   Serial.println(F(" seconds.\n"));
-  */
-  sleepTask.setInterval(temp);
+*/
+  sleepTask.setInterval(mSecToSleep);
 
 }
 
 void pauseCB(){
-//  Serial.println(F("Pause Callback!"));
+  //Serial.println(F("Pause Callback!"));
   delay(markovPause());
   setNextPauseTime();
 }
 
 void restCB(){
-//  Serial.println(F("Rest Callback!"));
+  //Serial.println(F("Rest Callback!"));
   mSwitch.ledState(0);
   sleep(5, 10);
   mSwitch.ledState(1);
@@ -134,7 +136,7 @@ void restCB(){
 }
 
 void sleepCB(){
-//  Serial.println(F("Sleep Callback!"));
+  //Serial.println(F("Sleep Callback!"));
   mSwitch.ledState(0);
   sleep(1800, 2400); //sleep between 30 and 40 minutes
   mSwitch.ledState(1);
@@ -201,6 +203,7 @@ void loop() {
 
   //check if switch is on or off and pause if off
   if(!mSwitch.switchState()){
+  //  Serial.print(F("Switch is off!"));
     laser.fire(0);
     mSwitch.ledState(0);
     panTiltX.angle = 90;
@@ -222,6 +225,7 @@ void loop() {
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
+  //Serial.println(F("Update Angles"));
   panTilt.updateAngles();
 
 
@@ -283,10 +287,10 @@ int getMarkovSpeed(int oldSpeed){
   }
 
   else if(oldSpeed == midVal){
-    if(probability < 30){
+    if(probability < 25){
       return hiVal;
     }
-    else if(probability < 80){
+    else if(probability < 60){
       return midVal;
     }
     else{
@@ -295,16 +299,19 @@ int getMarkovSpeed(int oldSpeed){
   }
 
   else if(oldSpeed == hiVal){
-    if(probability < 60){
+    if(probability < 50){
       return midVal;
     }
-    else{
+    else if(probability < 80){
       return hiVal;
+    }
+    else{
+      return lowVal;
     }
   }
 
   else{
-    return constrain(oldSpeed, lowVal, hiVal);
+    return midVal;
   }
 }
 

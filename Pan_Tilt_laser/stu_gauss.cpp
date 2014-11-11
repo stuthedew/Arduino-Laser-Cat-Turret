@@ -27,6 +27,6 @@ unsigned long StuGauss::gRandom(unsigned long zero, double variance){
   _gauss.setVariance(variance);
   _gauss.setMean(zero);
   double temp = _gauss.random();
-  Serial.println(temp);
+  //Serial.println(temp);
   return round(max(temp, 2));
 }
