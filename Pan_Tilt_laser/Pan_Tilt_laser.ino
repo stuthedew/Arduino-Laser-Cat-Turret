@@ -28,9 +28,6 @@
 
 
 
-
-
-
 int markovShakeState =1;
 int changeVal;
 

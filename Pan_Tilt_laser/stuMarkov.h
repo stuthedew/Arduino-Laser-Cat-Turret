@@ -19,17 +19,17 @@
 #include "Arduino.h"
 #include <assert.h>
 
-struct markovSpeed_t;
+struct markovLink_t;
 
 typedef struct markovPair_t{
 
           unsigned  int       probability;
-          markovSpeed_t*      markovSpeed;
+          markovLink_t*      markovLink;
 
 }markovPair_t;
 
 
-typedef struct markovSpeed_t{
+typedef struct markovLink_t{
 
           unsigned  int      speed;
 
@@ -37,7 +37,7 @@ typedef struct markovSpeed_t{
           markovPair_t       previous;
           markovPair_t       next;
 
-}markovSpeed_t;
+}markovLink_t;
 
 
 
@@ -45,7 +45,7 @@ typedef struct markovSpeed_t{
 class LinkedMarkov {
 
 public:
-                    LinkedMarkov();
+                        LinkedMarkov();
 
             void        begin();
             void        addLink( unsigned int speed, unsigned int prevVal, unsigned int nextVal ) ;
@@ -55,9 +55,9 @@ public:
 
 private:
 
-        markovSpeed_t     _mSpeed[ 5 ] ;
-        markovSpeed_t*    _head ;
-        markovSpeed_t*    _current ;
+        markovLink_t     _mSpeed[ 5 ] ;
+        markovLink_t*    _head ;
+        markovLink_t*    _current ;
         uint8_t           _itr ;
 
 };

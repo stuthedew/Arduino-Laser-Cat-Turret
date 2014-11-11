@@ -25,6 +25,8 @@ void LinkedMarkov::begin(){
   _itr = 0 ;
   _head = &_mSpeed[ _itr ] ;
   _current = _head ;
+  _current->previous.markovLink = _head ;
+  _current->next.markovLink = _head ;
 
 
 }
@@ -33,19 +35,18 @@ void LinkedMarkov::addLink( unsigned int speed, unsigned int prevVal, unsigned i
 
   assert( prevVal + nextVal <= 100 );             //make sure that change probabilites are less than one hundred
 
-  markovSpeed_t* current = &_mSpeed[ _itr++ ] ;   //get pointer to current spot in linked list and iterate one spot.
+  markovLink_t* oldLink = &_mSpeed[ _itr++ ] ;   //get pointer to current spot in linked list and iterate one spot.
 
-  current->next.markovSpeed = &_mSpeed[ _itr ] ;  //set current next to next spot
-  markovSpeed_t* previous = current ;             //get placeholder to old current
-  current = &_mSpeed[ _itr ] ;                    //set current pointer to next spot
+  markovLink_t* current = &_mSpeed[ _itr ] ;   //get pointer to new current spot in linked list.
 
   current->speed = speed ;
 
-  current->next.markovSpeed = _head ;             // new last element, so set next to head.
+  current->next.markovLink = _head ;             // new last element, so set next to head.
   current->next.probability = nextVal ;
 
-  current->previous.markovSpeed = previous ;
+  current->previous.markovLink = oldLink ;
   current->previous.probability = prevVal ;
+  oldLink->next.markovLink = current ;
 
 }
 
@@ -55,10 +56,10 @@ unsigned  int LinkedMarkov::getNextSpeed( int randVal ){
   assert( randVal <= 100 ) ;
 
   if( randVal < _current->previous.probability ){
-    _current = _current->previous.markovSpeed ;
+    _current = _current->previous.markovLink ;
   }
   else if( randVal < _current->previous.probability + _current->next.probability ){
-    _current = _current->next.markovSpeed ;
+    _current = _current->next.markovLink ;
 
   }
 
