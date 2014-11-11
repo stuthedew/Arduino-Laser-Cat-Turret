@@ -363,7 +363,7 @@ void heartBeat(unsigned long mSeconds, int hbInterval){
 
 void shake(){
   int moveVal = 10;
-  const int shakeDelay = 5;
+  const int shakeDelay = 0;
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
   delay(shakeDelay);
