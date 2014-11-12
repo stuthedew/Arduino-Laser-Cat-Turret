@@ -16,8 +16,7 @@
 /**************************************************************************/
 
 
-#ifndef _STUSERVO_H_
-#define _STUSERVO_H_
+#pragma once
 
 #include <Servo.h>
 
@@ -52,7 +51,3 @@ private:
 
 
 };
-
-
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _STUTILITY_H_
-#define _STUTILITY_H_
+#pragma once
 
 #include "stu_scheduler.h"
 #include "stu_gauss.h"
@@ -49,8 +48,3 @@ void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
   sleepTask.setInterval(mSecToSleep);
 
 }
-
-
-
-
-#endif

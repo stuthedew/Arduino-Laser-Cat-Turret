@@ -14,9 +14,7 @@
 
 */
 /**************************************************************************/
-
-#ifndef _STU_SCHEDULER_H_
-#define _STU_SCHEDULER_H_
+#pragma once
 
 #include "Arduino.h"
 
@@ -78,7 +76,3 @@ private:
 
 
 };
-
-
-
-#endif

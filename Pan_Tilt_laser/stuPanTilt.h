@@ -16,9 +16,7 @@
 */
 /**************************************************************************/
 
-
-#ifndef _STUPANTILT_H_
-#define _STUPANTILT_H_
+#pragma once
 
 #include "stuServo.h"
 #include <Servo.h>
@@ -78,9 +76,3 @@ private:
     *_Ypos;
 
 };
-
-
-
-
-
-#endif
