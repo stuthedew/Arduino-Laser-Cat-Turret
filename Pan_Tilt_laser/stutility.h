@@ -12,7 +12,7 @@ extern StuGauss gauss;
 
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
+void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 /*

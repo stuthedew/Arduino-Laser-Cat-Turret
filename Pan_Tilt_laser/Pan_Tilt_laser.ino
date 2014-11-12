@@ -108,22 +108,24 @@ void setup() {
 
 //addLinkToBack(speed, previous_state_probability, next_state_probability)
   lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
-//                      ^  ||
-//                      |  \/
+//                           ^  ||
+//                           |  \/
   lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
-//                      ^  ||
-//                      |  \/
+//                           ^  ||
+//                           |  \/
   lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
-//                      ^  ||
-//                      |  \/
-//                     | Slow |
+//                           ^  ||
+//                           |  \/
+//                          | Slow |
 
 
 //addLinkToBack(state, previous_state_probability, next_state_probability)
-  lmShake.addLinkToBack( 1,  5, 0 ); // No shake
-//                       ^  ||
-//                       |  \/
+  lmShake.addLinkToBack( 1,  0, 5 ); // No shake
+//                           ^  ||
+//                           |  \/
   lmShake.addLinkToBack( 2, 30, 0 ); // Shake
+
+
 
 
   randomSeed(analogRead(5));
