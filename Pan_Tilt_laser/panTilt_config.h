@@ -1,6 +1,4 @@
-#ifndef _PANTILT_CONFIG_H_
-#define _PANTILT_CONFIG_H_
-
+#pragma once
 
 #define BAUD_RATE 115200
 
@@ -32,6 +30,3 @@
 
 
 #define DIRECTION_CHANGE_PROBABILITY 15
-
-
-#endif

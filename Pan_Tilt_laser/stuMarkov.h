@@ -13,9 +13,7 @@
 
 */
 /**************************************************************************/
-
-#ifndef _STUMARKOV_H_
-#define _STUMARKOV_H_
+#pragma once
 
 #define LINKED_LIST_SIZE 5
 
@@ -74,7 +72,3 @@ private:
         int8_t           _itr ;
 
 };
-
-
-
-#endif

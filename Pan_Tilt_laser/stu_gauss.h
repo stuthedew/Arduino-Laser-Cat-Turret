@@ -15,9 +15,7 @@
 
 */
 /**************************************************************************/
-
-#ifndef _STU_GAUSS_H_
-#define _STU_GAUSS_H_
+#pragma once
 
 #include "Arduino.h"
 #include <Gaussian.h>
@@ -41,8 +39,3 @@ private:
   Gaussian _gauss;
 
 };
-
-
-
-
-#endif

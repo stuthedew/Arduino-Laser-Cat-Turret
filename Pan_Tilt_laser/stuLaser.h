@@ -16,8 +16,7 @@
 */
 /**************************************************************************/
 
-#ifndef _STULASER_H_
-#define _STULASER_H_
+#pragma once
 
 #include "Arduino.h"
 
@@ -37,6 +36,3 @@ private:
     _pin;
 
 };
-
-
-#endif
