@@ -18,7 +18,6 @@
 
 #include "missileswitch.h"
 
-
 Missileswitch::Missileswitch(int switchPin, int ledPin):_ledPin(ledPin), _switchPin(switchPin){
   _switchState = 0;
   _ledState = 0;
@@ -40,7 +39,7 @@ void Missileswitch::ledState(bool state){
 
 }
 
-bool Missileswitch::ledState(){
+bool Missileswitch::ledState() const {
 
   return _ledState;
 }
@@ -58,7 +57,6 @@ void Missileswitch::heartBeat(int numHeartBeat){
 bool Missileswitch::switchState(){
 
   return _debounce();;
-
 }
 
 

@@ -20,7 +20,6 @@
 #include "stuPanTilt.h"
 
 
-
 PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):_xServo(), _yServo(){
 
   _xPin = xPin;

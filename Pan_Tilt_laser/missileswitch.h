@@ -21,37 +21,33 @@
 #include "Arduino.h"
 
 
-class Missileswitch {
-  public:
 
-    Missileswitch(int, int);
+  class Missileswitch {
+    public:
 
-    void
-      begin(),
-      ledState(bool),
-      heartBeat(int);
+      Missileswitch(int, int);
 
-    bool
-      ledState(),
-      switchState();
+      void
+        begin(),
+        ledState(bool),
+        heartBeat(int);
 
-
-  private:
-    const int
-      _ledPin,
-      _switchPin;
-
-    bool
-      _ledState,
-      _switchState,
-      _debounce();
+      bool
+        ledState() const,
+        switchState() ;
 
 
+    private:
+      const int
+        _ledPin,
+        _switchPin;
 
-};
+      bool
+        _ledState,
+        _switchState,
+        _debounce();
 
-
-
+  };
 
 
 #endif

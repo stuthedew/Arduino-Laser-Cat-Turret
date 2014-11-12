@@ -20,38 +20,22 @@
     v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
     v1.5.0 - Added scheduler and gaussian library for random values
     v1.5.1 - Converted speed and direction function to scheduled task
+    v1.6.0 - Switched Markov speed change to Markov handler using circuler
+             linked list.
+    v1.6.1 - Switched Markov state to Markov handler
 */
 /**************************************************************************/
 
-
-
+#include "panTilt_config.h"
 #include <Servo.h>
-#include <math.h>
-#include "stuServo.h"
-#include "stuPanTilt.h"
-#include "stuLaser.h"
-#include "stu_scheduler.h"
-#include "missileswitch.h"
-#include "stu_gauss.h"
 #include <Gaussian.h>
 
 
-#define BAUD_RATE 115200
-
-#define MS_SWITCH_PIN 3
-#define MS_LED_PIN 4
-
-#define LASER_PIN 5
-
-#define SERVO_X_PIN A0
-#define SERVO_Y_PIN A1
-
-
-#define DIRECTION_CHANGE_PROBABILITY 15
-
-
-int markovShakeState =1;
+int markovShakeState = 1;
 int changeVal;
+
+LinkedMarkov lmSpeed;
+LinkedMarkov lmShake;
 
 StuGauss gauss;
 
@@ -76,49 +60,12 @@ Task speedAndDirTask(&updateSpeedAndDir, 750);
 StuScheduler schedule;
 
 void updateSpeedAndDir(){
-  changeVal = getMarkovSpeed(changeVal);
-  markovShakeState = markovState(5, 30);
+  changeVal = lmSpeed.getNextValue();
+  markovShakeState = lmShake.getNextValue();
 
 }
 
-//halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
 
-  unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
-/*
-  Serial.print(F("Next pause in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
-*/
-  pauseTask.setInterval(temp);
-
-}
-
-//turn off laser for a few moments at this time
-void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
-  unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
-/*
-  Serial.print(F("Next rest in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
-*/
-  restTask.setInterval(temp);
-}
-
-
-//turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
-  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
-
-//  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
-/*
-  Serial.print(F("Next sleep in "));
-  Serial.print(mSecToSleep/1000);
-  Serial.println(F(" seconds.\n"));
-*/
-  sleepTask.setInterval(mSecToSleep);
-
-}
 
 void pauseCB(){
   //Serial.println(F("Pause Callback!"));
@@ -145,14 +92,40 @@ void sleepCB(){
   setNextSleepTime();
 }
 
+
+
 void setup() {
   Serial.begin(BAUD_RATE);
+
+  lmSpeed.begin();
+
   mSwitch.begin();
 
   schedule.addTask(&pauseTask);
   schedule.addTask(&restTask);
   schedule.addTask(&sleepTask);
   schedule.addTask(&speedAndDirTask);
+
+//addLinkToBack(speed, previous_state_probability, next_state_probability)
+  lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
+//                      ^  ||
+//                      |  \/
+  lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
+//                      ^  ||
+//                      |  \/
+  lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
+//                      ^  ||
+//                      |  \/
+//                     | Slow |
+
+
+//addLinkToBack(state, previous_state_probability, next_state_probability)
+  lmShake.addLinkToBack( 1,  5, 0 ); // No shake
+//                       ^  ||
+//                       |  \/
+  lmShake.addLinkToBack( 2, 30, 0 ); // Shake
+
+
   randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
@@ -239,8 +212,6 @@ void loop() {
 }
 
 
-
-
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
     int prob = changeProb;
@@ -271,49 +242,6 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
 }
 
-int getMarkovSpeed(int oldSpeed){
-  int probability = random(101);
-  int lowVal = 2;
-  int midVal = 4;
-  int hiVal = 6;
-
-  if(oldSpeed == lowVal){
-    if(probability < 60){
-      return midVal;
-    }
-    else{
-      return lowVal;
-    }
-  }
-
-  else if(oldSpeed == midVal){
-    if(probability < 25){
-      return hiVal;
-    }
-    else if(probability < 60){
-      return midVal;
-    }
-    else{
-      return lowVal;
-    }
-  }
-
-  else if(oldSpeed == hiVal){
-    if(probability < 50){
-      return midVal;
-    }
-    else if(probability < 80){
-      return hiVal;
-    }
-    else{
-      return lowVal;
-    }
-  }
-
-  else{
-    return midVal;
-  }
-}
 
 int markovPause(){
   int val = random(101);
@@ -373,25 +301,4 @@ void shake(){
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
   delay(shakeDelay);
-}
-
-
-int markovState(int prob1, int prob2){
-  static int markovState;
-  int probVal = random(101);
-  if(!markovState){
-    markovState = 1;
-  }
-  else if(markovState == 1){
-    if(probVal <= prob1){
-      markovState = 2;
-    }
-  }
-  else if(markovState == 2){
-    if(probVal <= prob2){
-      markovState = 1;
-    }
-  }
-
-  return markovState;
 }

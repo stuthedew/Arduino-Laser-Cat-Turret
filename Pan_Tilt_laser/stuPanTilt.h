@@ -28,6 +28,8 @@
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
+
+
 struct panTiltPos_t {
   int
     pos,
@@ -76,6 +78,8 @@ private:
     *_Ypos;
 
 };
+
+
 
 
 

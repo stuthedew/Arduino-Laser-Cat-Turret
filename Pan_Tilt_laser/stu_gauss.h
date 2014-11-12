@@ -22,6 +22,8 @@
 #include "Arduino.h"
 #include <Gaussian.h>
 
+
+
 class StuGauss {
 
 public:
@@ -38,7 +40,9 @@ private:
 
   Gaussian _gauss;
 
-
 };
+
+
+
 
 #endif
