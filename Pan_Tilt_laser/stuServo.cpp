@@ -17,7 +17,6 @@
 
 #include "stuServo.h"
 
-
 void StuServo::calibrate(){
 
 
@@ -45,10 +44,10 @@ void StuServo::stuWrite(int position){
 
 }
 
-int StuServo::getMin(){
+int StuServo::getMin() const {
   return _position.min;
 }
 
-int StuServo::getMax(){
+int StuServo::getMax() const {
   return _position.max;
 }

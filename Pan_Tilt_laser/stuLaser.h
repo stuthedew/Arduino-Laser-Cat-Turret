@@ -32,7 +32,7 @@ public:
     fire(boolean state);
 
 private:
-  
+
   uint8_t
     _pin;
 

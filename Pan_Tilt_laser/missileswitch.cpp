@@ -18,7 +18,6 @@
 
 #include "missileswitch.h"
 
-
 Missileswitch::Missileswitch(int switchPin, int ledPin):_ledPin(ledPin), _switchPin(switchPin){
   _switchState = 0;
   _ledState = 0;

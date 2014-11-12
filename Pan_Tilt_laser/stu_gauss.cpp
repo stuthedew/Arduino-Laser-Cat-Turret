@@ -17,7 +17,6 @@
 
 #include "stu_gauss.h"
 
-
 StuGauss::StuGauss():_gauss(){
 
 

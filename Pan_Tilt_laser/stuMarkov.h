@@ -25,6 +25,8 @@
 
 #include <assert.h>
 
+
+
 struct markovLink_t;
 
 typedef struct markovPair_t{
@@ -72,6 +74,7 @@ private:
         int8_t           _itr ;
 
 };
+
 
 
 #endif

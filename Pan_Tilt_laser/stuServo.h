@@ -21,6 +21,7 @@
 
 #include <Servo.h>
 
+
 struct servoPos{
   int
     min,
@@ -39,14 +40,15 @@ public:
     stuWrite(int position);
 
   int
-    getMin(),
-    getMax();
+    getMin() const ,
+    getMax() const ;
 
 
 private:
 
   servoPos
     _position;
+
 
 
 };

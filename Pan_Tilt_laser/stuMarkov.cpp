@@ -16,6 +16,8 @@
 
 #include "stuMarkov.h"
 
+
+
 LinkedMarkov::LinkedMarkov(){
 
 

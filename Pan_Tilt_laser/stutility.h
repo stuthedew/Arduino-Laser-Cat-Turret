@@ -4,10 +4,12 @@
 #include "stu_scheduler.h"
 #include "stu_gauss.h"
 
+
 extern Task pauseTask;
 extern Task restTask;
 extern Task sleepTask;
 extern StuGauss gauss;
+
 
 //halt laser at certain spot for a few moments at this time
 void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=12){
