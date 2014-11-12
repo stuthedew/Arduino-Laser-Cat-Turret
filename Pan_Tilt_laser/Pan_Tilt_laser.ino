@@ -268,9 +268,14 @@ void sleep(unsigned long minSec, unsigned long maxSec){
   for(unsigned long i = 0; i < delayVal; i++){
     while(millis() - startTime < 1000){
       heartBeat(millis(), 10000);
+
+      if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart.
+        return;
+      }
       if(startTime > millis()){ //check for rollovers
         startTime = millis();
         break;
+
       }
     }
     startTime = millis();
