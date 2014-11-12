@@ -33,8 +33,8 @@
         heartBeat(int);
 
       bool
-        ledState(),
-        switchState();
+        ledState() const,
+        switchState() ;
 
 
     private:
@@ -46,8 +46,6 @@
         _ledState,
         _switchState,
         _debounce();
-
-
 
   };
 

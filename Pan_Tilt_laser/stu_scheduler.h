@@ -20,8 +20,6 @@
 
 #include "Arduino.h"
 
-
-
 typedef void (*Callback)(void);
 
 class Task{

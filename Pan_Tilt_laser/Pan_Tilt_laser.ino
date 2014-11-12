@@ -242,50 +242,6 @@ int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
 
 }
 
-int getMarkovSpeed(int oldSpeed){
-  int probability = random(101);
-  int lowVal = 2;
-  int midVal = 4;
-  int hiVal = 6;
-
-  if(oldSpeed == lowVal){
-    if(probability < 60){
-      return midVal;
-    }
-    else{
-      return lowVal;
-    }
-  }
-
-  else if(oldSpeed == midVal){
-    if(probability < 25){
-      return hiVal;
-    }
-    else if(probability < 60){
-      return midVal;
-    }
-    else{
-      return lowVal;
-    }
-  }
-
-  else if(oldSpeed == hiVal){
-    if(probability < 50){
-      return midVal;
-    }
-    else if(probability < 80){
-      return hiVal;
-    }
-    else{
-      return lowVal;
-    }
-  }
-
-  else{
-    return midVal;
-  }
-}
-
 
 int markovPause(){
   int val = random(101);
@@ -345,25 +301,4 @@ void shake(){
   panTiltX.angle += moveVal;
   panTilt.updateAngles();
   delay(shakeDelay);
-}
-
-
-int markovState(int prob1, int prob2){
-  static int markovState;
-  int probVal = random(101);
-  if(!markovState){
-    markovState = 1;
-  }
-  else if(markovState == 1){
-    if(probVal <= prob1){
-      markovState = 2;
-    }
-  }
-  else if(markovState == 2){
-    if(probVal <= prob2){
-      markovState = 1;
-    }
-  }
-
-  return markovState;
 }
