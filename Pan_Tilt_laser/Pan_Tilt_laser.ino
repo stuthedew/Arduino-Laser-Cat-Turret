@@ -125,9 +125,6 @@ void setup() {
 //                           |  \/
   lmShake.addLinkToBack( 2, 30, 0 ); // Shake
 
-
-
-
   randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
@@ -267,7 +264,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned long startTime = millis();
   for(unsigned long i = 0; i < delayVal; i++){
     while(millis() - startTime < 1000){
-      heartBeat(millis(), 10000);
+      heartBeat(10000);
 
       if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart.
         return;
@@ -288,7 +285,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
 
 void heartBeat(unsigned long mSeconds, int hbInterval){
   static unsigned long oldTime;
-  if(mSeconds - oldTime > hbInterval){
+  if(millis() - oldTime > hbInterval){
 
 
     mSwitch.heartBeat(1);
