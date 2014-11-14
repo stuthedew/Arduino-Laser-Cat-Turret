@@ -37,10 +37,10 @@ public:
     changeCallback(void (*callback)());
 
   bool
-    enabled();
+    enabled() const ;
 
   unsigned long
-    nextRunTime();
+    nextRunTime() const ;
 
 private:
   bool

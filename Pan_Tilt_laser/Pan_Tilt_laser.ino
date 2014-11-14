@@ -65,7 +65,6 @@ void updateSpeedAndDir(){
 }
 
 
-
 void pauseCB(){
   //Serial.println(F("Pause Callback!"));
   delay(markovPause());
@@ -96,7 +95,6 @@ void sleepCB(){
 void setup() {
   Serial.begin(BAUD_RATE);
 
-
   mSwitch.begin();
 
   schedule.addTask(&pauseTask);
@@ -104,7 +102,7 @@ void setup() {
   schedule.addTask(&sleepTask);
   schedule.addTask(&speedAndDirTask);
 
-//addLinkToBack(speed, previous_state_probability, next_state_probability)
+//        addLinkToBack(speed, previous_state_probability, next_state_probability)
   lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
 //                           ^  ||
 //                           |  \/
@@ -117,7 +115,7 @@ void setup() {
 //                          | Slow |
 
 
-//addLinkToBack(state, previous_state_probability, next_state_probability)
+//        addLinkToBack(state, previous_state_probability, next_state_probability)
   lmShake.addLinkToBack( 1,  0, 5 ); // No shake
 //                           ^  ||
 //                           |  \/
@@ -173,7 +171,11 @@ void loop() {
 
   //check if switch is on or off and pause if off
   if(!mSwitch.switchState()){
-  //  Serial.print(F("Switch is off!"));
+
+    #ifdef MAIN_DEBUG
+      Serial.print(F("Switch is off!"));
+    #endif
+
     laser.fire(0);
     mSwitch.ledState(0);
     panTiltX.angle = 90;
@@ -191,6 +193,9 @@ void loop() {
     panTilt.begin();
     laser.fire(1);
     schedule.restart();
+    #ifdef MAIN_DEBUG
+      Serial.print(F("Switch is on!"));
+    #endif
   }
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;

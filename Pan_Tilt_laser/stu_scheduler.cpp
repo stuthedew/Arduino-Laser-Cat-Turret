@@ -35,7 +35,7 @@ namespace stu {
 
   }
 
-  unsigned long Task::nextRunTime(){
+  unsigned long Task::nextRunTime() const{
     return _runNextAt;
 
   }
@@ -62,7 +62,7 @@ namespace stu {
     _callback();
   }
 
-  bool Task::enabled(){
+  bool Task::enabled() const {
     return _enabled;
   }
 
