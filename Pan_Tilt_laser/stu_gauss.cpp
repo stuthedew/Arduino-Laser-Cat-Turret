@@ -17,6 +17,10 @@
 
 #include "stu_gauss.h"
 
+namespace stu {
+
+StuGauss gauss;
+
 StuGauss::StuGauss():_gauss(){
 
 
@@ -28,4 +32,6 @@ unsigned long StuGauss::gRandom(unsigned long zero, double variance){
   double temp = _gauss.random();
   //Serial.println(temp);
   return round(max(temp, 2));
+}
+
 }

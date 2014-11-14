@@ -23,7 +23,7 @@
 
 #include <assert.h>
 
-
+namespace stu{
 
 struct markovLink_t;
 
@@ -72,3 +72,5 @@ private:
         int8_t           _itr ;
 
 };
+
+}// end namespace

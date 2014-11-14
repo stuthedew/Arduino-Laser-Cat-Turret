@@ -20,6 +20,8 @@
 
 #include "Arduino.h"
 
+namespace stu {
+
 class StuLaser {
 
 public:
@@ -36,3 +38,5 @@ private:
     _pin;
 
 };
+
+}

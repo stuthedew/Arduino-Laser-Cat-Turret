@@ -18,7 +18,7 @@
 #include <assert.h>
 #include "stuMarkov.h"
 
-
+using namespace stu;
 
 #define MS_SWITCH_PIN 3
 #define MS_LED_PIN 4

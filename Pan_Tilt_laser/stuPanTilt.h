@@ -26,53 +26,56 @@
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
+namespace stu{
 
 
-struct panTiltPos_t {
-  int
-    pos,
-    angle,
-    dir;
+  struct panTiltPos_t {
+    int
+      pos,
+      angle,
+      dir;
 
-  const int
-    minAngle,
-    maxAngle,
-    midOffset,
-    midAngle,
-    probOffset;
-
-
-  panTiltPos_t(int p, int mn, int mx, int mdOff = 0, int pbOff = 1): pos(p), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
-
-};
+    const int
+      minAngle,
+      maxAngle,
+      midOffset,
+      midAngle,
+      probOffset;
 
 
-class PanTilt {
+    panTiltPos_t(int p, int mn, int mx, int mdOff = 0, int pbOff = 1): pos(p), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
 
-public:
+  };
 
-  PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos);
 
-  void
-    begin(),
-    detach(),
-    updateAngles();
+  class PanTilt {
 
-private:
+  public:
 
-  StuServo
-    _xServo,
-    _yServo;
+    PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos);
 
-  uint8_t
-    _xPin,
-    _yPin;
+    void
+      begin(),
+      detach(),
+      updateAngles();
 
-  void
-    _update();
+  private:
 
-  panTiltPos_t
-    *_Xpos,
-    *_Ypos;
+    StuServo
+      _xServo,
+      _yServo;
 
-};
+    uint8_t
+      _xPin,
+      _yPin;
+
+    void
+      _update();
+
+    panTiltPos_t
+      *_Xpos,
+      *_Ypos;
+
+  };
+
+}// end namespace

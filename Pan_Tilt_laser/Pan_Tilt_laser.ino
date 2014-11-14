@@ -30,6 +30,7 @@
 #include <Servo.h>
 #include <Gaussian.h>
 
+using namespace stu;
 
 int markovShakeState = 1;
 int changeVal;
@@ -37,11 +38,8 @@ int changeVal;
 LinkedMarkov lmSpeed;
 LinkedMarkov lmShake;
 
-StuGauss gauss;
-
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
-
 panTiltPos_t panTiltX(0, 50, 120, -30);
 panTiltPos_t panTiltY(0, 7, 45, 0, 10);
 
@@ -51,6 +49,7 @@ PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY);
 StuLaser laser(LASER_PIN);
 
 Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
+
 
 Task pauseTask(&pauseCB);
 Task restTask(&restCB);
@@ -283,13 +282,12 @@ void sleep(unsigned long minSec, unsigned long maxSec){
 }
 
 
-void heartBeat(unsigned long mSeconds, int hbInterval){
+void heartBeat(int hbInterval){
   static unsigned long oldTime;
+
   if(millis() - oldTime > hbInterval){
-
-
     mSwitch.heartBeat(1);
-    oldTime = mSeconds;
+    oldTime = millis();
   }
 }
 
