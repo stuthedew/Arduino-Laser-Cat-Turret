@@ -26,7 +26,7 @@
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
-//namespace stu{
+namespace stu{
 
 
   struct panTiltPos_t {
@@ -78,4 +78,4 @@
 
   };
 
-//}// end namespace
+}// end namespace

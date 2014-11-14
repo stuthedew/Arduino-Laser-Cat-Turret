@@ -16,7 +16,7 @@
 
 #include "stuMarkov.h"
 
-//namespace stu{
+namespace stu{
 
 
   LinkedMarkov::LinkedMarkov(){
@@ -85,4 +85,4 @@
 
   }
 
-//}// end namespace
+}// end namespace
