@@ -96,7 +96,6 @@ void sleepCB(){
 void setup() {
   Serial.begin(BAUD_RATE);
 
-  lmSpeed.begin();
 
   mSwitch.begin();
 

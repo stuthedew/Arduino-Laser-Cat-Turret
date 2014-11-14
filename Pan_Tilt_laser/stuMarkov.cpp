@@ -20,11 +20,6 @@ namespace stu{
 
 
   LinkedMarkov::LinkedMarkov(){
-
-
-  }
-
-  void LinkedMarkov::begin(){
     _itr = 0 ;
     _head = &_mValue[ _itr ] ;
     _current = _head ;
@@ -33,6 +28,7 @@ namespace stu{
     _current->next.markovLink = _head ;
 
   }
+
 
   void LinkedMarkov::addLinkToBack( unsigned int value, unsigned int prevVal, unsigned int nextVal ) {
 

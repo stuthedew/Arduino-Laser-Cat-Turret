@@ -53,7 +53,6 @@ class LinkedMarkov {
 public:
                            LinkedMarkov( void ) ;
 
-            void           begin( void ) ;
             void           addLinkToBack( unsigned int value, unsigned int prevVal, unsigned int nextVal ) ;
 
   unsigned  int            getNextValue( void ) ;
