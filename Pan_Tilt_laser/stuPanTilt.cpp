@@ -53,7 +53,6 @@ namespace stu{
   void PanTilt::_update(){
     static int oldXangle, oldYangle;
 
-
     _xServo.stuWrite(_Xpos->angle);
     delay(10);
     _yServo.stuWrite(_Ypos->angle);
