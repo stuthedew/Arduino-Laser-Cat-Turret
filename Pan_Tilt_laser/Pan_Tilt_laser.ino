@@ -30,6 +30,7 @@
 #include <Servo.h>
 #include <Gaussian.h>
 
+//using namespace stu;
 
 int markovShakeState = 1;
 int changeVal;
@@ -283,13 +284,12 @@ void sleep(unsigned long minSec, unsigned long maxSec){
 }
 
 
-void heartBeat(unsigned long mSeconds, int hbInterval){
+void heartBeat(int hbInterval){
   static unsigned long oldTime;
+
   if(millis() - oldTime > hbInterval){
-
-
     mSwitch.heartBeat(1);
-    oldTime = mSeconds;
+    oldTime = millis();
   }
 }
 
