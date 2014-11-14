@@ -23,35 +23,30 @@ namespace stu {
 typedef void (*Callback)(void);
 
 class Task{
+
 public:
 
-  Task(void (*callback)(), unsigned long interval=100, bool enable=1);
+  Task( void (*callback)(), unsigned long interval=100, bool enable=1 ) ;
 
-  void
-    resetPeriodic(),
-    setInterval(unsigned long mSec),
-    setNextRunTime(unsigned long mSec),
-    disable(),
-    enable(),
-    run(),
-    changeCallback(void (*callback)());
+            void    resetPeriodic( void ) ;
+            void    setInterval( unsigned long mSec ) ;
+            void    setNextRunTime( unsigned long mSec ) ;
+            void    disable() ;
+            void    enable() ;
+            void    run() ;
+            void    changeCallback( void ( *callback )( void ) ) ;
 
-  bool
-    enabled() const ;
+            bool    enabled( void ) const ;
 
-  unsigned long
-    nextRunTime() const ;
+  unsigned  long    nextRunTime( void ) const ;
 
 private:
-  bool
-    _enabled;
+            bool    _enabled ;
 
-  Callback
-    _callback;
+        Callback    _callback ;
 
-  unsigned long
-    _runNextAt,
-    _timeBetweenRuns;
+  unsigned long     _runNextAt ;
+  unsigned long     _timeBetweenRuns ;
 
 };
 
@@ -60,21 +55,19 @@ private:
 class StuScheduler {
 
 public:
-  StuScheduler();
-
-  void
-    addTask(Task *t),
-    run(),
-    restart();
+  StuScheduler( void );
 
 
+            void    addTask( Task *t ) ;
+            void    run( void ) ;
+            void    restart( void ) ;
 
 private:
-  Task
-    *_Task[20];
 
-  uint8_t
-    _tItr;
+            Task    *_Task[ 20 ] ;
+
+          uint8_t   _tItr ;
+
 };
 
 
