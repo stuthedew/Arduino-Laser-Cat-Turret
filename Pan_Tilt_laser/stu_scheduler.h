@@ -31,9 +31,9 @@ public:
             void    resetPeriodic( void ) ;
             void    setInterval( unsigned long mSec ) ;
             void    setNextRunTime( unsigned long mSec ) ;
-            void    disable() ;
-            void    enable() ;
-            void    run() ;
+            void    disable( void ) ;
+            void    enable( void ) ;
+            void    run( void ) ;
             void    changeCallback( void ( *callback )( void ) ) ;
 
             bool    enabled( void ) const ;

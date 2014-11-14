@@ -22,32 +22,25 @@
 
 
 struct servoPos{
-  int
-    min,
-    max,
-    current;
 
+        int       min ;
+        int       max ;
+        int       current ;
 };
 
 class StuServo: public Servo {
 
 public:
 
-  void
-    setCalibration(int min, int max),
-    calibrate(),
-    stuWrite(int position);
+          void    setCalibration( int min, int max ) ;
+          void    calibrate( void ) ;
+          void    stuWrite( int position ) ;
 
-  int
-    getMin() const ,
-    getMax() const ;
-
+          int     getMin( void ) const ;
+          int     getMax( void ) const ;
 
 private:
 
-  servoPos
-    _position;
-
-
+      servoPos    _position ;
 
 };

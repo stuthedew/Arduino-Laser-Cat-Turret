@@ -58,7 +58,7 @@ public:
   unsigned  int            getNextValue( void ) ;
             int            getListSize( void ) const ;
 
- markovLink_t*             getMarkovPtr( uint8_t relativePos ) ;
+  markovLink_t*            getMarkovPtr( uint8_t relativePos ) ;
 
 
 private:

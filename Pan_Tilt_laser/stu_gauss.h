@@ -29,17 +29,14 @@ public:
   StuGauss();
 
 
-  unsigned long
-    gRandom(unsigned long zero, double variance);
-
-
+  unsigned  long    gRandom( unsigned long zero, double variance ) ;
 
 private:
 
-  Gaussian _gauss;
+        Gaussian    _gauss;
 
 };
 
-extern StuGauss gauss;
+extern  StuGauss    gauss;
 
 }
