@@ -18,6 +18,8 @@
 
 #include "missileswitch.h"
 
+namespace stu {
+
 Missileswitch::Missileswitch(int switchPin, int ledPin):_ledPin(ledPin), _switchPin(switchPin){
   _switchState = 0;
   _ledState = 0;
@@ -79,6 +81,11 @@ bool Missileswitch::_debounce(){
       return reading;
     }
   }
-  Serial.println(F("Switch Read TIMEOUT!!!!"));
+  #ifdef MISSILE_SWITCH_DEBUG
+    Serial.println(F("Switch Read TIMEOUT!!!!"));
+  #endif
+
   return _switchState;
+}
+
 }

@@ -15,12 +15,11 @@
 */
 /**************************************************************************/
 
-#ifndef _MISSILESWITCH_H_
-#define _MISSILESWITCH_H_
+#pragma once
 
 #include "Arduino.h"
 
-
+namespace stu {
 
   class Missileswitch {
     public:
@@ -48,6 +47,4 @@
         _debounce();
 
   };
-
-
-#endif
+}

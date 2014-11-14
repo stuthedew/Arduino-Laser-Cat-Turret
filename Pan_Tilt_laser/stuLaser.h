@@ -20,7 +20,7 @@
 
 #include "Arduino.h"
 
-//namespace stu {
+namespace stu {
 
 class StuLaser {
 
@@ -39,4 +39,4 @@ private:
 
 };
 
-//}
+}

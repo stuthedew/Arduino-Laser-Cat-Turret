@@ -15,87 +15,89 @@
 */
 /**************************************************************************/\
 
-
 #include "stu_scheduler.h"
 
+namespace stu {
 
-Task::Task(void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc),_timeBetweenRuns(interval),_enabled(enable) {
+  Task::Task(void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc),_timeBetweenRuns(interval),_enabled(enable) {
 
-}
-
-
-void Task::resetPeriodic(){
-
-  _runNextAt = _timeBetweenRuns + millis();
-}
-
-void Task::setInterval(unsigned long mSec){
-  _timeBetweenRuns = mSec;
-  _runNextAt = _timeBetweenRuns + millis();
-
-}
-
-unsigned long Task::nextRunTime(){
-  return _runNextAt;
-
-}
-
-void Task::setNextRunTime(unsigned long mSec){
-  _runNextAt = mSec;
-
-}
+  }
 
 
+  void Task::resetPeriodic(){
 
-void Task::disable(){
-  _enabled = 0;
+    _runNextAt = _timeBetweenRuns + millis();
+  }
 
-}
+  void Task::setInterval(unsigned long mSec){
+    _timeBetweenRuns = mSec;
+    _runNextAt = _timeBetweenRuns + millis();
 
+  }
 
-void Task::enable(){
-  _enabled = 1;
-  resetPeriodic();
-}
+  unsigned long Task::nextRunTime(){
+    return _runNextAt;
 
-void Task::run(){
-  _callback();
-}
+  }
 
-bool Task::enabled(){
-  return _enabled;
-}
+  void Task::setNextRunTime(unsigned long mSec){
+    _runNextAt = mSec;
 
-void Task::changeCallback(void (*cbFunc)()){
-  _callback = cbFunc;
-}
+  }
 
 
 
+  void Task::disable(){
+    _enabled = 0;
 
-StuScheduler::StuScheduler(){
-  _tItr = 0;
-}
+  }
 
-void StuScheduler::addTask(Task *t){
-_Task[_tItr] = t;
-_tItr++;
 
-}
+  void Task::enable(){
+    _enabled = 1;
+    resetPeriodic();
+  }
 
-void StuScheduler::restart(){
-  for(uint8_t i = 0; i < _tItr; i++){
-    if(_Task[i]->enabled()){
-      _Task[i]->resetPeriodic();
+  void Task::run(){
+    _callback();
+  }
+
+  bool Task::enabled(){
+    return _enabled;
+  }
+
+  void Task::changeCallback(void (*cbFunc)()){
+    _callback = cbFunc;
+  }
+
+
+
+
+  StuScheduler::StuScheduler(){
+    _tItr = 0;
+  }
+
+  void StuScheduler::addTask(Task *t){
+  _Task[_tItr] = t;
+  _tItr++;
+
+  }
+
+  void StuScheduler::restart(){
+    for(uint8_t i = 0; i < _tItr; i++){
+      if(_Task[i]->enabled()){
+        _Task[i]->resetPeriodic();
+      }
     }
   }
-}
 
-void StuScheduler::run(){
-  for(uint8_t i = 0; i < _tItr; i++){
-    if(_Task[i]->enabled() && _Task[i]->nextRunTime() <= millis()){
-      _Task[i]->run();
-      _Task[i]->resetPeriodic();
+  void StuScheduler::run(){
+    for(uint8_t i = 0; i < _tItr; i++){
+      if(_Task[i]->enabled() && _Task[i]->nextRunTime() <= millis()){
+        _Task[i]->run();
+        _Task[i]->resetPeriodic();
+      }
     }
   }
+
 }

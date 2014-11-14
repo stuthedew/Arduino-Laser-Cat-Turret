@@ -20,6 +20,7 @@
 
 #include "stuLaser.h"
 
+namespace stu {
 
 StuLaser::StuLaser(uint8_t pin){
   _pin = pin;
@@ -36,5 +37,7 @@ void StuLaser::begin(){
 
 void StuLaser::fire(boolean state){
 digitalWrite(_pin, state);
+
+}
 
 }
