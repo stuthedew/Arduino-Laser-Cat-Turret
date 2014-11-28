@@ -1,13 +1,14 @@
 #pragma once
 
-#include "panTilt_config.h"
+//#include "panTilt_config.h"
+#include "Arduino.h"
 #include "stu_scheduler.h"
 
 extern stu::Task pauseTask;
 extern stu::Task restTask;
 extern stu::Task sleepTask;
 
-namespace stu {
+namespace stu{
 
 
 //halt laser at certain spot for a few moments at this time

@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map For Arduino Laser
+# cat toy
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+StuScheduler	KEYWORD1
+Task		KEYWORD1
+StuLaser	KEYWORD1
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+
+
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+
+OFF 		LITERAL1
+CONTINUOUS	LITERAL1
+INTERMITTENT	LITERAL1
+
+#######################################
+

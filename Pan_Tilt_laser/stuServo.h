@@ -20,6 +20,7 @@
 
 #include <Servo.h>
 
+namespace stu{
 
 struct servoPos{
 
@@ -44,3 +45,4 @@ private:
       servoPos    _position ;
 
 };
+}

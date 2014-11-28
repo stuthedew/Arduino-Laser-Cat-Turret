@@ -38,6 +38,7 @@ int changeVal;
 LinkedMarkov lmSpeed;
 LinkedMarkov lmShake;
 
+
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
 panTiltPos_t panTiltX(0, 50, 120, -30);
@@ -94,7 +95,8 @@ void sleepCB(){
 
 void setup() {
   Serial.begin(BAUD_RATE);
-
+  Dial.setPin( DIAL_PIN );
+  Dial.begin( ) ;
   mSwitch.begin();
 
   schedule.addTask(&pauseTask);
@@ -124,14 +126,14 @@ void setup() {
   randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
-
+/*
   if(!mSwitch.switchState()) {
     mSwitch.ledState(0);
     while(!mSwitch.switchState()){
       delay(50);
       }
   }
-
+*/
   panTilt.begin();
 
   Serial.println(F("setup starting..."));
@@ -200,7 +202,7 @@ void loop() {
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
-  //Serial.println(F("Update Angles"));
+  
   panTilt.updateAngles();
 
 

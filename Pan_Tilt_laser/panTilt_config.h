@@ -17,6 +17,8 @@
 #include "stutility.h"
 #include <assert.h>
 #include "stuMarkov.h"
+#include "stu_dial.h"
+#include "stu_display.h"
 
 using namespace stu;
 
@@ -25,8 +27,10 @@ using namespace stu;
 
 #define LASER_PIN 5
 
+
+
 #define SERVO_X_PIN A0
 #define SERVO_Y_PIN A1
-
+#define DIAL_PIN A2
 
 #define DIRECTION_CHANGE_PROBABILITY 15
