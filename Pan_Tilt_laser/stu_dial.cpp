@@ -15,7 +15,7 @@ v0.0.1 - First release
 
 #include "stu_dial.h"
 
-namespace stu{
+//namespace stu{
 
   StuDial Dial;
 
@@ -41,15 +41,19 @@ void StuDial::update( void ){
   }else if( adcReading < MAX_CONT_ADC ){
     _mode = MODE_CONTINUOUS ;
   }
-  _mode = MODE_INTERMITTENT ;
+
+  else {
+    _mode = MODE_INTERMITTENT ;
 
 }
 
-potmode_e StuDial::getMode( void ) const{
+}
+
+runmode_e StuDial::getMode( void ) const{
   return _mode ;
 
 }
 
 
 
-}
+//}

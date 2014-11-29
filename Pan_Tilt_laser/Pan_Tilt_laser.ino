@@ -27,10 +27,17 @@
 /**************************************************************************/
 
 #include "panTilt_config.h"
+#include "stuPanTilt.h"
 #include <Servo.h>
+#include "stuMarkov.h"
+#include "stuLaser.h"
+#include "stu_scheduler.h"
+#include "missileswitch.h"
+#include "stu_gauss.h"
 #include <Gaussian.h>
 
-using namespace stu;
+#include "stu_dial.h"
+#include "stu_display.h"
 
 int markovShakeState = 1;
 int changeVal;
@@ -62,6 +69,50 @@ StuScheduler schedule;
 void updateSpeedAndDir(){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
+
+}
+
+//halt laser at certain spot for a few moments at this time
+void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
+
+  unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
+
+  #ifdef TIME_DEBUG
+  Serial.print(F("Next pause in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  #endif
+
+  pauseTask.setInterval(temp);
+
+}
+
+//turn off laser for a few moments at this time
+void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
+  unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
+
+  #ifdef TIME_DEBUG
+  Serial.print(F("Next rest in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  #endif
+
+  restTask.setInterval(temp);
+}
+
+
+//turn of laser for a minutes to hours at this time
+void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
+  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
+
+  //  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
+  #ifdef TIME_DEBUG
+  Serial.print(F("Next sleep in "));
+  Serial.print(mSecToSleep/1000);
+  Serial.println(F(" seconds.\n"));
+  #endif
+
+  sleepTask.setInterval(mSecToSleep);
 
 }
 
@@ -171,15 +222,19 @@ void loop() {
 
   schedule.run();
 
+
+
   //check if switch is on or off and pause if off
   if(!mSwitch.switchState()){
+
+//if(PanTilt.getMode() == MODE_SLEEP){
 
     #ifdef MAIN_DEBUG
       Serial.print(F("Switch is off!"));
     #endif
 
     laser.fire(0);
-    mSwitch.ledState(0);
+//    mSwitch.ledState(0);
     panTiltX.angle = 90;
     panTiltY.angle = 90;
     panTilt.updateAngles();
@@ -188,6 +243,7 @@ void loop() {
 
     panTilt.detach();
     while(!mSwitch.switchState()){
+    //while(PanTilt.getMode() == MODE_SLEEP){
       delay(50);
 
     }
@@ -200,9 +256,14 @@ void loop() {
     #endif
   }
 
+
+
+
+
+
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
   panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
-  
+
   panTilt.updateAngles();
 
 

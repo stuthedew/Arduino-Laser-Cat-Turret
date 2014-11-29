@@ -18,16 +18,26 @@
 
 #pragma once
 
-#include "stuServo.h"
-#include <Servo.h>
 #include "Arduino.h"
-#include <math.h>
+#include "stuServo.h"
+#include "panTilt_config.h"
+
 
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
-namespace stu{
 
+typedef enum {
+    MODE_OFF = 0      ,
+    MODE_CONTINUOUS   ,
+    MODE_INTERMITTENT ,
+    MODE_SLEEP
+
+  }runmode_e;
+
+  #include "stu_display.h"
+
+  class StuDisplay; //forward declare class
 
   struct panTiltPos_t {
     int
@@ -57,7 +67,11 @@ namespace stu{
     void
       begin(),
       detach(),
+      setMode( runmode_e mode ),
       updateAngles();
+
+    runmode_e
+      getMode( void ) const;
 
   private:
 
@@ -76,6 +90,9 @@ namespace stu{
       *_Xpos,
       *_Ypos;
 
-  };
+      StuDisplay _display() ;
 
-}// end namespace
+    runmode_e
+      _mode ;
+
+  };

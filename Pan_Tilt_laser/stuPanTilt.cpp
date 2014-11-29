@@ -18,9 +18,9 @@
 
 #include "stuPanTilt.h"
 
-namespace stu{
 
-  PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):_xServo(), _yServo(){
+
+  PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):_xServo(), _yServo(), _display( POWER_PIN, CONT_PIN, INT_PIN ){
 
     _xPin = xPin;
     _yPin = yPin;
@@ -38,6 +38,21 @@ namespace stu{
     _xServo.attach(_xPin);
     _yServo.attach(_yPin);
     delay(500);
+  }
+
+  void PanTilt::setMode( runmode_e mode ){
+    //don't exit from sleep if mode is set to intermittent
+    if( mode == MODE_INTERMITTENT && _mode == MODE_SLEEP){
+        return;
+    }
+      _mode = mode ;
+
+
+  }
+
+  runmode_e PanTilt::getMode( void ) const{
+
+    return _mode ;
   }
 
   void PanTilt::detach(){
@@ -63,5 +78,3 @@ namespace stu{
     oldYangle = _Ypos->angle;
 
   }
-
-}// end namespace

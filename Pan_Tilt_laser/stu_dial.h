@@ -15,8 +15,8 @@ v0.0.1 - First release
 
 #pragma once
 
+#include "stuPanTilt.h"
 #include "Arduino.h"
-
 
 
 // ADC readings from selecter potentiometer
@@ -24,14 +24,7 @@ v0.0.1 - First release
 #define MAX_CONT_ADC  150 // If less than, mode = CONTINUOUS
 #define MAX_INT_ADC   250 // If less than, mode = INTERMITTENT
 
-namespace stu{
-
-typedef enum{
-  MODE_OFF = 0,
-  MODE_CONTINUOUS,
-  MODE_INTERMITTENT
-
-}potmode_e;
+//namespace stu{
 
 
 class StuDial{
@@ -42,16 +35,16 @@ public:
   void        setPin( uint8_t pin ) ;
   void        update( void ) ;
 
-  potmode_e   getMode( void ) const;
+  runmode_e   getMode( void ) const;
 
 
 private:
     uint8_t _dialPin ;
 
-    potmode_e _mode ;
+    runmode_e _mode ;
 
 };
 
 extern StuDial Dial;
 
-}
+//}

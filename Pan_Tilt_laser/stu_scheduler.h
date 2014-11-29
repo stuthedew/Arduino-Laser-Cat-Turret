@@ -18,7 +18,6 @@
 
 #include "Arduino.h"
 
-namespace stu {
 
 typedef void (*Callback)(void);
 
@@ -69,6 +68,3 @@ private:
           uint8_t   _tItr ;
 
 };
-
-
-}

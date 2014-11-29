@@ -17,7 +17,6 @@
 
 #include "stu_gauss.h"
 
-namespace stu {
 
 StuGauss gauss;
 
@@ -36,6 +35,4 @@ unsigned long StuGauss::gRandom(unsigned long zero, double variance){
   #endif
 
   return round(max(temp, 2));
-}
-
 }

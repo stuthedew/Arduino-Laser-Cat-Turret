@@ -20,7 +20,7 @@
 #include "Arduino.h"
 #include <Gaussian.h>
 
-namespace stu {
+
 
 class StuGauss {
 
@@ -38,5 +38,3 @@ private:
 };
 
 extern  StuGauss    gauss;
-
-}

@@ -16,12 +16,12 @@ v0.0.1 - First release
 #pragma once
 
 #include "Arduino.h"
-#include "stu_dial.h"
+#include "stuPanTilt.h"
+//#include "stu_dial.h"
 
 #define LED_NUMBER 3
 
 
-namespace stu{
 
 typedef struct led_t{
 
@@ -38,7 +38,6 @@ class StuDisplay{
 public:
 
   StuDisplay( uint8_t pwrLED, uint8_t contLED, uint8_t intLED ) ;
-
   void  begin( void ) ;
   void  update( void ) ;
 
@@ -46,7 +45,7 @@ private:
 
   void _ledWrite( led_t* led, bool ledState ) ;
 
-  void _setMode( potmode_e mode ) ;
+  void _setMode( runmode_e mode ) ;
 
   led_t*        _led[ LED_NUMBER ] ;
 
@@ -56,5 +55,3 @@ private:
     _intermittent ;
 
 };
-
-}

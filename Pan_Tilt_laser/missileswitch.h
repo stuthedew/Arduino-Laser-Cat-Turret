@@ -19,8 +19,6 @@
 
 #include "Arduino.h"
 
-namespace stu {
-
   class Missileswitch {
     public:
 
@@ -47,4 +45,3 @@ namespace stu {
         _debounce();
 
   };
-}

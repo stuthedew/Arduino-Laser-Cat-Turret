@@ -18,7 +18,7 @@
 
 #include "missileswitch.h"
 
-namespace stu {
+
 
 Missileswitch::Missileswitch(int switchPin, int ledPin):_ledPin(ledPin), _switchPin(switchPin){
   _switchState = 0;
@@ -86,6 +86,4 @@ bool Missileswitch::_debounce(){
   #endif
 
   return _switchState;
-}
-
 }

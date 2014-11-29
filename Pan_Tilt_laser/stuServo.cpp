@@ -17,7 +17,7 @@
 
 #include "stuServo.h"
 
-namespace stu{
+//namespace stu{
 void StuServo::calibrate(){
 
 
@@ -52,4 +52,4 @@ int StuServo::getMin() const {
 int StuServo::getMax() const {
   return _position.max;
 }
-}
+//}

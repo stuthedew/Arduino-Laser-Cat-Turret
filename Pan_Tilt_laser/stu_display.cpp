@@ -16,10 +16,6 @@ v0.0.1 - First release
 #include "stu_display.h"
 
 
-namespace stu{
-
-StuDial dial;
-
 StuDisplay::StuDisplay( uint8_t pwrPin, uint8_t contPin, uint8_t intPin ):
                     _power( pwrPin ), _continuous( contPin ),
                     _intermittent( intPin ){
@@ -44,7 +40,7 @@ void StuDisplay::begin( void ){
 }
 
 void StuDisplay::update( void ){
-  _setMode( Dial.getMode() ) ;
+  //_setMode( Dial.getMode() ) ;
 
   for(int i = 0; i < LED_NUMBER; i++){
     digitalWrite(_led[ i ]->pin, _led[ i ]->state ) ;
@@ -58,7 +54,7 @@ void StuDisplay::_ledWrite( led_t* led, bool ledState ){
 
 }
 
-void StuDisplay::_setMode( potmode_e mode ){
+void StuDisplay::_setMode( runmode_e mode ){
 
   switch( mode ){
 
@@ -81,8 +77,5 @@ void StuDisplay::_setMode( potmode_e mode ){
       break;
 
   }
-
-}
-
 
 }

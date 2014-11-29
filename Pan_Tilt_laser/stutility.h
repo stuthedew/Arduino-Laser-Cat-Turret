@@ -1,15 +1,14 @@
 #pragma once
-
-//#include "panTilt_config.h"
+/*
 #include "Arduino.h"
+#include "stu_gauss.h"
 #include "stu_scheduler.h"
-
+/*
 extern stu::Task pauseTask;
 extern stu::Task restTask;
 extern stu::Task sleepTask;
 
 namespace stu{
-
 
 //halt laser at certain spot for a few moments at this time
 void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
@@ -55,4 +54,5 @@ void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
 
 }
 
-}
+
+}*/
