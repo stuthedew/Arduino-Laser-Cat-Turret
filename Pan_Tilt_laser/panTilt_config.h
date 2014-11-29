@@ -11,9 +11,9 @@
 #define MS_LED_PIN 4
 
 
-#define POWER_PIN 3
-#define CONT_PIN  4
-#define INT_PIN   6
+#define POWER_PIN 7
+#define CONT_PIN  8
+#define INT_PIN   9
 
 #define LASER_PIN 5
 
@@ -23,3 +23,11 @@
 #define DIAL_PIN A2
 
 #define DIRECTION_CHANGE_PROBABILITY 15
+
+typedef enum {
+  MODE_OFF = 0      ,
+  MODE_CONTINUOUS   ,
+  MODE_INTERMITTENT ,
+  MODE_SLEEP
+
+}runmode_e;

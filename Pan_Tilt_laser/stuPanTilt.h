@@ -21,23 +21,13 @@
 #include "Arduino.h"
 #include "stuServo.h"
 #include "panTilt_config.h"
+#include "stu_display.h"
 
 
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
-
-typedef enum {
-    MODE_OFF = 0      ,
-    MODE_CONTINUOUS   ,
-    MODE_INTERMITTENT ,
-    MODE_SLEEP
-
-  }runmode_e;
-
-  #include "stu_display.h"
-
-  class StuDisplay; //forward declare class
+typedef void (*modeCallback)(void);
 
   struct panTiltPos_t {
     int
@@ -58,6 +48,8 @@ typedef enum {
   };
 
 
+
+
   class PanTilt {
 
   public:
@@ -75,6 +67,14 @@ typedef enum {
 
   private:
 
+    typedef struct{
+      runmode_e id ;
+      modeCallback callback ;
+
+    }mode_t;
+
+    StuDisplay _display ;
+
     StuServo
       _xServo,
       _yServo;
@@ -90,7 +90,11 @@ typedef enum {
       *_Xpos,
       *_Ypos;
 
-      StuDisplay _display() ;
+    mode_t
+      offMode   ,
+      contMode  ,
+      intMode   ;
+
 
     runmode_e
       _mode ;

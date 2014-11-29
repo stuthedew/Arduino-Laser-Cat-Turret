@@ -37,16 +37,19 @@
   void PanTilt::begin(){
     _xServo.attach(_xPin);
     _yServo.attach(_yPin);
+    _display.begin();
     delay(500);
   }
 
   void PanTilt::setMode( runmode_e mode ){
+    /*
     //don't exit from sleep if mode is set to intermittent
     if( mode == MODE_INTERMITTENT && _mode == MODE_SLEEP){
         return;
-    }
+    }*/
       _mode = mode ;
 
+      _display.setMode( _mode ) ;
 
   }
 

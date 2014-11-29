@@ -31,7 +31,7 @@ void StuDisplay::begin( void ){
 
   for(int i = 0; i < LED_NUMBER; i++){
     pinMode( _led[ i ]->pin , OUTPUT ) ;
-    _ledWrite( _led[ i ], LOW ) ;
+    _ledWrite( _led[ i ], HIGH ) ;
 
   }
 
@@ -40,7 +40,6 @@ void StuDisplay::begin( void ){
 }
 
 void StuDisplay::update( void ){
-  //_setMode( Dial.getMode() ) ;
 
   for(int i = 0; i < LED_NUMBER; i++){
     digitalWrite(_led[ i ]->pin, _led[ i ]->state ) ;
@@ -54,7 +53,7 @@ void StuDisplay::_ledWrite( led_t* led, bool ledState ){
 
 }
 
-void StuDisplay::_setMode( runmode_e mode ){
+void StuDisplay::setMode( runmode_e mode ){
 
   switch( mode ){
 
@@ -77,5 +76,6 @@ void StuDisplay::_setMode( runmode_e mode ){
       break;
 
   }
+  update();
 
 }

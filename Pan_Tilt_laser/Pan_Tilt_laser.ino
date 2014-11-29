@@ -37,7 +37,7 @@
 #include <Gaussian.h>
 
 #include "stu_dial.h"
-#include "stu_display.h"
+
 
 int markovShakeState = 1;
 int changeVal;
@@ -134,9 +134,9 @@ void restCB(){
 
 void sleepCB(){
   //Serial.println(F("Sleep Callback!"));
-  mSwitch.ledState(0);
+  panTilt.setMode(MODE_SLEEP);
   sleep(1800, 2400); //sleep between 30 and 40 minutes
-  mSwitch.ledState(1);
+  panTilt.setMode(MODE_INTERMITTENT);
   setNextPauseTime();
   setNextRestTime();
   setNextSleepTime();
@@ -177,14 +177,7 @@ void setup() {
   randomSeed(analogRead(5));
 
   mSwitch.heartBeat(3);
-/*
-  if(!mSwitch.switchState()) {
-    mSwitch.ledState(0);
-    while(!mSwitch.switchState()){
-      delay(50);
-      }
-  }
-*/
+
   panTilt.begin();
 
   Serial.println(F("setup starting..."));
@@ -208,7 +201,7 @@ void setup() {
   panTiltY.angle = panTiltY.midAngle;
   panTilt.updateAngles();
 
-  delay(1000);
+  delay(500);
   laser.fire(1);
 
   Serial.println(F("setup complete"));
@@ -221,13 +214,17 @@ void setup() {
 void loop() {
 
   schedule.run();
-
+  Dial.update();
+  panTilt.setMode(Dial.getMode());
+  Serial.println(panTilt.getMode());
+  delay(100);
+  return;
 
 
   //check if switch is on or off and pause if off
-  if(!mSwitch.switchState()){
+//  if(!mSwitch.switchState()){
 
-//if(PanTilt.getMode() == MODE_SLEEP){
+if(panTilt.getMode() == MODE_OFF){
 
     #ifdef MAIN_DEBUG
       Serial.print(F("Switch is off!"));
@@ -242,8 +239,8 @@ void loop() {
     delay(50);
 
     panTilt.detach();
-    while(!mSwitch.switchState()){
-    //while(PanTilt.getMode() == MODE_SLEEP){
+    //while(!mSwitch.switchState()){
+    while(panTilt.getMode() == MODE_OFF){
       delay(50);
 
     }
