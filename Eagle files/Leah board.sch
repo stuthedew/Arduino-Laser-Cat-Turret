@@ -432,9 +432,6 @@
 <sheets>
 <sheet>
 <plain>
-<text x="175.26" y="30.48" size="2.54" layer="94">Adafruit Pro Trinket 5V</text>
-<text x="175.26" y="25.4" size="2.54" layer="94">http://adafruit.com/products/2000</text>
-<text x="248.92" y="30.48" size="2.54" layer="94">CC 2.5 BY-SA</text>
 </plain>
 <instances>
 <instance part="FRAME1" gate="G$1" x="0" y="0"/>
