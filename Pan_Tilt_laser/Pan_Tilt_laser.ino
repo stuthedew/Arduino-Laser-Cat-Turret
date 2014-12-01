@@ -32,10 +32,8 @@
 #include "stuMarkov.h"
 #include "stuLaser.h"
 #include "stu_scheduler.h"
-#include "missileswitch.h"
 #include "stu_gauss.h"
 #include <Gaussian.h>
-
 #include "stu_dial.h"
 
 
@@ -55,8 +53,6 @@ panTiltPos_t panTiltY(0, 7, 45, 0, 10);
 PanTilt panTilt(SERVO_X_PIN, &panTiltX, SERVO_Y_PIN, &panTiltY);
 
 StuLaser laser(LASER_PIN);
-
-Missileswitch mSwitch(MS_SWITCH_PIN, MS_LED_PIN);
 
 
 Task pauseTask(&pauseCB);
@@ -78,9 +74,9 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
   #ifdef TIME_DEBUG
-  Serial.print(F("Next pause in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
+    Serial.print(F("Next pause in "));
+    Serial.print(temp/1000);
+    Serial.println(F(" seconds.\n"));
   #endif
 
   pauseTask.setInterval(temp);
@@ -92,9 +88,9 @@ void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
   unsigned long temp = gauss.gRandom(avg_sec_to_rest, variance)*1000;
 
   #ifdef TIME_DEBUG
-  Serial.print(F("Next rest in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
+    Serial.print(F("Next rest in "));
+    Serial.print(temp/1000);
+    Serial.println(F(" seconds.\n"));
   #endif
 
   restTask.setInterval(temp);
@@ -107,13 +103,12 @@ void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
 
   //  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
   #ifdef TIME_DEBUG
-  Serial.print(F("Next sleep in "));
-  Serial.print(mSecToSleep/1000);
-  Serial.println(F(" seconds.\n"));
+    Serial.print(F("Next sleep in "));
+    Serial.print(mSecToSleep/1000);
+    Serial.println(F(" seconds.\n"));
   #endif
 
   sleepTask.setInterval(mSecToSleep);
-
 }
 
 
@@ -125,9 +120,10 @@ void pauseCB(){
 
 void restCB(){
   //Serial.println(F("Rest Callback!"));
-  mSwitch.ledState(0);
+
+//  mSwitch.ledState(0);  TODO: Replace missile switch
   sleep(5, 10);
-  mSwitch.ledState(1);
+//  mSwitch.ledState(1);  TODO: Replace missile switch
   setNextPauseTime();
   setNextRestTime();
 }
@@ -145,10 +141,18 @@ void sleepCB(){
 
 
 void setup() {
-  Serial.begin(BAUD_RATE);
+
+  #ifndef EMBED
+    Serial.begin(BAUD_RATE);
+//    mSwitch.begin();      TODO: Replace missile switch
+//    mSwitch.heartBeat(3); TODO: Replace missile switch
+    Serial.println(F("setup starting..."));
+//    mSwitch.ledState(1);  TODO: Replace missile switch
+  #endif
+
   Dial.setPin( DIAL_PIN );
   Dial.begin( ) ;
-  mSwitch.begin();
+
 
   schedule.addTask(&pauseTask);
   schedule.addTask(&restTask);
@@ -176,12 +180,10 @@ void setup() {
 
   randomSeed(analogRead(5));
 
-  mSwitch.heartBeat(3);
+
 
   panTilt.begin();
 
-  Serial.println(F("setup starting..."));
-  mSwitch.ledState(1);
 
 
   laser.begin();
@@ -204,25 +206,29 @@ void setup() {
   delay(500);
   laser.fire(1);
 
+#ifndef EMBED
   Serial.println(F("setup complete"));
+#endif
 
   setNextPauseTime();
   setNextRestTime();
   setNextSleepTime();
 }
 
+
 void loop() {
 
   schedule.run();
   Dial.update();
   panTilt.setMode(Dial.getMode());
-  Serial.println(panTilt.getMode());
+
+  #ifndef EMBED
+    Serial.println(panTilt.getMode());
+  #endif
+
   delay(100);
-  return;
+  return; //  TODO: Remove
 
-
-  //check if switch is on or off and pause if off
-//  if(!mSwitch.switchState()){
 
 if(panTilt.getMode() == MODE_OFF){
 
@@ -231,7 +237,7 @@ if(panTilt.getMode() == MODE_OFF){
     #endif
 
     laser.fire(0);
-//    mSwitch.ledState(0);
+//    mSwitch.ledState(0); TODO: Replace missile switch
     panTiltX.angle = 90;
     panTiltY.angle = 90;
     panTilt.updateAngles();
@@ -239,12 +245,12 @@ if(panTilt.getMode() == MODE_OFF){
     delay(50);
 
     panTilt.detach();
-    //while(!mSwitch.switchState()){
+    //while(!mSwitch.switchState()){ TODO: Replace missile switch
     while(panTilt.getMode() == MODE_OFF){
       delay(50);
 
     }
-    mSwitch.ledState(1);
+    //mSwitch.ledState(1);  TODO: Replace missile switch
     panTilt.begin();
     laser.fire(1);
     schedule.restart();
@@ -252,10 +258,6 @@ if(panTilt.getMode() == MODE_OFF){
       Serial.print(F("Switch is on!"));
     #endif
   }
-
-
-
-
 
 
   panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
@@ -281,7 +283,6 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
     if(pt->dir == 0){
       pt->dir = 1;
     }
-
 
     if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
       prob += abs(pt->midAngle - pt->angle) * max(pt->probOffset, 1);
@@ -319,6 +320,7 @@ int markovPause(){
   }
 }
 
+
 void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned int delayVal = random(minSec, maxSec);
   laser.fire(0);
@@ -329,7 +331,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
     while(millis() - startTime < 1000){
       heartBeat(10000);
 
-      if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart.
+      if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart. TODO: Replace missile switch
         return;
       }
       if(startTime > millis()){ //check for rollovers
@@ -342,7 +344,6 @@ void sleep(unsigned long minSec, unsigned long maxSec){
   }
   panTilt.begin();
   laser.fire(1);
-
 }
 
 
@@ -350,7 +351,11 @@ void heartBeat(int hbInterval){
   static unsigned long oldTime;
 
   if(millis() - oldTime > hbInterval){
-    mSwitch.heartBeat(1);
+    #ifndef EMBED
+//      mSwitch.heartBeat(1); TODO: Replace missile switch
+
+    #endif
+
     oldTime = millis();
   }
 }

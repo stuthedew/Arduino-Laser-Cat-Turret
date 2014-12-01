@@ -64,6 +64,7 @@
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="no" active="no"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
@@ -182,6 +183,7 @@
 <hole x="1.524" y="41.402" drill="2.2"/>
 <hole x="40.132" y="4.064" drill="2.2"/>
 <hole x="39.878" y="41.275" drill="2.2"/>
+<text x="32.258" y="15.113" size="1.778" layer="25">B R Y</text>
 </plain>
 <libraries>
 <library name="adafruit">
@@ -300,6 +302,59 @@
 <rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
 <rectangle x1="-2.794" y1="-0.254" x2="-2.286" y2="0.254" layer="51"/>
 <rectangle x1="2.286" y1="-0.254" x2="2.794" y2="0.254" layer="51"/>
+</package>
+</packages>
+</library>
+<library name="SparkFun-DiscreteSemi">
+<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
+In this library you'll find discrete semiconductors- transistors, diodes, TRIACs, optoisolators, etc.&lt;br&gt;&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
+&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="SOT23-3">
+<wire x1="1.4224" y1="0.6604" x2="1.4224" y2="-0.6604" width="0.1524" layer="51"/>
+<wire x1="1.4224" y1="-0.6604" x2="-1.4224" y2="-0.6604" width="0.1524" layer="51"/>
+<wire x1="-1.4224" y1="-0.6604" x2="-1.4224" y2="0.6604" width="0.1524" layer="51"/>
+<wire x1="-1.4224" y1="0.6604" x2="1.4224" y2="0.6604" width="0.1524" layer="51"/>
+<wire x1="-0.8" y1="0.7" x2="-1.4" y2="0.7" width="0.2032" layer="21"/>
+<wire x1="-1.4" y1="0.7" x2="-1.4" y2="-0.1" width="0.2032" layer="21"/>
+<wire x1="0.8" y1="0.7" x2="1.4" y2="0.7" width="0.2032" layer="21"/>
+<wire x1="1.4" y1="0.7" x2="1.4" y2="-0.1" width="0.2032" layer="21"/>
+<smd name="1" x="-0.95" y="-1" dx="0.8" dy="0.9" layer="1"/>
+<smd name="2" x="0.95" y="-1" dx="0.8" dy="0.9" layer="1"/>
+<smd name="3" x="0" y="1.1" dx="0.8" dy="0.9" layer="1"/>
+<text x="-0.8255" y="1.778" size="0.4064" layer="25">&gt;NAME</text>
+<text x="-1.016" y="-0.1905" size="0.4064" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+</library>
+<library name="SparkFun-Resistors">
+<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
+In this library you'll find resistors, capacitors, inductors, test points, jumper pads, etc.&lt;br&gt;&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
+&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="0603-RES">
+<wire x1="-1.473" y1="0.983" x2="1.473" y2="0.983" width="0.0508" layer="39"/>
+<wire x1="1.473" y1="0.983" x2="1.473" y2="-0.983" width="0.0508" layer="39"/>
+<wire x1="1.473" y1="-0.983" x2="-1.473" y2="-0.983" width="0.0508" layer="39"/>
+<wire x1="-1.473" y1="-0.983" x2="-1.473" y2="0.983" width="0.0508" layer="39"/>
+<wire x1="-0.356" y1="0.432" x2="0.356" y2="0.432" width="0.1016" layer="51"/>
+<wire x1="-0.356" y1="-0.419" x2="0.356" y2="-0.419" width="0.1016" layer="51"/>
+<smd name="1" x="-0.85" y="0" dx="1.1" dy="1" layer="1"/>
+<smd name="2" x="0.85" y="0" dx="1.1" dy="1" layer="1"/>
+<text x="-0.889" y="0.762" size="0.4064" layer="25" font="vector">&gt;NAME</text>
+<text x="-1.016" y="-1.143" size="0.4064" layer="27" font="vector">&gt;VALUE</text>
+<rectangle x1="-0.8382" y1="-0.4699" x2="-0.3381" y2="0.4801" layer="51"/>
+<rectangle x1="0.3302" y1="-0.4699" x2="0.8303" y2="0.4801" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
+<rectangle x1="-0.2286" y1="-0.381" x2="0.2286" y2="0.381" layer="21"/>
 </package>
 </packages>
 </library>
@@ -472,22 +527,58 @@ einem neuen Namen ab.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="JP4" library="adafruit" package="1X12-CB" value="" x="14.605" y="17.907" smashed="yes" rot="R270">
-<attribute name="NAME" x="16.4338" y="33.2232" size="1.27" layer="25" ratio="10" rot="R270"/>
-<attribute name="VALUE" x="11.43" y="33.147" size="1.27" layer="27" rot="R270"/>
+<element name="JP4" library="adafruit" package="1X12-CB" value="" x="13.716" y="26.924" smashed="yes" rot="R270">
+<attribute name="NAME" x="15.4178" y="42.1132" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="VALUE" x="10.541" y="42.164" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="JP1" library="adafruit" package="1X12-CB" value="" x="29.845" y="17.907" smashed="yes" rot="R270">
-<attribute name="NAME" x="31.6738" y="33.2232" size="1.27" layer="25" ratio="10" rot="R270"/>
-<attribute name="VALUE" x="26.67" y="33.147" size="1.27" layer="27" rot="R270"/>
+<element name="JP1" library="adafruit" package="1X12-CB" value="" x="28.956" y="26.924" smashed="yes" rot="R270">
+<attribute name="NAME" x="30.7848" y="42.2402" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="VALUE" x="25.781" y="42.164" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="POT" library="adafruit" package="JSTPH3" value="" x="7.493" y="18.415" rot="R90"/>
-<element name="POWER" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="22.352" y="37.465"/>
+<element name="POWER" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="21.717" y="5.207" rot="R180"/>
 <element name="PWR_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="6.35" y="28.956" rot="R90"/>
-<element name="CONT_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="35.814" y="28.575"/>
+<element name="CONT_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="36.703" y="33.147"/>
 <element name="INT_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="6.477" y="7.874" rot="R90"/>
-<element name="X_SERVO" library="adafruit" package="1X03" value="" x="35.941" y="14.605"/>
+<element name="X_SERVO" library="adafruit" package="1X03" value="" x="36.068" y="11.176"/>
 <element name="Y_SERVO" library="adafruit" package="1X03" value="" x="36.068" y="18.923"/>
 <element name="LASER" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="6.477" y="38.227" rot="R90"/>
+<element name="PWR_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="22.352" y="15.621" rot="MR0">
+<attribute name="PROD_ID" value="TRANS-00830" x="22.352" y="15.621" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="CONT_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="22.098" y="20.32" rot="MR0">
+<attribute name="PROD_ID" value="TRANS-00830" x="22.098" y="20.32" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="INT_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="22.479" y="30.734" rot="MR0">
+<attribute name="PROD_ID" value="TRANS-00830" x="22.479" y="30.734" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="R1" library="SparkFun-Resistors" package="0603-RES" value="10K" x="22.225" y="36.195" rot="MR0">
+<attribute name="PROD_ID" value="RES-00824" x="22.225" y="36.195" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="R2" library="SparkFun-Resistors" package="0603-RES" value="10K" x="20.066" y="22.479" rot="MR0">
+<attribute name="PROD_ID" value="RES-00824" x="20.066" y="22.479" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="R3" library="SparkFun-Resistors" package="0603-RES" value="10K" x="24.384" y="12.954" rot="MR0">
+<attribute name="PROD_ID" value="RES-00824" x="24.384" y="12.954" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="LASER_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="23.622" y="25.908" rot="MR0">
+<attribute name="PROD_ID" value="TRANS-00830" x="26.797" y="29.845" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="R4" library="SparkFun-Resistors" package="0603-RES" value="10K" x="32.004" y="2.159" rot="MR180">
+<attribute name="PROD_ID" value="RES-00824" x="28.829" y="-1.778" size="1.778" layer="28" rot="MR180" display="off"/>
+</element>
+<element name="X_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="34.671" y="5.588" rot="MR0">
+<attribute name="PROD_ID" value="TRANS-00830" x="37.846" y="9.525" size="1.778" layer="28" rot="MR0" display="off"/>
+</element>
+<element name="R5" library="SparkFun-Resistors" package="0603-RES" value="10K" x="36.576" y="2.667" rot="MR180">
+<attribute name="PROD_ID" value="RES-00824" x="33.401" y="-1.27" size="1.778" layer="28" rot="MR180" display="off"/>
+</element>
+<element name="Y_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="35.941" y="24.13" rot="MR180">
+<attribute name="PROD_ID" value="TRANS-00830" x="32.766" y="20.193" size="1.778" layer="28" rot="MR180" display="off"/>
+</element>
+<element name="R6" library="SparkFun-Resistors" package="0603-RES" value="10K" x="40.64" y="24.892" rot="MR90">
+<attribute name="PROD_ID" value="RES-00824" x="44.577" y="21.717" size="1.778" layer="28" rot="MR90" display="off"/>
+</element>
 </elements>
 <signals>
 <signal name="GND" class="1">
@@ -500,8 +591,24 @@ einem neuen Namen ab.</description>
 </polygon>
 <contactref element="POWER" pad="2"/>
 <contactref element="LASER" pad="2"/>
-<wire x1="29.845" y1="29.337" x2="10.177" y2="37.227" width="0" layer="19" extent="1-1"/>
-<wire x1="21.352" y1="33.765" x2="29.845" y2="29.337" width="0" layer="19" extent="1-1"/>
+<contactref element="R2" pad="1"/>
+<contactref element="R3" pad="1"/>
+<contactref element="R1" pad="1"/>
+<contactref element="POT" pad="3"/>
+<contactref element="R4" pad="1"/>
+<contactref element="R5" pad="1"/>
+<contactref element="R6" pad="1"/>
+<contactref element="PWR_LED" pad="2"/>
+<contactref element="INT_LED" pad="2"/>
+<contactref element="CONT_LED" pad="2"/>
+<contactref element="Y_SERVO" pad="3"/>
+<contactref element="X_SERVO" pad="1"/>
+<wire x1="40.64" y1="24.042" x2="35.703" y2="29.447" width="0" layer="19" extent="1-16"/>
+<wire x1="22.717" y1="8.907" x2="25.234" y2="12.954" width="0" layer="19" extent="1-16"/>
+<wire x1="10.193" y1="20.415" x2="20.916" y2="22.479" width="0" layer="19" extent="1-16"/>
+<wire x1="10.05" y1="27.956" x2="10.193" y2="20.415" width="0" layer="19" extent="1-1"/>
+<wire x1="10.177" y1="37.227" x2="10.05" y2="27.956" width="0" layer="19" extent="1-1"/>
+<wire x1="10.177" y1="6.874" x2="22.717" y2="8.907" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="VBUS" class="1">
 <contactref element="JP1" pad="3"/>
@@ -509,7 +616,21 @@ einem neuen Namen ab.</description>
 <signal name="VCC">
 <contactref element="JP1" pad="1"/>
 <contactref element="POWER" pad="1"/>
-<wire x1="23.352" y1="33.765" x2="29.845" y2="31.877" width="0" layer="19" extent="1-1"/>
+<contactref element="POT" pad="1"/>
+<contactref element="LASER_MOS" pad="3"/>
+<contactref element="X_MOS" pad="3"/>
+<contactref element="Y_MOS" pad="3"/>
+<contactref element="INT_MOS" pad="3"/>
+<contactref element="CONT_MOS" pad="3"/>
+<contactref element="PWR_MOS" pad="3"/>
+<wire x1="22.479" y1="31.834" x2="28.956" y2="40.894" width="0" layer="19" extent="16-16"/>
+<wire x1="23.622" y1="27.008" x2="22.479" y2="31.834" width="0" layer="19" extent="16-16"/>
+<wire x1="22.098" y1="21.42" x2="23.622" y2="27.008" width="0" layer="19" extent="16-16"/>
+<wire x1="22.352" y1="16.721" x2="22.098" y2="21.42" width="0" layer="19" extent="16-16"/>
+<wire x1="20.717" y1="8.907" x2="22.352" y2="16.721" width="0" layer="19" extent="1-16"/>
+<wire x1="10.193" y1="16.415" x2="22.352" y2="16.721" width="0" layer="19" extent="1-16"/>
+<wire x1="35.941" y1="23.03" x2="23.622" y2="27.008" width="0" layer="19" extent="16-16"/>
+<wire x1="34.671" y1="6.688" x2="20.717" y2="8.907" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="RESET">
 <contactref element="JP1" pad="12"/>
@@ -528,14 +649,18 @@ einem neuen Namen ab.</description>
 </signal>
 <signal name="A0">
 <contactref element="JP4" pad="7"/>
+<contactref element="X_SERVO" pad="3"/>
+<wire x1="13.716" y1="25.654" x2="38.608" y2="11.176" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="A1">
 <contactref element="JP4" pad="8"/>
+<contactref element="Y_SERVO" pad="1"/>
+<wire x1="13.716" y1="23.114" x2="33.528" y2="18.923" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="A2">
 <contactref element="JP4" pad="9"/>
 <contactref element="POT" pad="2"/>
-<wire x1="14.605" y1="11.557" x2="10.193" y2="18.415" width="0" layer="19" extent="1-1"/>
+<wire x1="10.193" y1="18.415" x2="13.716" y2="20.574" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="A3">
 <contactref element="JP4" pad="10"/>
@@ -575,6 +700,64 @@ einem neuen Namen ab.</description>
 </signal>
 <signal name="N$1">
 <contactref element="JP1" pad="4"/>
+</signal>
+<signal name="N$5">
+<contactref element="LASER_MOS" pad="2"/>
+<contactref element="R4" pad="2"/>
+<wire x1="32.854" y1="2.159" x2="22.672" y2="24.908" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="N$7">
+<contactref element="X_MOS" pad="2"/>
+<contactref element="R5" pad="2"/>
+<contactref element="X_SERVO" pad="2"/>
+<wire x1="33.721" y1="4.588" x2="36.068" y2="11.176" width="0" layer="19" extent="16-16"/>
+<wire x1="37.426" y1="2.667" x2="33.721" y2="4.588" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="N$6">
+<contactref element="Y_MOS" pad="2"/>
+<contactref element="R6" pad="2"/>
+<contactref element="Y_SERVO" pad="2"/>
+<wire x1="36.891" y1="25.13" x2="40.64" y2="25.742" width="0" layer="19" extent="16-16"/>
+<wire x1="36.068" y1="18.923" x2="36.891" y2="25.13" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="INT_PWR">
+<contactref element="INT_LED" pad="1"/>
+<contactref element="INT_MOS" pad="2"/>
+<contactref element="R1" pad="2"/>
+<wire x1="21.529" y1="29.734" x2="21.375" y2="36.195" width="0" layer="19" extent="16-16"/>
+<wire x1="10.177" y1="8.874" x2="21.529" y2="29.734" width="0" layer="19" extent="1-16"/>
+</signal>
+<signal name="CONT_PWR">
+<contactref element="CONT_LED" pad="1"/>
+<contactref element="CONT_MOS" pad="2"/>
+<contactref element="R2" pad="2"/>
+<wire x1="21.148" y1="19.32" x2="37.703" y2="29.447" width="0" layer="19" extent="1-16"/>
+<wire x1="19.216" y1="22.479" x2="21.148" y2="19.32" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="PLED_PWR">
+<contactref element="PWR_LED" pad="1"/>
+<contactref element="PWR_MOS" pad="2"/>
+<contactref element="R3" pad="2"/>
+<wire x1="21.402" y1="14.621" x2="10.05" y2="29.956" width="0" layer="19" extent="1-16"/>
+<wire x1="23.534" y1="12.954" x2="21.402" y2="14.621" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="LASER_PIN">
+<contactref element="LASER_MOS" pad="1"/>
+</signal>
+<signal name="XSERVO_PWR_PIN">
+<contactref element="X_MOS" pad="1"/>
+</signal>
+<signal name="YSERVO_PWR_PIN">
+<contactref element="Y_MOS" pad="1"/>
+</signal>
+<signal name="N$2">
+<contactref element="INT_MOS" pad="1"/>
+</signal>
+<signal name="N$3">
+<contactref element="CONT_MOS" pad="1"/>
+</signal>
+<signal name="N$4">
+<contactref element="PWR_MOS" pad="1"/>
 </signal>
 </signals>
 </board>
