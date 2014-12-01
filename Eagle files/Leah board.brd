@@ -143,14 +143,9 @@
 </layers>
 <board>
 <plain>
-<wire x1="41.91" y1="2.032" x2="41.91" y2="43.18" width="0" layer="20"/>
-<wire x1="41.91" y1="43.18" x2="2.032" y2="43.18" width="0" layer="20"/>
-<wire x1="2.032" y1="43.18" x2="2.032" y2="22.225" width="0" layer="20"/>
-<wire x1="2.032" y1="22.225" x2="0" y2="20.32" width="0" layer="20"/>
-<wire x1="0" y1="20.32" x2="0" y2="15.24" width="0" layer="20"/>
-<wire x1="0" y1="15.24" x2="2.032" y2="13.335" width="0" layer="20"/>
-<wire x1="2.032" y1="13.335" x2="2.032" y2="2.032" width="0" layer="20"/>
-<wire x1="2.032" y1="2.032" x2="41.91" y2="2.032" width="0" layer="20"/>
+<wire x1="43.18" y1="43.18" x2="0" y2="43.18" width="0" layer="20"/>
+<wire x1="0" y1="43.18" x2="0" y2="0" width="0" layer="20"/>
+<wire x1="0" y1="0" x2="43.18" y2="0" width="0" layer="20"/>
 <text x="28.2575" y="30.5435" size="1.016" layer="21" font="vector" ratio="10" rot="R270" align="center-right">BAT</text>
 <text x="28.3464" y="29.9339" size="1.016" layer="21" font="vector" ratio="10" rot="R90" align="center-right">G</text>
 <text x="28.3718" y="28.3845" size="0.9652" layer="21" font="vector" ratio="10" rot="R90" align="center-right">BUS</text>
@@ -183,8 +178,10 @@
 <text x="28.829" y="33.274" size="1.016" layer="21" font="vector" ratio="10" align="center-right">+</text>
 <text x="16.637" y="31.877" size="1.016" layer="21" font="vector" ratio="10" align="center-right">9</text>
 <text x="16.637" y="32.385" size="1.016" layer="21" font="vector" ratio="10" align="center-right">~</text>
-<hole x="1.651" y="17.78" drill="2.2"/>
-<hole x="21.717" y="20.955" drill="2.2"/>
+<hole x="1.524" y="3.81" drill="2.2"/>
+<hole x="1.524" y="41.402" drill="2.2"/>
+<hole x="40.132" y="4.064" drill="2.2"/>
+<hole x="39.878" y="41.275" drill="2.2"/>
 </plain>
 <libraries>
 <library name="adafruit">
@@ -496,14 +493,10 @@ einem neuen Namen ab.</description>
 <signal name="GND" class="1">
 <contactref element="JP1" pad="2"/>
 <polygon width="0.3048" layer="16">
-<vertex x="2.032" y="43.18"/>
-<vertex x="2.032" y="22.225"/>
-<vertex x="0" y="20.32"/>
-<vertex x="0" y="15.24"/>
-<vertex x="2.032" y="13.335"/>
-<vertex x="2.032" y="2.032"/>
-<vertex x="41.91" y="2.032"/>
-<vertex x="41.91" y="43.18"/>
+<vertex x="0" y="43.18"/>
+<vertex x="0" y="0"/>
+<vertex x="43.18" y="0"/>
+<vertex x="43.18" y="43.18"/>
 </polygon>
 <contactref element="POWER" pad="2"/>
 <contactref element="LASER" pad="2"/>
