@@ -56,11 +56,12 @@ class Timer: public Event{
 
 public:
 
+    Timer(unsigned long interval, bool enable) ;
 
     void start( void ) ;
     void stop( void ) ;
     void restart( void ) ;
-    bool check( timer_input_e action = ELAPSE_DISABLE ) const;
+    bool check( timer_input_e action = ELAPSE_DISABLE ) ;
 
 
 };

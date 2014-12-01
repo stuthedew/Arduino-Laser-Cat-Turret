@@ -331,9 +331,9 @@ void sleep(unsigned long minSec, unsigned long maxSec){
     while(millis() - startTime < 1000){
       heartBeat(10000);
 
-      if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart. TODO: Replace missile switch
-        return;
-      }
+      //if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart. TODO: Replace missile switch
+        //return;
+    //  }
       if(startTime > millis()){ //check for rollovers
         startTime = millis();
         break;

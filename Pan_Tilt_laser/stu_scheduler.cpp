@@ -48,7 +48,7 @@
   }
 
   void Event::run( void ){
-    return 0;
+    return;
   }
 
 
@@ -66,7 +66,9 @@
   }
 
 
-  Timer::Timer(unsigned long interval, bool enable):_timeDelta(interval),_enabled(enable) {
+  Timer::Timer(unsigned long interval, bool enable){
+    _timeDelta = interval ;
+    _enabled = enable ;
 
   }
 
@@ -102,8 +104,9 @@ bool Timer::check( timer_input_e action ){
 }
 
 
-  Task::Task( void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc),_timeDelta(interval),_enabled(enable) {
-
+  Task::Task( void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc) {
+    _timeDelta = interval ;
+    _enabled = enable ;
   }
 
   void Task::changeCallback( void (*cbFunc)() ){
@@ -135,7 +138,7 @@ bool Timer::check( timer_input_e action ){
 
   void StuScheduler::run( void ){
     for(uint8_t i = 0; i < _tItr; i++){
-      if(_Task[i]->enabled() && _Task[i]->nextRunTime() <= millis()){
+      if(_Task[i]->enabled() && _Task[i]->getNextEventTime() <= millis()){
         _Task[i]->run();
         _Task[i]->resetPeriodic();
       }
