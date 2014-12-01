@@ -89,15 +89,18 @@
 
   }
 
+
 bool Timer::check( timer_input_e action ){
   if(!_enabled){
     return false;
   }
 
   if( _endTime < millis() ){ //TRUE == elapsed
+    _enabled = 0 ;
     if(action == ELAPSE_RESTART){
       restart();
     }
+
     return true ;
   }
   return false ;

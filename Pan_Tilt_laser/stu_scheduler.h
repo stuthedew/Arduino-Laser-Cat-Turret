@@ -56,7 +56,7 @@ class Timer: public Event{
 
 public:
 
-    Timer(unsigned long interval, bool enable) ;
+    Timer(unsigned long interval=0, bool enable=0) ;
 
     void start( void ) ;
     void stop( void ) ;
