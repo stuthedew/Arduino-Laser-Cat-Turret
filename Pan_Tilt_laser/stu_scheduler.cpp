@@ -17,71 +17,115 @@
 
 #include "stu_scheduler.h"
 
-  Task::Task(void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc),_timeBetweenRuns(interval),_enabled(enable) {
+
+
+  void Event::resetPeriodic(){
+
+    _endTime = _timeDelta + millis();
+  }
+
+  void Event::setInterval(unsigned long mSec){
+    _timeDelta = mSec;
+    _endTime = _timeDelta + millis();
+
+  }
+
+  unsigned long Event::getNextEventTime() const{
+    return _endTime;
+
+  }
+
+  void Event::setNextEventTime(unsigned long mSec){
+    _endTime = mSec;
 
   }
 
 
-  void Task::resetPeriodic(){
 
-    _runNextAt = _timeBetweenRuns + millis();
-  }
-
-  void Task::setInterval(unsigned long mSec){
-    _timeBetweenRuns = mSec;
-    _runNextAt = _timeBetweenRuns + millis();
-
-  }
-
-  unsigned long Task::nextRunTime() const{
-    return _runNextAt;
-
-  }
-
-  void Task::setNextRunTime(unsigned long mSec){
-    _runNextAt = mSec;
-
-  }
-
-
-
-  void Task::disable(){
+  void Event::disable( void ){
     _enabled = 0;
 
   }
 
-
-  void Task::enable(){
-    _enabled = 1;
-    resetPeriodic();
+  void Event::run( void ){
+    return 0;
   }
 
-  void Task::run(){
-    _callback();
+
+  void Event::enable(){
+    if( !_enabled ){
+      _enabled = 1 ;
+      resetPeriodic() ;
+  }
   }
 
-  bool Task::enabled() const {
+
+
+  bool Event::enabled() const {
     return _enabled;
   }
 
-  void Task::changeCallback(void (*cbFunc)()){
+
+  Timer::Timer(unsigned long interval, bool enable):_timeDelta(interval),_enabled(enable) {
+
+  }
+
+  void Timer::start( void ){
+    enable();
+
+  }
+
+  void Timer::stop( void ){
+    disable();
+
+  }
+
+  void Timer::restart( void ){
+    stop();
+    start();
+
+
+  }
+
+bool Timer::check( timer_input_e action ){
+  if(!_enabled){
+    return false;
+  }
+
+  if( _endTime < millis() ){ //TRUE == elapsed
+    if(action == ELAPSE_RESTART){
+      restart();
+    }
+    return true ;
+  }
+  return false ;
+}
+
+
+  Task::Task( void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc),_timeDelta(interval),_enabled(enable) {
+
+  }
+
+  void Task::changeCallback( void (*cbFunc)() ){
     _callback = cbFunc;
   }
 
 
+  void Task::run( void ){
+    _callback();
+  }
 
-
-  StuScheduler::StuScheduler(){
+  StuScheduler::StuScheduler( void ){
     _tItr = 0;
   }
 
-  void StuScheduler::addTask(Task *t){
-  _Task[_tItr] = t;
+  void StuScheduler::addTask( Task *t ){
+  _Task[ _tItr ] = t;
   _tItr++;
 
   }
 
-  void StuScheduler::restart(){
+  void StuScheduler::restart( void ){
     for(uint8_t i = 0; i < _tItr; i++){
       if(_Task[i]->enabled()){
         _Task[i]->resetPeriodic();
@@ -89,7 +133,7 @@
     }
   }
 
-  void StuScheduler::run(){
+  void StuScheduler::run( void ){
     for(uint8_t i = 0; i < _tItr; i++){
       if(_Task[i]->enabled() && _Task[i]->nextRunTime() <= millis()){
         _Task[i]->run();

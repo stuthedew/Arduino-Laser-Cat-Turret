@@ -1690,7 +1690,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="PWR_MOS" gate="G$1" pin="G"/>
 <wire x1="213.36" y1="177.8" x2="213.36" y2="180.34" width="0.1524" layer="91"/>
 <wire x1="213.36" y1="180.34" x2="210.82" y2="180.34" width="0.1524" layer="91"/>
-<label x="210.82" y="180.34" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 </nets>

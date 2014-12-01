@@ -183,7 +183,7 @@
 <hole x="1.524" y="41.402" drill="2.2"/>
 <hole x="40.132" y="4.064" drill="2.2"/>
 <hole x="39.878" y="41.275" drill="2.2"/>
-<text x="32.258" y="15.113" size="1.778" layer="25">B R Y</text>
+<text x="36.068" y="15.875" size="1.778" layer="25" align="center">Y R B</text>
 </plain>
 <libraries>
 <library name="adafruit">
@@ -540,8 +540,8 @@ einem neuen Namen ab.</description>
 <element name="PWR_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="6.35" y="28.956" rot="R90"/>
 <element name="CONT_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="36.703" y="33.147"/>
 <element name="INT_LED" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="6.477" y="7.874" rot="R90"/>
-<element name="X_SERVO" library="adafruit" package="1X03" value="" x="36.068" y="11.176"/>
-<element name="Y_SERVO" library="adafruit" package="1X03" value="" x="36.068" y="18.923"/>
+<element name="X_SERVO" library="adafruit" package="1X03" value="" x="36.068" y="12.7" rot="R180"/>
+<element name="Y_SERVO" library="adafruit" package="1X03" value="" x="36.068" y="19.05"/>
 <element name="LASER" library="adafruit" package="JST-PH-2-SMT-RA" value="" x="6.477" y="38.227" rot="R90"/>
 <element name="PWR_MOS" library="SparkFun-DiscreteSemi" package="SOT23-3" value="200mA/50V" x="22.352" y="15.621" rot="MR0">
 <attribute name="PROD_ID" value="TRANS-00830" x="22.352" y="15.621" size="1.778" layer="28" rot="MR0" display="off"/>
@@ -555,8 +555,8 @@ einem neuen Namen ab.</description>
 <element name="R1" library="SparkFun-Resistors" package="0603-RES" value="10K" x="22.225" y="36.195" rot="MR0">
 <attribute name="PROD_ID" value="RES-00824" x="22.225" y="36.195" size="1.778" layer="28" rot="MR0" display="off"/>
 </element>
-<element name="R2" library="SparkFun-Resistors" package="0603-RES" value="10K" x="20.066" y="22.479" rot="MR0">
-<attribute name="PROD_ID" value="RES-00824" x="20.066" y="22.479" size="1.778" layer="28" rot="MR0" display="off"/>
+<element name="R2" library="SparkFun-Resistors" package="0603-RES" value="10K" x="19.177" y="24.511" rot="MR0">
+<attribute name="PROD_ID" value="RES-00824" x="19.177" y="24.511" size="1.778" layer="28" rot="MR0" display="off"/>
 </element>
 <element name="R3" library="SparkFun-Resistors" package="0603-RES" value="10K" x="24.384" y="12.954" rot="MR0">
 <attribute name="PROD_ID" value="RES-00824" x="24.384" y="12.954" size="1.778" layer="28" rot="MR0" display="off"/>
@@ -605,8 +605,8 @@ einem neuen Namen ab.</description>
 <contactref element="X_SERVO" pad="1"/>
 <wire x1="40.64" y1="24.042" x2="35.703" y2="29.447" width="0" layer="19" extent="1-16"/>
 <wire x1="22.717" y1="8.907" x2="25.234" y2="12.954" width="0" layer="19" extent="1-16"/>
-<wire x1="10.193" y1="20.415" x2="20.916" y2="22.479" width="0" layer="19" extent="1-16"/>
-<wire x1="10.05" y1="27.956" x2="10.193" y2="20.415" width="0" layer="19" extent="1-1"/>
+<wire x1="10.05" y1="27.956" x2="20.027" y2="24.511" width="0" layer="19" extent="1-16"/>
+<wire x1="10.193" y1="20.415" x2="10.05" y2="27.956" width="0" layer="19" extent="1-1"/>
 <wire x1="10.177" y1="37.227" x2="10.05" y2="27.956" width="0" layer="19" extent="1-1"/>
 <wire x1="10.177" y1="6.874" x2="22.717" y2="8.907" width="0" layer="19" extent="1-1"/>
 </signal>
@@ -650,12 +650,12 @@ einem neuen Namen ab.</description>
 <signal name="A0">
 <contactref element="JP4" pad="7"/>
 <contactref element="X_SERVO" pad="3"/>
-<wire x1="13.716" y1="25.654" x2="38.608" y2="11.176" width="0" layer="19" extent="1-1"/>
+<wire x1="13.716" y1="25.654" x2="33.528" y2="12.7" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="A1">
 <contactref element="JP4" pad="8"/>
 <contactref element="Y_SERVO" pad="1"/>
-<wire x1="13.716" y1="23.114" x2="33.528" y2="18.923" width="0" layer="19" extent="1-1"/>
+<wire x1="13.716" y1="23.114" x2="33.528" y2="19.05" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="A2">
 <contactref element="JP4" pad="9"/>
@@ -710,7 +710,7 @@ einem neuen Namen ab.</description>
 <contactref element="X_MOS" pad="2"/>
 <contactref element="R5" pad="2"/>
 <contactref element="X_SERVO" pad="2"/>
-<wire x1="33.721" y1="4.588" x2="36.068" y2="11.176" width="0" layer="19" extent="16-16"/>
+<wire x1="33.721" y1="4.588" x2="36.068" y2="12.7" width="0" layer="19" extent="16-16"/>
 <wire x1="37.426" y1="2.667" x2="33.721" y2="4.588" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="N$6">
@@ -718,7 +718,7 @@ einem neuen Namen ab.</description>
 <contactref element="R6" pad="2"/>
 <contactref element="Y_SERVO" pad="2"/>
 <wire x1="36.891" y1="25.13" x2="40.64" y2="25.742" width="0" layer="19" extent="16-16"/>
-<wire x1="36.068" y1="18.923" x2="36.891" y2="25.13" width="0" layer="19" extent="16-16"/>
+<wire x1="36.068" y1="19.05" x2="36.891" y2="25.13" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="INT_PWR">
 <contactref element="INT_LED" pad="1"/>
@@ -732,7 +732,7 @@ einem neuen Namen ab.</description>
 <contactref element="CONT_MOS" pad="2"/>
 <contactref element="R2" pad="2"/>
 <wire x1="21.148" y1="19.32" x2="37.703" y2="29.447" width="0" layer="19" extent="1-16"/>
-<wire x1="19.216" y1="22.479" x2="21.148" y2="19.32" width="0" layer="19" extent="16-16"/>
+<wire x1="18.327" y1="24.511" x2="21.148" y2="19.32" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="PLED_PWR">
 <contactref element="PWR_LED" pad="1"/>
