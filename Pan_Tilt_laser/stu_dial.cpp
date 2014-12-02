@@ -51,5 +51,4 @@ void StuDial::update( void ){
 
 runmode_e StuDial::getMode( void ) const{
   return _mode ;
-
 }

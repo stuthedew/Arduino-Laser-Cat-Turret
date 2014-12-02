@@ -2,6 +2,8 @@
 
 #include "Arduino.h"
 
+
+//Embedded Arduino does not have Serial.
 #ifndef EMBED
   #define BAUD_RATE 115200
 #endif
@@ -18,7 +20,7 @@
 //LED power pins
 #define POWER_PIN 8 // Power lED pin
 #define CONT_PIN  4 // Continuous LED pin
-#define INT_PIN   3 // Intermittent LED pin 
+#define INT_PIN   3 // Intermittent LED pin
 
 #define LASER_PIN 9
 

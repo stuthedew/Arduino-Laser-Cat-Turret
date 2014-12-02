@@ -33,22 +33,30 @@ class Event{
 
 public:
 
-            void    resetPeriodic( void ) ;
-            void    setInterval( unsigned long mSec ) ;
-            void    setNextEventTime( unsigned long mSec ) ;
-            void    disable( void ) ;
-            void    enable( void ) ;
-   virtual  void    run( void ) ;
+    void
+      resetPeriodic( void ) ,
+      setInterval( unsigned long mSec ) ,
+      setNextEventTime( unsigned long mSec ) ,
+      disable( void ) ,
+      enable( void ) ;
 
-            bool    enabled( void ) const ;
+    virtual void
+      run( void ) ;
 
-  unsigned  long    getNextEventTime( void ) const ;
+    bool
+      enabled( void ) const ;
+
+    unsigned long
+      getNextEventTime( void ) const ;
+
 
 protected:
-            bool    _enabled ;
+  bool
+    _enabled ;
 
-  unsigned long     _endTime ;
-  unsigned long     _timeDelta ;
+  unsigned long
+    _endTime ,
+    _timeDelta ;
 
 };
 
@@ -58,10 +66,13 @@ public:
 
     Timer(unsigned long interval=0, bool enable=0) ;
 
-    void start( void ) ;
-    void stop( void ) ;
-    void restart( void ) ;
-    bool check( timer_input_e action = ELAPSE_DISABLE ) ;
+    void
+      start( void ) ,
+      stop( void ) ,
+      restart( void ) ;
+
+    bool
+      check( timer_input_e action = ELAPSE_DISABLE ) ;
 
 
 };
@@ -72,19 +83,20 @@ public:
 
   Task( void (*callback)(), unsigned long interval=100, bool enable=0 ) ;
 
-  void    run( void ) ;
-  void    changeCallback( void ( *callback )( void ) ) ;
+  void
+    run( void ) ,
+    changeCallback( void ( *callback )( void ) ) ;
 
 
-  unsigned  long    nextRunTime( void ) const ;
+  unsigned long
+    nextRunTime( void ) const ;
 
 private:
 
-  Callback    _callback ;
+  Callback
+    _callback ;
 
 };
-
-
 
 class StuScheduler {
 
@@ -92,15 +104,18 @@ public:
   StuScheduler( void );
 
 
-            void    addTask( Task *t ) ;
-            void    run( void ) ;
-            void    restart( void ) ;
+    void
+      addTask( Task *t ) ,
+      run( void ) ,
+      restart( void ) ;
 
 
 private:
 
-            Task    *_Task[ 20 ] ;
+    Task
+      *_Task[ 20 ] ;
 
-          uint8_t   _tItr ;
+    uint8_t
+      _tItr ;
 
 };

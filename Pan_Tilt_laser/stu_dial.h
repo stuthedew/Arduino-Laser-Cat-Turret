@@ -28,17 +28,21 @@ class StuDial{
 
 public:
 
-  void        begin( void ) ;
-  void        setPin( uint8_t pin ) ;
-  void        update( void ) ;
+  void
+    begin( void ) ,
+    setPin( uint8_t pin ) ,
+    update( void ) ;
 
-  runmode_e   getMode( void ) const;
+  runmode_e
+    getMode( void ) const;
 
 
 private:
-    uint8_t _dialPin ;
+    uint8_t
+      _dialPin ;
 
-    runmode_e _mode ;
+    runmode_e
+      _mode ;
 
 };
 
