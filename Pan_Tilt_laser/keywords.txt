@@ -7,17 +7,20 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-StuScheduler	KEYWORD1
-Task		KEYWORD1
-StuLaser	KEYWORD1
+StuScheduler	      KEYWORD1
+Task		            KEYWORD1
+StuLaser	          KEYWORD1
 
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
+setInterval         KEYWORD2
+addTask             KEYWORD2
+addLinkToBack       KEYWORD2
 
-
+updateAngles        KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)
@@ -32,5 +35,6 @@ StuLaser	KEYWORD1
 MODE_OFF 		        LITERAL1
 MODE_CONTINUOUS	    LITERAL1
 MODE_INTERMITTENT	  LITERAL1
+MODE_SLEEP          LITERAL1
 
 #######################################
