@@ -17,21 +17,25 @@
 
 #include "stuServo.h"
 
-//namespace stu{
-void StuServo::calibrate(){
 
+void StuServo::setPowerPin( uint8_t powerPin ){
+
+  _powerPin = powerPin ;
+  pinMode( _powerPin, OUTPUT ) ;
+  digitalWrite( _powerPin, LOW ) ;
 
 }
+
 
 void StuServo::setCalibration(int min, int max){
   _position.min = min;
   _position.max = max;
-
-
 }
 
 
 void StuServo::stuWrite(int position){
+
+  digitalWrite( _powerPin, HIGH ) ;
 
   if(position < _position.min){
     write(_position.min);
@@ -42,14 +46,15 @@ void StuServo::stuWrite(int position){
   else{
     write(position);
   }
-
+  digitalWrite( _powerPin, LOW ) ;
 }
+
 
 int StuServo::getMin() const {
   return _position.min;
 }
 
+
 int StuServo::getMax() const {
   return _position.max;
 }
-//}

@@ -25,8 +25,11 @@ v0.0.1 - First release
 
 typedef struct led_t{
 
-  uint8_t const pin  ; // pin for the led
-  bool          state   ; // current pin state (ON/OFF)
+  uint8_t const
+    pin ; // pin for the led
+
+  bool
+    state ; // current pin state (ON/OFF)
 
   led_t( uint8_t ledPin ): pin( ledPin ), state( 0 ){}
 
@@ -38,21 +41,18 @@ class StuDisplay{
 public:
 
   StuDisplay( uint8_t pwrLED, uint8_t contLED, uint8_t intLED ) ;
-  void  begin( void ) ;
-  void setMode( runmode_e mode ) ;
-  void  update( void ) ;
 
-
+  void
+    begin( void ) ,
+    setMode( runmode_e mode ) ,
+    update( void ) ;
 
 private:
 
-  void _ledWrite( led_t* led, bool ledState ) ;
+  void
+    _ledWrite( led_t* led, bool ledState ) ;
 
-
-
-
-
-  led_t*        _led[ LED_NUMBER ] ;
+  led_t* _led[ LED_NUMBER ] ;
 
   led_t
     _power        ,

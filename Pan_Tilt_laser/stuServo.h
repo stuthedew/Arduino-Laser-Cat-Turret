@@ -11,6 +11,7 @@
 
     @section  HISTORY
     v0.0.1 - First release
+    v0.0.2 - Added power control (MOSFET)
 
 */
 /**************************************************************************/
@@ -18,31 +19,38 @@
 
 #pragma once
 
+#include "Arduino.h"
 #include <Servo.h>
 
-//namespace stu{
 
 struct servoPos{
 
-        int       min ;
-        int       max ;
-        int       current ;
+    int
+      min ,
+      max ,
+      current ;
 };
 
 class StuServo: public Servo {
 
 public:
 
-          void    setCalibration( int min, int max ) ;
-          void    calibrate( void ) ;
-          void    stuWrite( int position ) ;
+    void
+      begin( void ) ,
+      setPowerPin( uint8_t pwrPin ) ,
+      setCalibration( int min, int max ) ,
+      stuWrite( int position ) ;
 
-          int     getMin( void ) const ;
-          int     getMax( void ) const ;
+    int
+      getMin( void ) const ,
+      getMax( void ) const ;
 
 private:
 
-      servoPos    _position ;
+    servoPos
+      _position ;
+
+    uint8_t
+      _powerPin ;
 
 };
-//}

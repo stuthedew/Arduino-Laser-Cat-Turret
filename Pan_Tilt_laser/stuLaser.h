@@ -26,12 +26,13 @@ public:
 
   StuLaser( uint8_t laserPin );
 
-              void    begin( void ) ;
-              void    fire( boolean state ) ;
+    void
+      begin( void ) ,
+      fire( boolean state ) ;
 
 private:
 
-           uint8_t    _pin ;
-
+    uint8_t
+      _pin ;
 
 };

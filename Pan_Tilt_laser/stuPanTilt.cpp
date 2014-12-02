@@ -30,13 +30,13 @@
 
     _xServo.setCalibration(_Xpos->minAngle, _Xpos->maxAngle);
     _yServo.setCalibration(_Ypos->minAngle, _Ypos->maxAngle);
-
-
   }
 
   void PanTilt::begin(){
-    _xServo.attach(_xPin);
-    _yServo.attach(_yPin);
+    _xServo.attach(_xPin) ;
+    _yServo.attach(_yPin) ;
+    _xServo.setPowerPin( X_PWR_PIN ) ;
+    _yServo.setPowerPin( Y_PWR_PIN ) ;
     _display.begin();
     delay(500);
   }

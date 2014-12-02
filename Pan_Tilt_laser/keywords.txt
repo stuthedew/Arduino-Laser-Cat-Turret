@@ -10,6 +10,8 @@
 StuScheduler	KEYWORD1
 Task		KEYWORD1
 StuLaser	KEYWORD1
+
+
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
@@ -21,12 +23,14 @@ StuLaser	KEYWORD1
 # Instances (KEYWORD2)
 #######################################
 
+
+
+
 #######################################
 # Constants (LITERAL1)
 
-OFF 		LITERAL1
-CONTINUOUS	LITERAL1
-INTERMITTENT	LITERAL1
+MODE_OFF 		        LITERAL1
+MODE_CONTINUOUS	    LITERAL1
+MODE_INTERMITTENT	  LITERAL1
 
 #######################################
-
