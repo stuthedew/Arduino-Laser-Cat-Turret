@@ -27,34 +27,34 @@ void StuServo::setPowerPin( uint8_t powerPin ){
 }
 
 
-void StuServo::setCalibration(int min, int max){
+void StuServo::setCalibration( int min, int max ){
   _position.min = min;
   _position.max = max;
 }
 
 
-void StuServo::stuWrite(int position){
+void StuServo::stuWrite( int position ){
 
   digitalWrite( _powerPin, HIGH ) ;
 
-  if(position < _position.min){
-    write(_position.min);
+  if( position < _position.min ){
+    write(_position.min) ;
   }
-  else if(position > _position.max){
-    write(_position.max);
+  else if( position > _position.max ){
+    write( _position.max );
   }
   else{
-    write(position);
+    write( position ) ;
   }
   digitalWrite( _powerPin, LOW ) ;
 }
 
 
-int StuServo::getMin() const {
-  return _position.min;
+int StuServo::getMin( void ) const {
+  return _position.min ;
 }
 
 
-int StuServo::getMax() const {
-  return _position.max;
+int StuServo::getMax( void ) const {
+  return _position.max ;
 }
