@@ -51,12 +51,12 @@ public:
 
 
 protected:
-  bool
-    _enabled ;
+    bool
+      _enabled ;
 
-  unsigned long
-    _endTime ,
-    _timeDelta ;
+    unsigned long
+      _endTime ,
+      _timeDelta ;
 
 };
 
@@ -81,28 +81,28 @@ class Task: public Event{
 
 public:
 
-  Task( void (*callback)(), unsigned long interval=100, bool enable=0 ) ;
+    Task( void (*callback)(), unsigned long interval=100, bool enable=0 ) ;
 
-  void
-    run( void ) ,
-    changeCallback( void ( *callback )( void ) ) ;
+    void
+      run( void ) ,
+      changeCallback( void ( *callback )( void ) ) ;
 
 
-  unsigned long
-    nextRunTime( void ) const ;
+    unsigned long
+      nextRunTime( void ) const ;
 
 private:
 
-  Callback
-    _callback ;
+    Callback
+      _callback ;
 
 };
 
 class StuScheduler {
 
 public:
-  StuScheduler( void );
 
+    StuScheduler( void );
 
     void
       addTask( Task *t ) ,

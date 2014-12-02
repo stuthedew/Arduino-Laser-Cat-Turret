@@ -154,6 +154,8 @@ void setup() {
 
   Dial.setPin( DIAL_PIN );
   Dial.begin( ) ;
+  panTilt.begin();
+  laser.begin();
 
 
   schedule.addTask(&pauseTask);
@@ -181,14 +183,6 @@ void setup() {
   lmShake.addLinkToBack( 2, 30, 0 ); // Shake
 
   randomSeed(analogRead(5));
-
-
-
-  panTilt.begin();
-
-
-
-  laser.begin();
 
   panTiltX.angle = panTiltX.minAngle;
   panTiltY.angle = panTiltY.minAngle;
