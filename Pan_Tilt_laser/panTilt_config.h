@@ -10,17 +10,17 @@
 
 
 // Servo pins
-#define X_PWR_PIN   99    // TODO: define servo power pins
-#define Y_PWR_PIN   99    // TODO: Set pins for Pro trinket
+#define X_PWR_PIN   A3
+#define Y_PWR_PIN   A4
 #define SERVO_X_PIN A0    // PWM Pins
 #define SERVO_Y_PIN A1
 
 //LED power pins
-#define POWER_PIN 7 // Power lED pin        TODO: Set pins for Pro trinket
-#define CONT_PIN  8 // Continuous LED pin   TODO: Set pins for Pro trinket
-#define INT_PIN   9 // Intermittent LED pin TODO: Set pins for Pro trinket
+#define POWER_PIN 8 // Power lED pin
+#define CONT_PIN  4 // Continuous LED pin
+#define INT_PIN   3 // Intermittent LED pin 
 
-#define LASER_PIN 5 // TODO: Set pins for Pro trinket
+#define LASER_PIN 9
 
 #define DIAL_PIN A2
 

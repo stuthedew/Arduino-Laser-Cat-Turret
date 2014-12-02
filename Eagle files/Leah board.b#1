@@ -170,12 +170,12 @@
 <text x="15.748" y="36.322" size="1.016" layer="51" font="vector" ratio="10" rot="R90" align="center-right">11</text>
 <text x="27.178" y="24.765" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
 <text x="27.305" y="27.305" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
-<text x="15.621" y="37.211" size="1.016" layer="51" font="vector" ratio="10" rot="R270" align="center-right">10</text>
-<text x="15.875" y="38.862" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
+<text x="15.621" y="37.211" size="1.016" layer="21" font="vector" ratio="10" rot="R270" align="center-right">10</text>
+<text x="15.875" y="38.862" size="1.016" layer="21" font="vector" ratio="10" align="center-right">~</text>
 <text x="27.178" y="19.685" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
-<text x="16.129" y="36.195" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
+<text x="16.129" y="36.195" size="1.016" layer="21" font="vector" ratio="10" align="center-right">~</text>
 <text x="27.051" y="41.021" size="1.016" layer="51" font="vector" ratio="10" align="center-right">+</text>
-<text x="15.875" y="40.767" size="1.016" layer="51" font="vector" ratio="10" align="center-right">9</text>
+<text x="15.875" y="40.767" size="1.016" layer="21" font="vector" ratio="10" align="center-right">9</text>
 <text x="15.875" y="41.402" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
 <hole x="1.778" y="1.778" drill="2.2"/>
 <hole x="1.778" y="41.402" drill="2.2"/>

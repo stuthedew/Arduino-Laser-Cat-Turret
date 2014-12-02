@@ -147,7 +147,7 @@
 <wire x1="43.18" y1="43.18" x2="0" y2="43.18" width="0" layer="20"/>
 <wire x1="0" y1="43.18" x2="0" y2="0" width="0" layer="20"/>
 <wire x1="0" y1="0" x2="43.18" y2="0" width="0" layer="20"/>
-<text x="26.4795" y="38.2905" size="1.016" layer="51" font="vector" ratio="10" rot="R270" align="center-right">BAT</text>
+<text x="26.4795" y="38.2905" size="1.016" layer="21" font="vector" ratio="10" rot="R270" align="center-right">BAT</text>
 <text x="26.5684" y="37.6809" size="1.016" layer="51" font="vector" ratio="10" rot="R90" align="center-right">G</text>
 <text x="26.5938" y="36.1315" size="0.9652" layer="51" font="vector" ratio="10" rot="R90" align="center-right">BUS</text>
 <text x="27.178" y="32.1945" size="1.016" layer="51" font="vector" ratio="10" align="center-right">5V</text>
@@ -163,19 +163,19 @@
 <text x="15.494" y="18.542" size="1.016" layer="51" font="vector" ratio="10" rot="R180" align="center-right">A3</text>
 <text x="15.113" y="20.955" size="1.016" layer="51" font="vector" ratio="10" rot="R180" align="center-right">A2</text>
 <text x="15.24" y="23.749" size="0.9652" layer="51" font="vector" ratio="10" rot="R180" align="center-right">A1</text>
-<text x="15.113" y="26.162" size="0.889" layer="51" font="vector" ratio="10" rot="R180" align="center-right">A0</text>
-<text x="15.24" y="28.448" size="1.016" layer="51" font="vector" ratio="10" rot="R180" align="center-right">Ar</text>
-<text x="15.621" y="31.75" size="1.016" layer="51" font="vector" ratio="10" rot="R90" align="center-right">13</text>
-<text x="15.621" y="33.909" size="1.016" layer="51" font="vector" ratio="10" rot="R90" align="center-right">12</text>
-<text x="15.748" y="36.322" size="1.016" layer="51" font="vector" ratio="10" rot="R90" align="center-right">11</text>
+<text x="15.113" y="26.162" size="0.889" layer="21" font="vector" ratio="10" rot="R180" align="center-right">A0</text>
+<text x="15.24" y="28.448" size="1.016" layer="21" font="vector" ratio="10" rot="R180" align="center-right">Ar</text>
+<text x="15.621" y="31.75" size="1.016" layer="21" font="vector" ratio="10" rot="R90" align="center-right">13</text>
+<text x="15.621" y="33.909" size="1.016" layer="21" font="vector" ratio="10" rot="R90" align="center-right">12</text>
+<text x="15.748" y="36.322" size="1.016" layer="21" font="vector" ratio="10" rot="R90" align="center-right">11</text>
 <text x="27.178" y="24.765" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
 <text x="27.305" y="27.305" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
-<text x="15.621" y="37.211" size="1.016" layer="51" font="vector" ratio="10" rot="R270" align="center-right">10</text>
-<text x="15.875" y="38.862" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
+<text x="15.621" y="37.211" size="1.016" layer="21" font="vector" ratio="10" rot="R270" align="center-right">10</text>
+<text x="15.875" y="38.862" size="1.016" layer="21" font="vector" ratio="10" align="center-right">~</text>
 <text x="27.178" y="19.685" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
-<text x="16.129" y="36.195" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
-<text x="27.051" y="41.021" size="1.016" layer="51" font="vector" ratio="10" align="center-right">+</text>
-<text x="15.875" y="40.767" size="1.016" layer="51" font="vector" ratio="10" align="center-right">9</text>
+<text x="16.129" y="36.195" size="1.016" layer="21" font="vector" ratio="10" align="center-right">~</text>
+<text x="27.051" y="41.021" size="1.016" layer="21" font="vector" ratio="10" align="center-right">+</text>
+<text x="15.875" y="40.767" size="1.016" layer="21" font="vector" ratio="10" align="center-right">9</text>
 <text x="15.875" y="41.402" size="1.016" layer="51" font="vector" ratio="10" align="center-right">~</text>
 <hole x="1.778" y="1.778" drill="2.2"/>
 <hole x="1.778" y="41.402" drill="2.2"/>
