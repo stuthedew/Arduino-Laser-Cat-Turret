@@ -17,25 +17,25 @@
 
 #include "stu_scheduler.h"
 
-
+StuScheduler scheduler;
 
   void Event::resetPeriodic(){
 
     _endTime = _timeDelta + millis();
   }
 
-  void Event::setInterval(unsigned long mSec){
+  void Event::setInterval(time_t mSec){
     _timeDelta = mSec;
     _endTime = _timeDelta + millis();
 
   }
 
-  unsigned long Event::getNextEventTime() const{
+  time_t Event::getNextEventTime() const{
     return _endTime;
 
   }
 
-  void Event::setNextEventTime(unsigned long mSec){
+  void Event::setNextEventTime(time_t mSec){
     _endTime = mSec;
 
   }
@@ -47,10 +47,6 @@
 
   }
 
-  void Event::run( void ){
-    return;
-  }
-
 
   void Event::enable(){
     if( !_enabled ){
@@ -59,14 +55,12 @@
   }
   }
 
-
-
   bool Event::enabled() const {
     return _enabled;
   }
 
 
-  Timer::Timer(unsigned long interval, bool enable){
+  Timer::Timer(time_t interval, bool enable){
     _timeDelta = interval ;
     _enabled = enable ;
 
@@ -107,7 +101,7 @@ bool Timer::check( timer_input_e action ){
 }
 
 
-  Task::Task( void (*cbFunc)(), unsigned long interval, bool enable):_callback(cbFunc) {
+  Task::Task( void (*cbFunc)(), time_t interval, bool enable):_callback(cbFunc) {
     _timeDelta = interval ;
     _enabled = enable ;
   }

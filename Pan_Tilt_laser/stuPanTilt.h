@@ -20,8 +20,10 @@
 
 #include "Arduino.h"
 #include "stuServo.h"
+#include "stu_scheduler.h"
 #include "panTilt_config.h"
 #include "stu_display.h"
+#include "stu_dial.h"
 
 
 #define DEFAULT_MIN 5
@@ -43,24 +45,23 @@ typedef void (*modeCallback)(void);
       probOffset;
 
 
-    panTiltPos_t(int p, int mn, int mx, int mdOff = 0, int pbOff = 1): pos(p), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
+    panTiltPos_t( int mn, int mx, int mdOff = 0, int pbOff = 1): pos( 0 ), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
 
   };
-
-
 
 
   class PanTilt {
 
   public:
 
-    PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos);
+    PanTilt( uint8_t xPin, uint8_t yPin );
 
     void
-      begin(),
-      detach(),
+      begin( void ),
+      detach( void ),
       setMode( runmode_e mode ),
-      updateAngles();
+      update( void ),
+      shake( void );
 
     runmode_e
       getMode( void ) const;
@@ -84,11 +85,11 @@ typedef void (*modeCallback)(void);
       _yPin;
 
     void
-      _update();
+      _updateAngles( void );
 
     panTiltPos_t
-      *_Xpos,
-      *_Ypos;
+      _posX ,
+      _posY ;
 
     mode_t
       offMode   ,
@@ -97,6 +98,9 @@ typedef void (*modeCallback)(void);
 
 
     runmode_e
-      _mode ;
+      _mode; // pan tilt mode
+
+    StuDial
+      _dial ;
 
   };

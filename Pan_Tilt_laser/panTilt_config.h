@@ -32,5 +32,6 @@ typedef enum {
   MODE_OFF = 0      ,
   MODE_CONTINUOUS   ,
   MODE_INTERMITTENT ,
+  MODE_REST         ,
   MODE_SLEEP
 }runmode_e;

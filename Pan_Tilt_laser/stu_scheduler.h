@@ -17,7 +17,7 @@
 #pragma once
 
 #include "Arduino.h"
-
+#include <Time.h>
 
 typedef void (*Callback)(void);
 
@@ -35,8 +35,8 @@ public:
 
     void
       resetPeriodic( void ) ,
-      setInterval( unsigned long mSec ) ,
-      setNextEventTime( unsigned long mSec ) ,
+      setInterval( time_t mSec ) ,
+      setNextEventTime( time_t mSec ) ,
       disable( void ) ,
       enable( void ) ;
 
@@ -46,7 +46,7 @@ public:
     bool
       enabled( void ) const ;
 
-    unsigned long
+    time_t
       getNextEventTime( void ) const ;
 
 
@@ -54,7 +54,7 @@ protected:
     bool
       _enabled ;
 
-    unsigned long
+    time_t
       _endTime ,
       _timeDelta ;
 
@@ -64,7 +64,7 @@ class Timer: public Event{
 
 public:
 
-    Timer(unsigned long interval=0, bool enable=0) ;
+    Timer(time_t interval=0, bool enable=0) ;
 
     void
       start( void ) ,
@@ -81,14 +81,14 @@ class Task: public Event{
 
 public:
 
-    Task( void (*callback)(), unsigned long interval=100, bool enable=0 ) ;
+    Task( void (*callback)(), time_t interval=100, bool enable=0 ) ;
 
     void
       run( void ) ,
       changeCallback( void ( *callback )( void ) ) ;
 
 
-    unsigned long
+    time_t
       nextRunTime( void ) const ;
 
 private:
@@ -118,4 +118,8 @@ private:
     uint8_t
       _tItr ;
 
+
+
 };
+
+extern StuScheduler scheduler;

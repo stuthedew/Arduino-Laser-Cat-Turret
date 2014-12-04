@@ -17,10 +17,10 @@ v0.0.1 - First release
 
 #include "Arduino.h"
 #include "panTilt_config.h"
+#include "stu_scheduler.h"
 
 
 #define LED_NUMBER 3
-
 
 
 typedef struct led_t{

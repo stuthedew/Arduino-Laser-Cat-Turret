@@ -20,35 +20,36 @@
 
 
 
-  PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):_xServo(), _yServo(), _display( POWER_PIN, CONT_PIN, INT_PIN ){
+  PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(), _display( POWER_PIN, CONT_PIN, INT_PIN ), _posX( 50, 120, -30 ), _posY( 7, 45, 0, 10){
 
     _xPin = xPin;
     _yPin = yPin;
 
-    _Xpos = xPos;
-    _Ypos = yPos;
-
-    _xServo.setCalibration(_Xpos->minAngle, _Xpos->maxAngle);
-    _yServo.setCalibration(_Ypos->minAngle, _Ypos->maxAngle);
+    _xServo.setCalibration(_posX.minAngle, _posX.maxAngle);
+    _yServo.setCalibration(_posY.minAngle, _posY.maxAngle);
   }
 
-  void PanTilt::begin(){
+  void PanTilt::begin( void ){
     _xServo.attach(_xPin) ;
     _yServo.attach(_yPin) ;
     _xServo.setPowerPin( X_PWR_PIN ) ;
     _yServo.setPowerPin( Y_PWR_PIN ) ;
-    _display.begin();
+
+    _dial.setPin( DIAL_PIN );
+    _dial.begin() ;
+
+    _display.begin() ;
+
     delay(500);
   }
 
   void PanTilt::setMode( runmode_e mode ){
-    /*
-    //don't exit from sleep if mode is set to intermittent
-    if( mode == MODE_INTERMITTENT && _mode == MODE_SLEEP){
-        return;
-    }*/
+      static runmode_e oldDialMode;
+      if( oldDialMode == mode ){ //return if nothing has changed
+        return ;
+      }
       _mode = mode ;
-
+      oldDialMode = _mode ;
       _display.setMode( _mode ) ;
 
   }
@@ -63,21 +64,38 @@
     _yServo.detach();
   }
 
-  void PanTilt::updateAngles(){
-    _update();
+  void PanTilt::update(){
+    _dial.update() ;
+    setMode( _dial.getMode() ) ;
+    scheduler.run();
+    _display.update();
+    _updateAngles();
+  }
+
+  void PanTilt::_updateAngles(){
+    static int oldXangle, oldYangle ;
+
+    _xServo.stuWrite(_posX.angle);
+    delay(10);
+    _yServo.stuWrite(_posY.angle);
+    delay(abs((_posX.angle - oldXangle)+15));
+    delay(abs((_posY.angle - oldYangle)+15));
+
+    oldXangle = _posX.angle;
+    oldYangle = _posY.angle;
 
   }
 
-  void PanTilt::_update(){
-    static int oldXangle, oldYangle;
-
-    _xServo.stuWrite(_Xpos->angle);
-    delay(10);
-    _yServo.stuWrite(_Ypos->angle);
-    delay(abs((_Xpos->angle - oldXangle)+15));
-    delay(abs((_Ypos->angle - oldYangle)+15));
-
-    oldXangle = _Xpos->angle;
-    oldYangle = _Ypos->angle;
-
+  void PanTilt::shake( void ){
+    int moveVal = 10;
+    const int shakeDelay = 0;
+    _posX.angle += moveVal;
+    update();
+    delay(shakeDelay);
+    _posX.angle -= 2*moveVal;
+    update();
+    delay(shakeDelay);
+    _posX.angle += moveVal;
+    update();
+    delay(shakeDelay);
   }
