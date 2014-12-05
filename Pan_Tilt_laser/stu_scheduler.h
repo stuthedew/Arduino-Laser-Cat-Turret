@@ -34,6 +34,7 @@ class Event{
 public:
 
     void
+      initialize( void ) ,
       resetPeriodic( void ) ,
       setInterval( time_t mSec ) ,
       setNextEventTime( time_t mSec ) ,
@@ -49,10 +50,14 @@ public:
     time_t
       getNextEventTime( void ) const ;
 
+    bool
+      rolloverFlag ;
+
 
 protected:
     bool
       _enabled ;
+
 
     time_t
       _endTime ,
@@ -102,9 +107,8 @@ class StuScheduler {
 
 public:
 
-    StuScheduler( void );
-
     void
+      initialize( void ) ,
       addTask( Task *t ) ,
       run( void ) ,
       restart( void ) ;
@@ -115,10 +119,11 @@ private:
     Task
       *_Task[ 20 ] ;
 
+    bool
+      _milliRolloverFlag ;
+
     uint8_t
       _tItr ;
-
-
 
 };
 

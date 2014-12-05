@@ -20,16 +20,19 @@
 
 #include "Arduino.h"
 #include "stuServo.h"
+#include <Time.h>
 #include "stu_scheduler.h"
 #include "panTilt_config.h"
 #include "stu_display.h"
 #include "stu_dial.h"
+#include "stuLaser.h"
 
 
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
-typedef void (*modeCallback)(void);
+typedef void (*stateCallback)(void);
+
 
   struct panTiltPos_t {
     int
@@ -49,6 +52,20 @@ typedef void (*modeCallback)(void);
 
   };
 
+  typedef struct{
+
+    stateCallback callback ;
+
+  }state_t;
+
+
+  typedef struct {
+    runmode_e id ;
+
+    state_t* currentState ;
+
+  } mode_t;
+
 
   class PanTilt {
 
@@ -61,18 +78,15 @@ typedef void (*modeCallback)(void);
       detach( void ),
       setMode( runmode_e mode ),
       update( void ),
-      shake( void );
+      shake( void ),
+      setPosition(int X, int Y );
 
     runmode_e
       getMode( void ) const;
 
   private:
 
-    typedef struct{
-      runmode_e id ;
-      modeCallback callback ;
 
-    }mode_t;
 
     StuDisplay _display ;
 
@@ -92,9 +106,15 @@ typedef void (*modeCallback)(void);
       _posY ;
 
     mode_t
-      offMode   ,
-      contMode  ,
-      intMode   ;
+      _offMode  ,
+      _contMode ,
+      _intMode  ;
+
+    state_t
+      _offState   ,
+      _runState   ,
+      _restState  ,
+      _sleepState ;
 
 
     runmode_e
@@ -102,5 +122,8 @@ typedef void (*modeCallback)(void);
 
     StuDial
       _dial ;
+
+    StuLaser
+      _laser ;
 
   };

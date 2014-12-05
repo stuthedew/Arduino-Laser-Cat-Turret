@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     Pan_Tilt_laser.ino
+    @file     Pan_Tilt__laser.ino
     @author   Stuart Feichtinger
     @license  MIT (see license.txt)
 
@@ -49,13 +49,13 @@ LinkedMarkov lmShake;
 
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
-panTiltPos_t panTiltX( 50, 120, -30);
-panTiltPos_t panTiltY( 7, 45, 0, 10);
+panTiltPos_t _posX( 50, 120, -30);
+panTiltPos_t _posY( 7, 45, 0, 10);
 
 
 PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
 
-StuLaser laser(LASER_PIN);
+StuLaser _laser(LASER_PIN);
 
 
 Task pauseTask(&pauseCB);
@@ -156,14 +156,8 @@ void setup() {
 
 
   panTilt.begin();
-  laser.begin();
+  
 
-/*
-  schedule.addTask(&pauseTask);
-  schedule.addTask(&restTask);
-  schedule.addTask(&sleepTask);
-  schedule.addTask(&speedAndDirTask);
-*/
 
 //        addLinkToBack(speed, previous_state_probability, next_state_probability)
   lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
@@ -186,23 +180,7 @@ void setup() {
 
   randomSeed(analogRead(5));
 
-  panTiltX.angle = panTiltX.minAngle;
-  panTiltY.angle = panTiltY.minAngle;
-  panTilt.update();
-  delay(500);
 
-  panTiltX.angle = panTiltX.maxAngle;
-  panTiltY.angle = panTiltY.maxAngle;
-  panTilt.update();
-  delay(500);
-
-
-  panTiltX.angle = panTiltX.midAngle;
-  panTiltY.angle = panTiltY.midAngle;
-  panTilt.update();
-
-  delay(500);
-  laser.fire(1);
 
 #ifndef EMBED
   Serial.println(F("setup complete"));
@@ -234,10 +212,10 @@ if(panTilt.getMode() == MODE_OFF){
       Serial.print(F("Switch is off!"));
     #endif
 
-    laser.fire(0);
+    _laser.fire(0);
 //    mSwitch.ledState(0); TODO: Replace missile switch
-    panTiltX.angle = 90;
-    panTiltY.angle = 90;
+    _posX.angle = 90;
+    _posY.angle = 90;
     panTilt.update();
 
     delay(50);
@@ -250,7 +228,7 @@ if(panTilt.getMode() == MODE_OFF){
     }
     //mSwitch.ledState(1);  TODO: Replace missile switch
     panTilt.begin();
-    laser.fire(1);
+    _laser.fire(1);
     //schedule.restart();
     #ifdef MAIN_DEBUG
       Serial.print(F("Switch is on!"));
@@ -258,8 +236,8 @@ if(panTilt.getMode() == MODE_OFF){
   }
 
 
-  panTiltX.angle = getDeltaPosition(&panTiltX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltX.angle;
-  panTiltY.angle = getDeltaPosition(&panTiltY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTiltY.angle;
+  _posX.angle = getDeltaPosition(&_posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + _posX.angle;
+  _posY.angle = getDeltaPosition(&_posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + _posY.angle;
 
   panTilt.update();
 
@@ -269,7 +247,7 @@ if(panTilt.getMode() == MODE_OFF){
   }
 
 
-  laser.fire(1);
+  _laser.fire(1);
   delay(5);
 }
 
@@ -321,7 +299,7 @@ int markovPause(){
 
 void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned int delayVal = random(minSec, maxSec);
-  laser.fire(0);
+  _laser.fire(0);
   panTilt.detach();
 
   unsigned long startTime = millis();
@@ -341,7 +319,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
     startTime = millis();
   }
   panTilt.begin();
-  laser.fire(1);
+  _laser.fire(1);
 }
 
 
