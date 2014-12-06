@@ -20,13 +20,20 @@
 
 
 
-PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(), _display( POWER_PIN, CONT_PIN, INT_PIN ), _posX( 50, 120, -30 ), _posY( 7, 45, 0, 10), _laser(LASER_PIN){
+PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(), _display( POWER_PIN, CONT_PIN, INT_PIN ), _posX( 50, 120, -30 ), _posY( 7, 45, 0, 10), _laser(LASER_PIN) {
 
   _xPin = xPin;
   _yPin = yPin;
 
   _xServo.setCalibration(_posX.minAngle, _posX.maxAngle);
   _yServo.setCalibration(_posY.minAngle, _posY.maxAngle);
+
+  _modes[ 0 ] = &_offMode ;
+  _modes[ 1 ] = &_contMode ;
+  _modes[ 2 ] = &_intMode ;
+  _modes[ 3 ] = &_restMode ;
+  _modes[ 4 ] = &_sleepMode ;
+
 }
 
 void PanTilt::begin( void ){

@@ -25,14 +25,21 @@ void Event::initialize( void ){
 
 void Event::resetPeriodic(){
   _enabled = 1 ;
-  setNextEventTime( _timeDelta + _endTime );
+  time_t temp = _timeDelta + millis() ;
+  setNextEventTime( temp );
+  #ifndef EMBED
+    Serial.println(F("Next Event: "));
+    Serial.println(temp);
+    Serial.println(F("Interval:"));
+    Serial.println(_timeDelta);
+    Serial.println();
+  #endif
 
 }
 
 void Event::setInterval(time_t mSec){
 
   _timeDelta = mSec;
-  setNextEventTime( _timeDelta ) ;
 
 }
 
@@ -47,6 +54,9 @@ void Event::setNextEventTime(time_t mSec){
   _endTime = mSec;
 
   if( oldTime > _endTime ){
+    #ifndef EMBED
+      Serial.println(F("EVENT ROLLOVER!!!!"));
+    #endif
     rolloverFlag ^= 1 ;
   }
 
@@ -61,6 +71,11 @@ void Event::disable( void ){
 
 
 void Event::enable(){
+
+  #ifndef EMBED
+  Serial.println(F("EVENT enabled"));
+  #endif
+
   if( !_enabled ){
     resetPeriodic() ;
   }
@@ -70,6 +85,9 @@ bool Event::enabled() const {
   return _enabled;
 }
 
+void Event::run(){
+  return;
+}
 
 Timer::Timer(time_t interval, bool enable){
   _timeDelta = interval ;
@@ -88,18 +106,29 @@ void Timer::stop( void ){
 }
 
 void Timer::restart( void ){
-  stop();
-  start();
+  #ifndef EMBED
+    Serial.println(F("Restart"));
+  #endif
+  resetPeriodic();
 }
 
+void Timer::run( ){
+  _elapsed = true ;
+}
 
 bool Timer::check( timer_input_e action ){
   if(!_enabled){
     return false;
   }
 
-  if( _endTime < millis() ){ //TRUE == elapsed
+  if( _elapsed ){ //TRUE == elapsed
+
+    #ifndef EMBED
+    Serial.println(F("EVENT Elapsed!!!!"));
+    #endif
+
     _enabled = 0 ;
+    _elapsed = 0;
     if(action == ELAPSE_RESTART){
       restart();
     }
@@ -113,6 +142,13 @@ bool Timer::check( timer_input_e action ){
 Task::Task( void (*cbFunc)(), time_t interval, bool enable):_callback(cbFunc) {
   _timeDelta = interval ;
   _enabled = enable ;
+}
+
+Task::Task( time_t interval, bool enable) {
+
+  _timeDelta = interval ;
+  _enabled = enable ;
+
 }
 
 void Task::changeCallback( void (*cbFunc)() ){
@@ -131,40 +167,43 @@ void StuScheduler::initialize( void ){
 
 }
 
-void StuScheduler::addTask( Task *t ){
-  _Task[ _tItr ] = t;
+void StuScheduler::addEvent( Event *t ){
+  _Event[ _tItr ] = t;
   _tItr++;
 
 }
 
 void StuScheduler::restart( void ){
+  #ifndef EMBED
+    Serial.println(F("Schedule Restart"));
+  #endif
+
   for(uint8_t i = 0; i < _tItr; i++){
-    if( _Task[i]->enabled() ){
-      _Task[i]->resetPeriodic();
+    if( _Event[i]->enabled() ){
+      _Event[i]->resetPeriodic();
     }
   }
 }
 
 void StuScheduler::run( void ){
   static time_t oldTime;
-
   time_t currentTime = millis();
 
   // HANDLE ROLLOVER
   if( oldTime > currentTime ){ //rollover
-
+    #ifndef EMBED
+    Serial.println( F("MILLI ROLLOVER!!!!") );
+    #endif
     _milliRolloverFlag ^= 1; // Toggle rollover flag
   }
 
   for(uint8_t i = 0; i < _tItr; i++){
 
-    if( _Task[i]->enabled() ){
+    if( _Event[i]->enabled() ){
 
-      if( _Task[i]->getNextEventTime() <= currentTime && _milliRolloverFlag == _Task[i]->rolloverFlag){
+      if( _Event[i]->getNextEventTime() <= currentTime && _milliRolloverFlag == _Event[i]->rolloverFlag){
 
-        _Task[i]->run();
-        _Task[i]->resetPeriodic();
-
+        _Event[i]->run();
       }
     }
   }

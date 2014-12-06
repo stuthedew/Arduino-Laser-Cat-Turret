@@ -33,8 +33,8 @@ void StuDial::begin( void ){
 void StuDial::update( void ){
 
   int adcReading = analogRead( _dialPin ) ;
-  Serial.println(F("Reading:"));
-  Serial.println(adcReading);
+//  Serial.println(F("Reading:"));
+//  Serial.println(adcReading);
 
   if( adcReading < MAX_OFF_ADC ){
     _mode = MODE_OFF ;
@@ -43,8 +43,13 @@ void StuDial::update( void ){
     _mode = MODE_CONTINUOUS ;
   }
 
-  else {
+  else if( adcReading < MAX_INT1_ADC ){
     _mode = MODE_INTERMITTENT ;
+
+  }
+  else
+    {
+      _mode = MODE_INTERMITTENT ;
   }
 
 }

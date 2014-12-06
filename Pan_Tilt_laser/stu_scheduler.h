@@ -42,7 +42,7 @@ public:
       enable( void ) ;
 
     virtual void
-      run( void ) ;
+        run( void ) ;
 
     bool
       enabled( void ) const ;
@@ -69,7 +69,10 @@ class Timer: public Event{
 
 public:
 
-    Timer(time_t interval=0, bool enable=0) ;
+    Timer(time_t interval = 0, bool enable = 0) ;
+
+    virtual void
+      run( void ) ;
 
     void
       start( void ) ,
@@ -79,6 +82,10 @@ public:
     bool
       check( timer_input_e action = ELAPSE_DISABLE ) ;
 
+  private:
+    bool
+      _elapsed ;
+
 
 };
 
@@ -87,9 +94,13 @@ class Task: public Event{
 public:
 
     Task( void (*callback)(), time_t interval=100, bool enable=0 ) ;
+    Task( time_t interval = 100, bool enable = 0 ) ;
+
+
+    virtual void
+      run( void ) ;
 
     void
-      run( void ) ,
       changeCallback( void ( *callback )( void ) ) ;
 
 
@@ -109,15 +120,15 @@ public:
 
     void
       initialize( void ) ,
-      addTask( Task *t ) ,
+      addEvent( Event *e ) ,
       run( void ) ,
       restart( void ) ;
 
 
 private:
 
-    Task
-      *_Task[ 20 ] ;
+    Event
+      *_Event[ 20 ] ;
 
     bool
       _milliRolloverFlag ;

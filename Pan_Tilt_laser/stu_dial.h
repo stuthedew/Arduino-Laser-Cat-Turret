@@ -19,9 +19,10 @@ v0.0.1 - First release
 #include "panTilt_config.h"
 
 // ADC readings from selecter potentiometer
-#define MAX_OFF_ADC   300  // If less than, mode = OFF
-#define MAX_CONT_ADC  600 // If less than, mode = CONTINUOUS
-#define MAX_INT_ADC   900 // If less than, mode = INTERMITTENT
+#define MAX_OFF_ADC   256  // If less than, mode = OFF
+#define MAX_CONT_ADC  512 // If less than, mode = CONTINUOUS
+#define MAX_INT1_ADC  768 // If less than, mode = INTERMITTENT
+#define MAX_INT2_ADC  1024 // If less than, mode = INTERMITTENT
 
 
 class StuDial{

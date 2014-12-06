@@ -59,13 +59,24 @@ typedef void (*stateCallback)(void);
   }state_t;
 
 
-  typedef struct {
-    runmode_e id ;
+  typedef struct mode_t{
+    const runmode_e
+      displayState ;
 
-    state_t* currentState ;
+    const bool
+      laserState ;
 
-  } mode_t;
+      mode_t(runmode_e led, bool laser):displayState( led ), laserState( laser ){}
 
+  } ;
+
+
+static mode_t
+  _offMode( MODE_OFF, false) ,
+  _contMode( MODE_CONTINUOUS, true) ,
+  _intMode( MODE_INTERMITTENT, true) ,
+  _restMode( MODE_REST, false ) ,
+  _sleepMode( MODE_SLEEP, false );
 
   class PanTilt {
 
@@ -105,16 +116,17 @@ typedef void (*stateCallback)(void);
       _posX ,
       _posY ;
 
-    mode_t
-      _offMode  ,
-      _contMode ,
-      _intMode  ;
+
 
     state_t
       _offState   ,
       _runState   ,
       _restState  ,
       _sleepState ;
+
+
+    mode_t*
+      _modes[ 5 ];
 
 
     runmode_e

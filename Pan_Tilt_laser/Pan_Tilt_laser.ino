@@ -156,7 +156,7 @@ void setup() {
 
 
   panTilt.begin();
-  
+
 
 
 //        addLinkToBack(speed, previous_state_probability, next_state_probability)
@@ -193,13 +193,15 @@ void setup() {
 
 
 void loop() {
+  panTilt.update();
+
 
   //schedule.run();
   //Dial.update();
   //panTilt.setMode(Dial.getMode());
 
   #ifndef EMBED
-    Serial.println(panTilt.getMode());
+  //  Serial.println(panTilt.getMode());
   #endif
 
   delay(100);

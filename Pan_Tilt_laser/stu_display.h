@@ -50,13 +50,28 @@ public:
 private:
 
   void
-    _ledWrite( led_t* led, bool ledState ) ;
+    _ledWrite( led_t* led, bool ledState ) ,
+    _enableBlink( led_t* led, unsigned int duration, unsigned int onTime ) ,
+    _blinkLED( void ) ,
+    _disableBlink( void ) ;
 
   led_t* _led[ LED_NUMBER ] ;
+  led_t* _ledToBlink ;
 
   led_t
     _power        ,
     _continuous   ,
     _intermittent ;
+
+    Timer
+      _blinkTimer;
+
+    unsigned int
+      _offTime,
+      _blinkTime  ;
+
+    runmode_e
+      _currentDisplayMode;
+
 
 };

@@ -30,8 +30,8 @@
 // Global Run Mode enum
 typedef enum {
   MODE_OFF = 0      ,
-  MODE_CONTINUOUS   ,
-  MODE_INTERMITTENT ,
-  MODE_REST         ,
-  MODE_SLEEP
+  MODE_CONTINUOUS = 1  ,
+  MODE_INTERMITTENT = 2 ,
+  MODE_REST         = 3,
+  MODE_SLEEP        = 4
 }runmode_e;
