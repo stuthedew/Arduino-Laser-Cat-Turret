@@ -29,11 +29,12 @@ StuDisplay::StuDisplay( uint8_t contPin, uint8_t intPin, uint8_t sleepPin ):
 
 void StuDisplay::begin( void ){
 
-  scheduler.addEvent(&_blinkTimer);
+
 
 
 
   for(int i = 0; i < LED_NUMBER; i++){
+    scheduler.addEvent(&_led[ i ]->_blinkTimer);
     pinMode( _led[ i ]->pin , OUTPUT ) ;
     _ledWrite( _led[ i ], HIGH );
 
@@ -57,31 +58,35 @@ void StuDisplay::update( void ){
 
   for(int i = 0; i < LED_NUMBER; i++){
     digitalWrite(_led[ i ]->pin, _led[ i ]->state ) ;
-  }
 
-  if(_blinkTimer.enabled()){
-    if(_blinkTimer.check(ELAPSE_DISABLE)){
-      #ifndef EMBED
-        Serial.println(F("Blink Timer"));
-      #endif
-      _blinkLED();
-    }
+    if(_led[ i ]->_blinkTimer.enabled()){
+      if(_led[ i ]->_blinkTimer.check()){
+        #ifndef EMBED
+          Serial.println(F("Blink Timer"));
+        #endif
+        _blinkLED( _led[ i ] );
+        }
+      }
   }
 }
 
 
 void StuDisplay::setLEDStates( ledState_e e1, ledState_e e2, ledState_e e3 ){
 
-  _setState( &_continuous , e1 );
-  _setState( &_intermittent , e2 );
-  _setState( &_sleep , e3 );
+  setLEDState( &_continuous , e1 );
+  setLEDState( &_intermittent , e2 );
+  setLEDState( &_sleep , e3 );
 
+}
 
-  StuDisplay::update();
+void StuDisplay::setLEDState( uint8_t ledVal, ledState_e e ){
+    return setLEDState( _led[ledVal], e );
+
 }
 
 
-void StuDisplay::_setState( led_t* l, ledState_e e ){
+
+void StuDisplay::setLEDState( led_t* l, ledState_e e ){
 
     switch( e ){
 
@@ -97,6 +102,7 @@ void StuDisplay::_setState( led_t* l, ledState_e e ){
       _enableBlink(l, 100, 400 ) ;
         break;
 
+
     }
 
   }
@@ -109,35 +115,32 @@ void StuDisplay::_ledWrite( led_t* led, bool ledState ){
 }
 
 void StuDisplay::_enableBlink( led_t* led, unsigned int interval, unsigned int onTime ){
-  _ledToBlink = led ;
   _offTime = interval ;
   _blinkTime = onTime;
 
-  _blinkTimer.setInterval( _offTime ) ;
-  _blinkTimer.start();
+  led->_blinkTimer.setInterval( _offTime ) ;
+  led->_blinkTimer.start();
 
 }
 
-void StuDisplay::_disableBlink( void ){
-  _ledToBlink = NULL;
-  _blinkTimer.stop();
+void StuDisplay::_disableBlink( led_t* led ){
+  led->_blinkTimer.stop();
 
 }
 
-void StuDisplay::_blinkLED( void ){
+void StuDisplay::_blinkLED( led_t* led ){
   static uint8_t intervalItr;
   unsigned int* interval[2];
 
   interval[ 0 ] = &_offTime;
   interval[ 1 ] = &_blinkTime;
-    _ledWrite(_ledToBlink, intervalItr) ;
+    _ledWrite(led, intervalItr) ;
     StuDisplay::update() ;
 
-    _blinkTimer.setInterval(*interval[intervalItr]);
+    led->_blinkTimer.setInterval(*interval[intervalItr]);
 
-    _blinkTimer.resetPeriodic();
+    led->_blinkTimer.resetPeriodic();
 
     intervalItr ^= 1;
-
 
 }

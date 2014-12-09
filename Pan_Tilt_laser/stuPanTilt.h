@@ -52,51 +52,60 @@ typedef void (*stateCallback)(void);
     panTiltPos_t( int mn, int mx, int mdOff = 0, int pbOff = 1): pos( 0 ), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
 
   };
-
-  typedef struct state_t{
-      const bool
+/*
+  typedef struct state1_t{
+      bool const
         laserState;
 
-      const ledState_e
-        ledState;
+      ledState_e const
+        ledState[3];
 
-      state_t( bool laser, ledState_e e ):laserState( laser ), ledState( e ){}
+      state_t( bool laser, ledState_e e1, ledState_e e2, ledState_e e3 ):laserState( laser ), ledState[0]( e1 ), ledState[1](e2), ledState[2](e3){}
 
   };
 
-  static state_t
-    off_state( 0, LED_OFF ) ,
-    on_state( 1, LED_ON ) ,
-    rest_state( 0, LED_BLINK );
+*/
+
+typedef struct state_t{
+
+      bool const
+        laserState;
+
+      ledState_e
+        ledState[3];
+
+      state_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2):laserState(laser){
+        ledState[0] = e0;
+        ledState[1] = e1;
+        ledState[2] = e2;
+
+      }
+    } state_t;
 
 
+    typedef struct statePair_t{
+      state_t*
+        state;
 
-    typedef struct linkedstate_t{
+      time_t const
+      duration;
 
-      state_t const*
-        currentState;
-      const time_t
-        timeToNextState;
-      linkedstate_t*
-        nextState;
+      statePair_t(state_t* s, time_t t=0): state(s), duration( t ){}
 
-      linkedstate_t(state_t* curState, time_t tmToNxt ):currentState( curState ), timeToNextState( tmToNxt * 60 * 1000 ), nextState( NULL ){}
-    }linkedstate_t;
-
+    };
 
   typedef struct mode_t{
 
-      linkedstate_t
-        stateA ,
-        stateB ;
+      statePair_t
+        stateA,
+        stateB;
 
-      mode_t(state_t* StateAPtr, time_t StateA_duration, state_t* StateBPtr, time_t StateB_duration ):stateA(StateAPtr, StateA_duration), stateB( StateBPtr , StateB_duration ){
-        stateA.nextState = &stateB;
-      }
-      mode_t(state_t* StateAPtr):stateA( StateAPtr, 0 ), stateB( NULL , 0 ){
-      }
+      statePair_t* currentState;
+      statePair_t* nextState;
 
-  } ;
+
+        mode_t(state_t* s1, time_t duration1=0, state_t* s2=NULL, time_t duration2=0 ):stateA(s1, duration1), stateB(s2, duration2), currentState(&stateA), nextState(&stateB){}
+  };
 
 
 
@@ -115,20 +124,28 @@ typedef void (*stateCallback)(void);
       shake( void ),
       setPosition(int X, int Y );
 
+    panTiltPos_t* getXPos( void );
+    panTiltPos_t* getYPos( void );
+
     runmode_e
       getMode( void ) const;
 
+      panTiltPos_t
+        posX ,
+        posY ;
+
   private:
 
-
-
     StuDisplay _display ;
+
+    void _setState( state_t* s );
 
     mode_t
       _offMode,
       _contMode,
       _intMode,
       _sleepMode;
+
 
     StuServo
       _xServo,
@@ -141,17 +158,16 @@ typedef void (*stateCallback)(void);
     void
       _updateAngles( void );
 
-    panTiltPos_t
-      _posX ,
-      _posY ;
 
 
     mode_t*
       _modes[ 4 ];
 
-    mode_t
+    mode_t*
       _currentMode;
 
+    Timer
+      _stateChangeTimer;
 
     runmode_e
       _mode; // pan tilt mode
@@ -161,5 +177,8 @@ typedef void (*stateCallback)(void);
 
     StuLaser
       _laser ;
+
+    Callback
+      _callback();
 
   };

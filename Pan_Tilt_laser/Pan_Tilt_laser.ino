@@ -49,28 +49,27 @@ LinkedMarkov lmShake;
 
 //X Position: lower numbers == Right
 //Y Position: lower numbers == Up
-panTiltPos_t _posX( 50, 120, -30);
-panTiltPos_t _posY( 7, 45, 0, 10);
+//panTiltPos_t panTilt.posX( 50, 120, -30);
+//panTiltPos_t panTilt.posY( 7, 45, 0, 10);
 
 
 PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
 
-StuLaser _laser(LASER_PIN);
+//StuLaser _laser(LASER_PIN);
 
-
+/*
 Task pauseTask(&pauseCB);
 Task restTask(&restCB);
 Task sleepTask(&sleepCB);
 Task speedAndDirTask(&updateSpeedAndDir, 750);
-
-//StuScheduler schedule;
+*/
 
 void updateSpeedAndDir(){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
 
 }
-
+/*
 //halt laser at certain spot for a few moments at this time
 void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
 
@@ -82,7 +81,7 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
     Serial.println(F(" seconds.\n"));
   #endif
 
-  pauseTask.setInterval(temp);
+//  pauseTask.setInterval(temp);
 
 }
 
@@ -96,7 +95,7 @@ void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
     Serial.println(F(" seconds.\n"));
   #endif
 
-  restTask.setInterval(temp);
+//  restTask.setInterval(temp);
 }
 
 
@@ -141,7 +140,7 @@ void sleepCB(){
   setNextRestTime();
   setNextSleepTime();
 }
-
+*/
 
 
 void setup() {
@@ -186,9 +185,9 @@ void setup() {
   Serial.println(F("setup complete"));
 #endif
 
-  setNextPauseTime();
-  setNextRestTime();
-  setNextSleepTime();
+  //setNextPauseTime();
+  //setNextRestTime();
+  //setNextSleepTime();
 }
 
 
@@ -200,24 +199,20 @@ void loop() {
   //Dial.update();
   //panTilt.setMode(Dial.getMode());
 
-  #ifndef EMBED
-  //  Serial.println(panTilt.getMode());
-  #endif
-
-  delay(100);
+  delay(50);
   return; //  TODO: Remove
 
-
+/*
 if(panTilt.getMode() == MODE_OFF){
 
     #ifdef MAIN_DEBUG
       Serial.print(F("Switch is off!"));
     #endif
 
-    _laser.fire(0);
+    //_laser.fire(0);
 //    mSwitch.ledState(0); TODO: Replace missile switch
-    _posX.angle = 90;
-    _posY.angle = 90;
+    panTilt.posX.angle = 90;
+    panTilt.posY.angle = 90;
     panTilt.update();
 
     delay(50);
@@ -230,16 +225,16 @@ if(panTilt.getMode() == MODE_OFF){
     }
     //mSwitch.ledState(1);  TODO: Replace missile switch
     panTilt.begin();
-    _laser.fire(1);
+    //_laser.fire(1);
     //schedule.restart();
     #ifdef MAIN_DEBUG
       Serial.print(F("Switch is on!"));
     #endif
   }
+*/
 
-
-  _posX.angle = getDeltaPosition(&_posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + _posX.angle;
-  _posY.angle = getDeltaPosition(&_posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + _posY.angle;
+  panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
+  panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
 
   panTilt.update();
 
@@ -249,7 +244,7 @@ if(panTilt.getMode() == MODE_OFF){
   }
 
 
-  _laser.fire(1);
+  //_laser.fire(1);
   delay(5);
 }
 
@@ -297,11 +292,11 @@ int markovPause(){
     return random(500, 750);
   }
 }
-
+/*
 
 void sleep(unsigned long minSec, unsigned long maxSec){
   unsigned int delayVal = random(minSec, maxSec);
-  _laser.fire(0);
+  //_laser.fire(0);
   panTilt.detach();
 
   unsigned long startTime = millis();
@@ -321,7 +316,7 @@ void sleep(unsigned long minSec, unsigned long maxSec){
     startTime = millis();
   }
   panTilt.begin();
-  _laser.fire(1);
+  //_laser.fire(1);
 }
 
 
@@ -337,3 +332,4 @@ void heartBeat(int hbInterval){
     oldTime = millis();
   }
 }
+*/
