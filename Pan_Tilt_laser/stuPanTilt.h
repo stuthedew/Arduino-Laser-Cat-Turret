@@ -26,6 +26,7 @@
 #include "stu_display.h"
 #include "stu_dial.h"
 #include "stuLaser.h"
+#include "SETTINGS.h"
 
 
 #define DEFAULT_MIN 5
@@ -52,31 +53,53 @@ typedef void (*stateCallback)(void);
 
   };
 
-  typedef struct{
+  typedef struct state_t{
+      const bool
+        laserState;
 
-    stateCallback callback ;
+      const ledState_e
+        ledState;
 
-  }state_t;
+      state_t( bool laser, ledState_e e ):laserState( laser ), ledState( e ){}
+
+  };
+
+  static state_t
+    off_state( 0, LED_OFF ) ,
+    on_state( 1, LED_ON ) ,
+    rest_state( 0, LED_BLINK );
+
+
+
+    typedef struct linkedstate_t{
+
+      state_t const*
+        currentState;
+      const time_t
+        timeToNextState;
+      linkedstate_t*
+        nextState;
+
+      linkedstate_t(state_t* curState, time_t tmToNxt ):currentState( curState ), timeToNextState( tmToNxt * 60 * 1000 ), nextState( NULL ){}
+    }linkedstate_t;
 
 
   typedef struct mode_t{
-    const runmode_e
-      displayState ;
 
-    const bool
-      laserState ;
+      linkedstate_t
+        stateA ,
+        stateB ;
 
-      mode_t(runmode_e led, bool laser):displayState( led ), laserState( laser ){}
+      mode_t(state_t* StateAPtr, time_t StateA_duration, state_t* StateBPtr, time_t StateB_duration ):stateA(StateAPtr, StateA_duration), stateB( StateBPtr , StateB_duration ){
+        stateA.nextState = &stateB;
+      }
+      mode_t(state_t* StateAPtr):stateA( StateAPtr, 0 ), stateB( NULL , 0 ){
+      }
 
   } ;
 
 
-static mode_t
-  _offMode( MODE_OFF, false) ,
-  _contMode( MODE_CONTINUOUS, true) ,
-  _intMode( MODE_INTERMITTENT, true) ,
-  _restMode( MODE_REST, false ) ,
-  _sleepMode( MODE_SLEEP, false );
+
 
   class PanTilt {
 
@@ -101,6 +124,12 @@ static mode_t
 
     StuDisplay _display ;
 
+    mode_t
+      _offMode,
+      _contMode,
+      _intMode,
+      _sleepMode;
+
     StuServo
       _xServo,
       _yServo;
@@ -117,16 +146,11 @@ static mode_t
       _posY ;
 
 
-
-    state_t
-      _offState   ,
-      _runState   ,
-      _restState  ,
-      _sleepState ;
-
-
     mode_t*
-      _modes[ 5 ];
+      _modes[ 4 ];
+
+    mode_t
+      _currentMode;
 
 
     runmode_e

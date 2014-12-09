@@ -23,6 +23,12 @@ v0.0.1 - First release
 #define LED_NUMBER 3
 
 
+typedef enum ledState_e{
+  LED_OFF = 0,
+  LED_ON     ,
+  LED_BLINK
+}ledState_e;
+
 typedef struct led_t{
 
   uint8_t const
@@ -44,12 +50,13 @@ public:
 
   void
     begin( void ) ,
-    setMode( runmode_e mode ) ,
+    setLEDStates( ledState_e e1, ledState_e e2, ledState_e e3 ),
     update( void ) ;
 
 private:
 
   void
+    _setState( led_t* led, ledState_e e ),
     _ledWrite( led_t* led, bool ledState ) ,
     _enableBlink( led_t* led, unsigned int duration, unsigned int onTime ) ,
     _blinkLED( void ) ,
@@ -59,7 +66,7 @@ private:
   led_t* _ledToBlink ;
 
   led_t
-    _power        ,
+    _sleep        ,
     _continuous   ,
     _intermittent ;
 
@@ -69,9 +76,5 @@ private:
     unsigned int
       _offTime,
       _blinkTime  ;
-
-    runmode_e
-      _currentDisplayMode;
-
 
 };
