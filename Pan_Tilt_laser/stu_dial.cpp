@@ -33,12 +33,15 @@ void StuDial::begin( void ){
 void StuDial::update( void ){
   int adcReading = 0;
 
-//  for(int i = 0; i< ADC_SAMPLES; i++){
-    adcReading += analogRead( _dialPin ) ;
-//    delay(10);
-//}
+    analogReference(INTERNAL); //set analog reference to internal 1.1V
+    adcReading = analogRead( _dialPin ) * 1100/1024 ; //scale to adjust for Aref
+    analogReference(DEFAULT);
+
+
+#ifndef EMBED
   Serial.println(F("Reading:"));
   Serial.println(adcReading);
+#endif
 
   if( abs(adcReading - MAX_OFF_ADC) <= ADC_VALUE_RANGE ){
     _mode = MODE_OFF ;
