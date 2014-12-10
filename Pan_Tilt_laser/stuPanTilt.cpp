@@ -86,12 +86,20 @@ void PanTilt::setMode( runmode_e mode ){
       _setState(&off_state);
       _currentMode = &_offMode;
 
+      #ifndef EMBED
+        Serial.println(F("MODE set to OFF"));
+      #endif
+
       break;
 
     case MODE_CONTINUOUS:
 
       _setState(&on_state);
       _currentMode = &_contMode;
+
+      #ifndef EMBED
+        Serial.println(F("MODE set to CONTINUOUS"));
+      #endif
 
       break;
 
@@ -100,12 +108,20 @@ void PanTilt::setMode( runmode_e mode ){
       _display.setLEDState( 1, LED_ON ); //set INTERMITTENT led to ON
       _currentMode = &_intMode;
 
+      #ifndef EMBED
+      Serial.println(F("MODE set to INTERMITTENT"));
+      #endif
+
       break;
 
     case MODE_SLEEP:
       _setState(&on_state);
       _currentMode = &_sleepMode;
       _display.setLEDState( 2, LED_BLINK ); //set SLEEP led to BLINK
+
+      #ifndef EMBED
+      Serial.println(F("MODE set to SLEEP"));
+      #endif
 
       break;
   }
@@ -119,7 +135,7 @@ void PanTilt::setMode( runmode_e mode ){
 }
 
 
-Callback PanTilt::_callback( void ){
+void PanTilt::_callback( void ){
 
   _stateChangeTimer.disable();
 

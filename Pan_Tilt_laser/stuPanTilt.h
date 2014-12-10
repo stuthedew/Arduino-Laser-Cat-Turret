@@ -32,7 +32,6 @@
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
-typedef void (*stateCallback)(void);
 
 
   struct panTiltPos_t {
@@ -156,8 +155,8 @@ typedef struct state_t{
       _yPin;
 
     void
-      _updateAngles( void );
-
+      _updateAngles( void ),
+      _callback( void );
 
 
     mode_t*
@@ -178,7 +177,5 @@ typedef struct state_t{
     StuLaser
       _laser ;
 
-    Callback
-      _callback();
 
   };

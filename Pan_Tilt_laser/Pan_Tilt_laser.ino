@@ -39,7 +39,7 @@
 #include "stu_dial.h"
 
 
-#define EMBED
+//#define EMBED
 
 int markovShakeState = 1;
 int changeVal;
