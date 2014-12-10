@@ -177,6 +177,9 @@ typedef struct settings_t{
     runmode_e
       _mode; // pan tilt mode
 
+    state_e* const
+      _currentState;
+
     StuDial
       _dial ;
 

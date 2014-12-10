@@ -53,24 +53,17 @@ LinkedMarkov lmPause;
 PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
 
 
-
-
-void updateMarkov( void ){
-  changeVal = lmSpeed.getNextValue();
-  markovShakeState = lmShake.getNextValue();
-
-}
-
 Task pauseTask(&pauseCB);
-Task restTask(&restCB);
-Task sleepTask(&sleepCB);
-Task speedAndDirTask(&updateSpeedAndDir, 750);
+//Task restTask(&restCB);
+//Task sleepTask(&sleepCB);
+Task updateMarkovTask(&updateMarkov, 750, 1);
 
 //StuScheduler schedule;
 
-void updateSpeedAndDir(){
+void updateMarkov(){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
+  updateMarkovTask.enable();
 
 }
 
@@ -86,9 +79,10 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
   #endif
 
   pauseTask.setInterval(temp);
+  pauseTask.enable();
 
 }
-
+/*
 //turn off laser for a few moments at this time
 void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
   unsigned long temp = gauss.gRandom( avg_sec_to_rest, variance ) * 1000 ;
@@ -114,15 +108,11 @@ void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
   Serial.println(F(" seconds.\n"));
   #endif
 
-  sleepTask.setInterval(mSecToSleep);
+  //sleepTask.setInterval(mSecToSleep);
 }
 
 
-void pauseCB(){
-  //Serial.println(F("Pause Callback!"));
-  delay(markovPause());
-  setNextPauseTime();
-}
+
 
 void restCB(){
   //Serial.println(F("Rest Callback!"));
@@ -145,9 +135,19 @@ void sleepCB(){
   setNextSleepTime();
 }
 
+*/
+
+void pauseCB(){
+  //Serial.println(F("Pause Callback!"));
+  pauseTask.disable();
+  delay(markovPause());
+  setNextPauseTime();
+}
+
 void panTiltCB(){
 
   panTilt.callback();
+
 }
 
 void setup() {
@@ -183,19 +183,6 @@ void setup() {
 //                           ^  ||
 //                           |  \/
   lmShake.addLinkToBack( 2, 30, 0 ); // Shake
-
-
-  //        addLinkToBack(state, previous_state_probability, next_state_probability)
-  lmPause.addLinkToBack( 1,  0, 5 ); // No Pause
-  //                         ^  ||
-  //                         |  \/
-  lmPause.addLinkToBack( 2, 40, 60 ); // Pause
-  //                         ^  ||
-  //                         |  \/
-  lmPause.addLinkToBack( 1, 30, 0 ); // No Pause
-  //                        ^  ||
-  //                        |  \/
-  //                     | No Pause |
 
   randomSeed(analogRead(5));
 

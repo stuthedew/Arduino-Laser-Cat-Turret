@@ -25,7 +25,7 @@ static settings_t rest_state( 0, LED_OFF, LED_BLINK, LED_OFF, STATE_REST);
 
 PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
   _display( POWER_PIN,  CONT_PIN, INT_PIN ), posX( 50, 120, -30 ), posY( 7, 45, 0, 10),
-  _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &on_state, INTERMITTENT_RUN_TIME, &rest_state, INTERMITTENT_REST_TIME ), _sleepMode(  &on_state, TIME_BEFORE_SLEEP, &off_state ), _stateChangeTimer() {
+  _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &on_state, INTERMITTENT_RUN_TIME, &rest_state, INTERMITTENT_REST_TIME ), _sleepMode(  &on_state, TIME_BEFORE_SLEEP, &off_state ), _stateChangeTimer(), _currentState(&_currentMode->currentSettings->state->id) {
 
   _modes[ 0 ] = &_offMode;
   _modes[ 1 ] = &_contMode;
@@ -172,7 +172,7 @@ void PanTilt::_setState( settings_t* s ){
 }
 
 state_e PanTilt::getState( void ) const{
-  return _currentMode->currentSettings->state->id;
+  return *_currentState;
 }
 
 
@@ -187,21 +187,24 @@ runmode_e PanTilt::getMode( void ) const{
   return _mode ;
 }
 
-void PanTilt::detach(){
+void PanTilt::detach( void ){
   _xServo.detach();
   _yServo.detach();
 }
 
-void PanTilt::update(){
+
+void PanTilt::update( void ){
   _dial.update() ;
   setMode( _dial.getMode() ) ;
   scheduler.run();
 
   _display.update();
-  _updateAngles();
+  if( *_currentState == STATE_RUN){
+    _updateAngles();
+  }
 }
 
-void PanTilt::_updateAngles(){
+void PanTilt::_updateAngles( void ){
   static int oldXangle, oldYangle ;
 
   _xServo.stuWrite(posX.angle);
