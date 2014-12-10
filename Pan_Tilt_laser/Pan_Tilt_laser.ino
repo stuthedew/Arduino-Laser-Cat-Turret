@@ -53,6 +53,8 @@ LinkedMarkov lmPause;
 PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
 
 
+
+
 void updateMarkov( void ){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
@@ -60,6 +62,90 @@ void updateMarkov( void ){
 }
 
 
+
+Task pauseTask(&pauseCB);
+Task restTask(&restCB);
+Task sleepTask(&sleepCB);
+Task speedAndDirTask(&updateSpeedAndDir, 750);
+
+//StuScheduler schedule;
+
+void updateSpeedAndDir(){
+  changeVal = lmSpeed.getNextValue();
+  markovShakeState = lmShake.getNextValue();
+
+}
+
+//halt laser at certain spot for a few moments at this time
+void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
+
+  unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
+
+  #ifdef TIME_DEBUG
+  Serial.print(F("Next pause in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  #endif
+
+  pauseTask.setInterval(temp);
+
+}
+
+//turn off laser for a few moments at this time
+void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
+  unsigned long temp = gauss.gRandom( avg_sec_to_rest, variance ) * 1000 ;
+
+  #ifdef TIME_DEBUG
+  Serial.print(F("Next rest in "));
+  Serial.print(temp/1000);
+  Serial.println(F(" seconds.\n"));
+  #endif
+
+  restTask.setInterval(temp);
+}
+
+
+//turn of laser for a minutes to hours at this time
+void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
+  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
+
+  //  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
+  #ifdef TIME_DEBUG
+  Serial.print(F("Next sleep in "));
+  Serial.print(mSecToSleep/1000);
+  Serial.println(F(" seconds.\n"));
+  #endif
+
+  sleepTask.setInterval(mSecToSleep);
+}
+
+
+void pauseCB(){
+  //Serial.println(F("Pause Callback!"));
+  delay(markovPause());
+  setNextPauseTime();
+}
+
+void restCB(){
+  //Serial.println(F("Rest Callback!"));
+
+  //  mSwitch.ledState(0);  TODO: Replace missile switch
+  //panTilt.setMode(MODE_REST);
+  //sleep(5, 10);
+  //  mSwitch.ledState(1);  TODO: Replace missile switch
+  setNextPauseTime();
+  setNextRestTime();
+}
+
+void sleepCB(){
+  //Serial.println(F("Sleep Callback!"));
+  //panTilt.setMode(MODE_SLEEP);
+  //sleep(1800, 2400); //sleep between 30 and 40 minutes
+  //panTilt.setMode(MODE_INTERMITTENT);
+  setNextPauseTime();
+  setNextRestTime();
+  setNextSleepTime();
+}
 
 void setup() {
 
