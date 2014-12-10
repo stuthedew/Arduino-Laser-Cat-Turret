@@ -30,9 +30,6 @@ StuDisplay::StuDisplay( uint8_t contPin, uint8_t intPin, uint8_t sleepPin ):
 void StuDisplay::begin( void ){
 
 
-
-
-
   for(int i = 0; i < LED_NUMBER; i++){
     scheduler.addEvent(&_led[ i ]->_blinkTimer);
     pinMode( _led[ i ]->pin , OUTPUT ) ;
@@ -65,8 +62,8 @@ void StuDisplay::update( void ){
           Serial.println(F("Blink Timer"));
         #endif
         _blinkLED( _led[ i ] );
-        }
       }
+    }
   }
 }
 

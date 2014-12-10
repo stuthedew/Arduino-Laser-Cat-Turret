@@ -51,21 +51,17 @@
     panTiltPos_t( int mn, int mx, int mdOff = 0, int pbOff = 1): pos( 0 ), dir(1), minAngle(mn), maxAngle(mx), midOffset(mdOff), midAngle(((mx-mn) >>1) + mn + midOffset), probOffset(pbOff){}
 
   };
-/*
-  typedef struct state1_t{
-      bool const
-        laserState;
 
-      ledState_e const
-        ledState[3];
 
-      state_t( bool laser, ledState_e e1, ledState_e e2, ledState_e e3 ):laserState( laser ), ledState[0]( e1 ), ledState[1](e2), ledState[2](e3){}
+typedef enum {
+  STATE_OFF,
+  STATE_RUN,
+  STATE_REST
+}state_e;
 
-  };
-
-*/
-
-typedef struct state_t{
+typedef struct settings_t{
+      state_e
+        id;
 
       bool const
         laserState;
@@ -73,37 +69,37 @@ typedef struct state_t{
       ledState_e
         ledState[3];
 
-      state_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2):laserState(laser){
+      settings_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2, state_e e):laserState(laser){
         ledState[0] = e0;
         ledState[1] = e1;
         ledState[2] = e2;
 
       }
-    } state_t;
+    } settings_t;
 
 
     typedef struct statePair_t{
-      state_t*
+      settings_t*
         state;
 
       time_t const
       duration;
 
-      statePair_t(state_t* s, time_t t=0): state(s), duration( t ){}
+      statePair_t(settings_t* s, time_t t=0): state(s), duration( t ){}
 
     };
 
   typedef struct mode_t{
 
       statePair_t
-        stateA,
-        stateB;
+        settingA,
+        settingB;
 
-      statePair_t* currentState;
-      statePair_t* nextState;
+      statePair_t* currentSettings;
+      statePair_t* nextSettings;
 
 
-        mode_t(state_t* s1, time_t duration1=0, state_t* s2=NULL, time_t duration2=0 ):stateA(s1, duration1), stateB(s2, duration2), currentState(&stateA), nextState(&stateB){}
+        mode_t(settings_t* s1, time_t duration1=0, settings_t* s2=NULL, time_t duration2=0 ):settingA(s1, duration1), settingB(s2, duration2), currentSettings(&settingA), nextSettings(&settingB){}
   };
 
 
@@ -129,6 +125,11 @@ typedef struct state_t{
     runmode_e
       getMode( void ) const;
 
+    state_e
+      getState( void ) const;
+
+
+
       panTiltPos_t
         posX ,
         posY ;
@@ -137,7 +138,7 @@ typedef struct state_t{
 
     StuDisplay _display ;
 
-    void _setState( state_t* s );
+    void _setState( settings_t* s );
 
     mode_t
       _offMode,

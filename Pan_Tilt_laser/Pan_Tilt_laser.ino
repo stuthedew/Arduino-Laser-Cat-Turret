@@ -46,13 +46,14 @@ int changeVal;
 
 LinkedMarkov lmSpeed;
 LinkedMarkov lmShake;
+LinkedMarkov lmPause;
 
 
 
 PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
 
 
-void updateSpeedAndDir(){
+void updateMarkov( void ){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
 
@@ -91,6 +92,19 @@ void setup() {
 //                           |  \/
   lmShake.addLinkToBack( 2, 30, 0 ); // Shake
 
+
+  //        addLinkToBack(state, previous_state_probability, next_state_probability)
+  lmPause.addLinkToBack( 1,  0, 5 ); // No Pause
+  //                         ^  ||
+  //                         |  \/
+  lmPause.addLinkToBack( 2, 40, 60 ); // Pause
+  //                         ^  ||
+  //                         |  \/
+  lmPause.addLinkToBack( 1, 30, 0 ); // No Pause
+  //                        ^  ||
+  //                        |  \/
+  //                     | No Pause |
+
   randomSeed(analogRead(5));
 
 
@@ -103,11 +117,16 @@ void setup() {
 
 
 void loop() {
+
   panTilt.update();
 
-  delay(50);
+  delay( 50 );
   return; //  TODO: Remove
 
+if( panTilt.getState() != STATE_RUN ){
+  delay( 100 );
+  return;
+}
 
   panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
   panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;

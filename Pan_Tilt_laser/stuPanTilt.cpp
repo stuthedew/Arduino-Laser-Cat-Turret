@@ -19,9 +19,9 @@
 #include "stuPanTilt.h"
 
 
-static state_t on_state( 1, LED_ON, LED_OFF, LED_OFF );
-static state_t off_state( 0, LED_OFF, LED_OFF, LED_OFF );
-static state_t rest_state( 0, LED_OFF, LED_BLINK, LED_OFF );
+static settings_t on_state( 1, LED_ON, LED_OFF, LED_OFF, STATE_RUN );
+static settings_t off_state( 0, LED_OFF, LED_OFF, LED_OFF, STATE_OFF);
+static settings_t rest_state( 0, LED_OFF, LED_BLINK, LED_OFF, STATE_REST);
 
 PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
   _display( POWER_PIN,  CONT_PIN, INT_PIN ), posX( 50, 120, -30 ), posY( 7, 45, 0, 10),
@@ -126,8 +126,8 @@ void PanTilt::setMode( runmode_e mode ){
       break;
   }
 
-  if( _currentMode->currentState->duration > 0){
-    _stateChangeTimer.setInterval( _currentMode->currentState->duration );
+  if( _currentMode->currentSettings->duration > 0){
+    _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
     _stateChangeTimer.enable();
 }
 
@@ -139,30 +139,34 @@ void PanTilt::_callback( void ){
 
   _stateChangeTimer.disable();
 
-  if( _currentMode->nextState != NULL){
+  if( _currentMode->nextSettings != NULL){
     #ifndef EMBED
       Serial.println(F("STATE CALLBACK"));
     #endif
     statePair_t* tmp;
-    tmp = _currentMode->currentState;
-    _currentMode->currentState = _currentMode->nextState;
+    tmp = _currentMode->currentSettings;
+    _currentMode->currentSettings = _currentMode->nextSettings;
 
-    _setState( _currentMode->currentState->state );
+    _setState( _currentMode->currentSettings->state );
 
-    _currentMode->nextState = tmp;
+    _currentMode->nextSettings = tmp;
 
-    _stateChangeTimer.setInterval( _currentMode->currentState->duration );
+    _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
     _stateChangeTimer.enable();
 
   }
 }
 
 
-void PanTilt::_setState( state_t* s ){
+void PanTilt::_setState( settings_t* s ){
 
   _display.setLEDStates( s->ledState[0], s->ledState[1], s->ledState[2] );
   _laser.fire(s->laserState);
 
+}
+
+state_e PanTilt::getState( void ) const{
+  return _currentMode->currentSettings->state->id;
 }
 
 
