@@ -61,8 +61,6 @@ void updateMarkov( void ){
 
 }
 
-
-
 Task pauseTask(&pauseCB);
 Task restTask(&restCB);
 Task sleepTask(&sleepCB);
@@ -129,10 +127,10 @@ void pauseCB(){
 void restCB(){
   //Serial.println(F("Rest Callback!"));
 
-  //  mSwitch.ledState(0);  TODO: Replace missile switch
+
   //panTilt.setMode(MODE_REST);
   //sleep(5, 10);
-  //  mSwitch.ledState(1);  TODO: Replace missile switch
+
   setNextPauseTime();
   setNextRestTime();
 }
@@ -147,6 +145,11 @@ void sleepCB(){
   setNextSleepTime();
 }
 
+void panTiltCB(){
+
+  panTilt.callback();
+}
+
 void setup() {
 
   #ifndef EMBED
@@ -154,6 +157,9 @@ void setup() {
     Serial.println(F("setup starting..."));
   #endif
 
+  Task* taskPtr = panTilt.getTaskPtr();
+
+  taskPtr->changeCallback(panTiltCB);
 
   panTilt.begin();
 
@@ -209,10 +215,9 @@ void loop() {
   delay( 50 );
   return; //  TODO: Remove
 
-if( panTilt.getState() != STATE_RUN ){
-  delay( 100 );
-  return;
-}
+if( panTilt.getState() == STATE_RUN ){
+
+
 
   panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
   panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
@@ -225,6 +230,10 @@ if( panTilt.getState() != STATE_RUN ){
   }
 
   delay(5);
+}
+else{
+  delay(50);
+}
 }
 
 

@@ -135,7 +135,13 @@ void PanTilt::setMode( runmode_e mode ){
 }
 
 
-void PanTilt::_callback( void ){
+Task* PanTilt::getTaskPtr( void ){
+  return &_stateChangeTimer;
+
+}
+
+
+Callback PanTilt::callback( void ){
 
   _stateChangeTimer.disable();
 
@@ -190,9 +196,7 @@ void PanTilt::update(){
   _dial.update() ;
   setMode( _dial.getMode() ) ;
   scheduler.run();
-  if(_stateChangeTimer.check()){
-    _callback();
-  }
+
   _display.update();
   _updateAngles();
 }

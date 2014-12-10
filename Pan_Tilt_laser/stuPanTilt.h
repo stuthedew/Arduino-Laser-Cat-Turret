@@ -128,6 +128,11 @@ typedef struct settings_t{
     state_e
       getState( void ) const;
 
+      Callback
+        callback( void );
+
+    Task* getTaskPtr( void );
+
 
 
       panTiltPos_t
@@ -156,8 +161,8 @@ typedef struct settings_t{
       _yPin;
 
     void
-      _updateAngles( void ),
-      _callback( void );
+      _updateAngles( void );
+
 
 
     mode_t*
@@ -166,7 +171,7 @@ typedef struct settings_t{
     mode_t*
       _currentMode;
 
-    Timer
+    Task
       _stateChangeTimer;
 
     runmode_e
