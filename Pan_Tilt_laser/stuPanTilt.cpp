@@ -57,18 +57,18 @@ void PanTilt::begin( void ){
 
   posX.angle = posX.minAngle;
   posY.angle = posY.minAngle;
-  update();
+  PanTilt::update();
   delay(500);
 
   posX.angle = posX.maxAngle;
   posY.angle = posY.maxAngle;
-  update();
+  PanTilt::update();
   delay(500);
 
   _laser.fire(1);
   posX.angle = posX.midAngle;
   posY.angle = posY.midAngle;
-  update();
+  PanTilt::update();
 
   delay(500);
   _laser.fire(0);
@@ -145,21 +145,21 @@ Callback PanTilt::callback( void ){
 
   _stateChangeTimer.disable();
 
+
+  #ifndef EMBED
+    Serial.println(F("STATE CALLBACK"));
+  #endif
+  statePair_t* tmp;
+  tmp = _currentMode->currentSettings;
+  _currentMode->currentSettings = _currentMode->nextSettings;
+
+  _setState( _currentMode->currentSettings->state );
+
   if( _currentMode->nextSettings != NULL){
-    #ifndef EMBED
-      Serial.println(F("STATE CALLBACK"));
-    #endif
-    statePair_t* tmp;
-    tmp = _currentMode->currentSettings;
-    _currentMode->currentSettings = _currentMode->nextSettings;
-
-    _setState( _currentMode->currentSettings->state );
-
     _currentMode->nextSettings = tmp;
 
     _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
     _stateChangeTimer.enable();
-
   }
 }
 
@@ -222,12 +222,12 @@ void PanTilt::shake( void ){
   int moveVal = 10;
   const int shakeDelay = 0;
   posX.angle += moveVal;
-  update();
+  PanTilt::update();
   delay(shakeDelay);
   posX.angle -= 2*moveVal;
-  update();
+  PanTilt::update();
   delay(shakeDelay);
   posX.angle += moveVal;
-  update();
+  PanTilt::update();
   delay(shakeDelay);
 }

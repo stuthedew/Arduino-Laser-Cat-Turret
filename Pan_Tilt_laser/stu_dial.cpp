@@ -15,13 +15,6 @@ v0.0.1 - First release
 
 #include "stu_dial.h"
 
-/*
-#define LOWPASS_ANALOG_PIN_AMT 6
-[LOWPASS_ANALOG_PIN_AMT],
-lowpass_cur_out[LOWPASS_ANALOG_PIN_AMT];
-int        lowpass_input[LOWPASS_ANALOG_PIN_AMT];
-
-*/
 
 int adcsample_and_lowpass(int pin, int sample_rate, int samples, float alpha, char use_previous) {
   // pin:            arduino analog pin number to sample on   (should be < LOWPASS_ANALOG_PIN_AMT)
@@ -76,17 +69,16 @@ void StuDial::setPin( uint8_t dialPin ){
 
 void StuDial::begin( void ){
   pinMode( _dialPin, INPUT ) ;
-  update() ;
+  StuDial::update() ;
 
 }
 
 void StuDial::update( void ){
-  int adcReading = 0;
 
     analogReference(INTERNAL); //set analog reference to internal 1.1V
     //adcReading = analogRead( _dialPin ) * 1100 ; //scale to adjust for Aref
-    adcReading = adcsample_and_lowpass( _dialPin ) * 1100 ; //scale to adjust for Aref
-    adcReading += 128; // Adjust for rounding when bitshifting right.
+    int adcReading = adcsample_and_lowpass( _dialPin, 1000, 300, 0.015, false ) * 1100 ; //scale to adjust for Aref
+    adcReading += 512; // Adjust for rounding when bitshifting right.
     adcReading >>= 10; // divide by 1024
     analogReference(DEFAULT);
 
