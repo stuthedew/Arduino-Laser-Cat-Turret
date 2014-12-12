@@ -1,7 +1,6 @@
 #pragma once/*<=DON'T TOUCH!!!!!!!*/
 /**************************************************************************/
 /*!                   ****Customizable Settings****
-/--------------------------------------------------------------------------/
 
 Use this file to change the laser settings (e.g. the amount of time the
 laser runs before shutting off in sleep mode).

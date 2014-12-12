@@ -16,6 +16,9 @@ v0.0.1 - First release
 #include "stu_dial.h"
 
 
+// Custom analogRead with filtering from
+// <http://helpful.knobs-dials.com/index.php/Low-pass_filter>
+
 int adcsample_and_lowpass(int pin, int sample_rate, int samples, float alpha, char use_previous) {
   // pin:            arduino analog pin number to sample on   (should be < LOWPASS_ANALOG_PIN_AMT)
   // sample_rate:    approximate rate to sample at (less than ~9000 for default ADC settings)
@@ -30,8 +33,8 @@ int adcsample_and_lowpass(int pin, int sample_rate, int samples, float alpha, ch
   //   You may still want one initial sampling, possibly in setup(), to start from something real.
 
   static float
-    lowpass_prev_out,
-    lowpass_cur_out;
+  lowpass_prev_out,
+  lowpass_cur_out;
 
   static int
   lowpass_input;
@@ -57,9 +60,7 @@ int adcsample_and_lowpass(int pin, int sample_rate, int samples, float alpha, ch
 }
 
 
-
-
-  StuDial Dial;
+  StuDial Dial; // global dial object
 
 
 void StuDial::setPin( uint8_t dialPin ){
