@@ -24,6 +24,7 @@
              linked list.
     v1.6.1 - Switched Markov state to Markov handler
     v1.7.0 - Moved control of timing to master Pan-Tilt Class
+    v1.8.0 - Switched to a state-machine model.
 */
 /**************************************************************************/
 
@@ -38,16 +39,14 @@
 #include <Gaussian.h>
 #include "stu_dial.h"
 
-
+/*
 #ifdef SERIAL_DEBUG
 #ifdef EMBED
   #include <SoftwareSerial.h>
   SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
 #endif
 #endif
-
-
-
+*/
 
 
 int markovShakeState = 1;
@@ -162,22 +161,24 @@ panTilt.begin();
 
 void loop(){
 
-if( panTilt.getState() == STATE_RUN ){
+  panTilt.update();
 
-    panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
-    panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
+  if( panTilt.getState() == STATE_RUN ){
 
-    if(markovShakeState == 2){
-      panTilt.shake();
-    }
+      panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
+      panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
 
-    delay(5);
-}
-else{
-  delay(50);
-}
+      if(markovShakeState == 2){
+        panTilt.shake();
+      }
 
-panTilt.update();
+      delay(5);
+  }
+  else{
+    delay(10);
+  }
+
+
 
 }
 

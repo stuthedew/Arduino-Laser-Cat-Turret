@@ -85,14 +85,12 @@ void PanTilt::_setMode( runmode_e mode ){
   switch(mode){
 
     case MODE_OFF:
-
       _setState(&off_state);
       _currentMode = &_offMode;
 
       #ifdef SERIAL_DEBUG
         MY_SERIAL.println(F("MODE set to OFF"));
       #endif
-
       break;
 
     case MODE_CONTINUOUS:
@@ -118,10 +116,9 @@ void PanTilt::_setMode( runmode_e mode ){
       break;
 
     case MODE_SLEEP:
-      _setState(&sleep_state);
-      _currentMode = &_sleepMode;
-      _display.setLEDState( 2, LED_BLINK ); //set SLEEP led to BLINK
 
+      _currentMode = &_sleepMode;
+      _setState(&sleep_state);
 
       #ifdef SERIAL_DEBUG
       MY_SERIAL.println(F("MODE set to SLEEP"));

@@ -101,7 +101,7 @@ void StuDisplay::setLEDState( led_t* l, ledState_e e ){
         break;
 
       case LED_BLINK:
-      _enableBlink(l, 25, 5000 ) ;
+      _enableBlink(l, 35, 5000 ) ;
         break;
 
 
