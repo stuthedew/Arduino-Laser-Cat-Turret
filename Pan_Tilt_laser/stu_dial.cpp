@@ -60,9 +60,6 @@ int adcsample_and_lowpass(int pin, int sample_rate, int samples, float alpha, ch
 }
 
 
-  StuDial Dial; // global dial object
-
-
 void StuDial::setPin( uint8_t dialPin ){
   _dialPin = dialPin ;
 
@@ -70,23 +67,36 @@ void StuDial::setPin( uint8_t dialPin ){
 
 void StuDial::begin( void ){
   pinMode( _dialPin, INPUT ) ;
-  StuDial::update() ;
+  StuDial::_update() ;
 
 }
 
-void StuDial::update( void ){
+void StuDial::_update( void ){
 
-    analogReference(INTERNAL); //set analog reference to internal 1.1V
-    //adcReading = analogRead( _dialPin ) * 1100 ; //scale to adjust for Aref
-    int adcReading = adcsample_and_lowpass( _dialPin, 1000, 300, 0.015, false ) * 1100 ; //scale to adjust for Aref
-    adcReading += 512; // Adjust for rounding when bitshifting right.
-    adcReading >>= 10; // divide by 1024
-    analogReference(DEFAULT);
+    //int adcReading = adcsample_and_lowpass( _dialPin, 1000, 300, 0.015, false );
+
+    int minRead = 1023;
+    int maxRead = 0;
+    int sumRead = 0;
+
+    for(int i = 0; i < 6; i++){
+      int tmpRead = analogRead(_dialPin);
+      minRead = min(tmpRead, minRead);
+      maxRead = max(tmpRead, maxRead);
+      sumRead += tmpRead;
+    }
+
+    sumRead -= minRead;
+    sumRead -= maxRead;
+    sumRead += 2; // for integer rounding with shift
+    int adcReading = sumRead >> 2; //divide by 4 (6 readings - hi - lo = 4 readings)
 
 
-#ifndef EMBED
-  Serial.println(F("Reading:"));
-  Serial.println(adcReading);
+#ifdef SERIAL_DEBUG
+#ifdef DIAL_DEBUG
+  MY_SERIAL.println(F("Reading:"));
+  MY_SERIAL.println(adcReading);
+#endif
 #endif
 
   if( abs(adcReading - MAX_OFF_ADC) <= ADC_VALUE_RANGE ){
@@ -100,13 +110,14 @@ void StuDial::update( void ){
     _mode = MODE_INTERMITTENT ;
 
   }
-  else
-    {
-      _mode = MODE_INTERMITTENT ;
+  else if( adcReading <= MAX_SLEEP_ADC + ADC_VALUE_RANGE ){
+    _mode = MODE_SLEEP ;
+
   }
 
 }
 
-runmode_e StuDial::getMode( void ) const{
+runmode_e StuDial::getMode( void ){
+  StuDial::_update();
   return _mode ;
 }

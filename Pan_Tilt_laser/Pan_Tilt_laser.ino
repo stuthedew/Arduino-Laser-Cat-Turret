@@ -39,7 +39,16 @@
 #include "stu_dial.h"
 
 
-#define EMBED
+#ifdef SERIAL_DEBUG
+#ifdef EMBED
+  #include <SoftwareSerial.h>
+  SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
+#endif
+#endif
+
+
+
+
 
 int markovShakeState = 1;
 int changeVal;
@@ -49,21 +58,17 @@ LinkedMarkov lmShake;
 LinkedMarkov lmPause;
 
 
-
 PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
 
 
 Task pauseTask(&pauseCB);
-//Task restTask(&restCB);
-//Task sleepTask(&sleepCB);
 Task updateMarkovTask(&updateMarkov, 750, 1);
-
-//StuScheduler schedule;
 
 void updateMarkov(){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
   updateMarkovTask.enable();
+
 
 }
 
@@ -72,79 +77,36 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
+  #ifdef SERIAL_DEBUG
   #ifdef TIME_DEBUG
-  Serial.print(F("Next pause in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
+  MY_SERIAL1.print(F("Next pause in "));
+  MY_SERIAL1.print(temp/1000);
+  MY_SERIAL.println(F(" seconds.\n"));
+  #endif
   #endif
 
   pauseTask.setInterval(temp);
   pauseTask.enable();
 
 }
-/*
-//turn off laser for a few moments at this time
-void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
-  unsigned long temp = gauss.gRandom( avg_sec_to_rest, variance ) * 1000 ;
 
-  #ifdef TIME_DEBUG
-  Serial.print(F("Next rest in "));
-  Serial.print(temp/1000);
-  Serial.println(F(" seconds.\n"));
-  #endif
-
-  restTask.setInterval(temp);
-}
-
-
-//turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
-  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
-
-  //  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
-  #ifdef TIME_DEBUG
-  Serial.print(F("Next sleep in "));
-  Serial.print(mSecToSleep/1000);
-  Serial.println(F(" seconds.\n"));
-  #endif
-
-  //sleepTask.setInterval(mSecToSleep);
-}
-
-
-
-
-void restCB(){
-  //Serial.println(F("Rest Callback!"));
-
-
-  //panTilt.setMode(MODE_REST);
-  //sleep(5, 10);
-
-  setNextPauseTime();
-  setNextRestTime();
-}
-
-void sleepCB(){
-  //Serial.println(F("Sleep Callback!"));
-  //panTilt.setMode(MODE_SLEEP);
-  //sleep(1800, 2400); //sleep between 30 and 40 minutes
-  //panTilt.setMode(MODE_INTERMITTENT);
-  setNextPauseTime();
-  setNextRestTime();
-  setNextSleepTime();
-}
-
-*/
 
 void pauseCB(){
-  //Serial.println(F("Pause Callback!"));
+
+
   pauseTask.disable();
-  delay(markovPause());
+  panTilt.pause(markovPause());
+
   setNextPauseTime();
+
 }
 
 void panTiltCB(){
+
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("Main Sketch PanTilt Callback!!!! "));
+  #endif
+
 
   panTilt.callback();
 
@@ -152,16 +114,19 @@ void panTiltCB(){
 
 void setup() {
 
-  #ifndef EMBED
-    Serial.begin(BAUD_RATE);
-    Serial.println(F("setup starting..."));
+  scheduler.addEvent(&pauseTask);
+  scheduler.addEvent(&updateMarkovTask);
+
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.begin(BAUD_RATE);
+    MY_SERIAL.println(F("setup starting..."));
   #endif
 
   Task* taskPtr = panTilt.getTaskPtr();
 
   taskPtr->changeCallback(panTiltCB);
 
-  panTilt.begin();
+
 
 
 
@@ -188,39 +153,32 @@ void setup() {
 
 
 
-#ifndef EMBED
-  Serial.println(F("setup complete"));
+#ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("setup complete"));
 #endif
-
+panTilt.begin();
 }
 
 
-void loop() {
-
-  panTilt.update();
-
-  delay( 50 );
-  return; //  TODO: Remove
+void loop(){
 
 if( panTilt.getState() == STATE_RUN ){
 
+    panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
+    panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
 
+    if(markovShakeState == 2){
+      panTilt.shake();
+    }
 
-  panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
-  panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
-
-  panTilt.update();
-
-
-  if(markovShakeState == 2){
-    panTilt.shake();
-  }
-
-  delay(5);
+    delay(5);
 }
 else{
   delay(50);
 }
+
+panTilt.update();
+
 }
 
 
@@ -245,6 +203,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
 
 int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
+
   int tempVal = getMarkovDirection(pt, changeProb);
 
   tempVal *= funcChangeVal;
@@ -266,4 +225,5 @@ int markovPause(){
   else{
     return random(500, 750);
   }
+
 }

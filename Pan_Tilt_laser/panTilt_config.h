@@ -3,9 +3,13 @@
 #include "Arduino.h"
 
 
-//Embedded Arduino does not have Serial.
-#ifndef EMBED
-  #define BAUD_RATE 115200
+#define EMBED
+
+#define SERIAL_DEBUG
+
+
+#ifdef SERIAL_DEBUG
+  #define BAUD_RATE 9600
 #endif
 
 #define DIRECTION_CHANGE_PROBABILITY 15
@@ -25,6 +29,25 @@
 #define LASER_PIN 9
 
 #define DIAL_PIN A2
+
+
+#define SWS_DEBUG_RX 5
+#define SWS_DEBUG_TX 6
+
+#ifdef SERIAL_DEBUG
+
+#ifndef EMBED
+#define MY_SERIAL Serial
+
+#else
+#include <SoftwareSerial.h>
+extern SoftwareSerial swSerial;
+#define MY_SERIAL swSerial
+
+#endif
+
+#endif
+
 
 
 // Global Run Mode enum

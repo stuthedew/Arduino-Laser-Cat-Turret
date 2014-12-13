@@ -83,7 +83,7 @@ typedef struct settings_t{
         state;
 
       time_t const
-      duration;
+        duration;
 
       statePair_t(settings_t* s, time_t t=0): state(s), duration( t ){}
 
@@ -99,7 +99,9 @@ typedef struct settings_t{
       statePair_t* nextSettings;
 
 
-        mode_t(settings_t* s1, time_t duration1=0, settings_t* s2=NULL, time_t duration2=0 ):settingA(s1, duration1), settingB(s2, duration2), currentSettings(&settingA), nextSettings(&settingB){}
+        mode_t(settings_t* s1, time_t duration1=0, settings_t* s2=NULL, time_t duration2=0 ):settingA(s1, duration1*10*1000), settingB(s2, duration2*10*1000), currentSettings(&settingA), nextSettings(&settingB){
+
+        }
   };
 
 
@@ -114,10 +116,10 @@ typedef struct settings_t{
     void
       begin( void ),
       detach( void ),
-      setMode( runmode_e mode ),
       update( void ),
       shake( void ),
-      setPosition(int X, int Y );
+      setPosition(int X, int Y ),
+      pause( unsigned long pauseVal ) ;
 
     panTiltPos_t* getXPos( void );
     panTiltPos_t* getYPos( void );
@@ -143,7 +145,9 @@ typedef struct settings_t{
 
     StuDisplay _display ;
 
-    void _setState( settings_t* s );
+    void
+      _setMode( runmode_e mode ),
+      _setState( settings_t* s );
 
     mode_t
       _offMode,

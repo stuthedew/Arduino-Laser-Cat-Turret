@@ -17,7 +17,10 @@
 #pragma once
 
 #include "Arduino.h"
+#include "panTilt_config.h"
 #include <Time.h>
+
+#define MAX_EVENTS 20
 
 typedef void (*Callback)(void);
 
@@ -128,7 +131,7 @@ public:
 private:
 
     Event
-      *_Event[ 20 ] ;
+      *_Event[ MAX_EVENTS ] ;
 
     bool
       _milliRolloverFlag ;

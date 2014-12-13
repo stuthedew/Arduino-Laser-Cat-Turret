@@ -27,14 +27,15 @@ void Event::resetPeriodic(){
   _enabled = 1 ;
   time_t temp = _timeDelta + millis() ;
   setNextEventTime( temp );
-  #ifndef EMBED
-    Serial.println(F("Next Event: "));
-    Serial.println(temp);
-    Serial.println(F("Interval:"));
-    Serial.println(_timeDelta);
-    Serial.println();
+  /*
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("Next Event: "));
+    MY_SERIAL.println(temp);
+    MY_SERIAL.println(F("Interval:"));
+    MY_SERIAL.println(_timeDelta);
+    MY_SERIAL.println();
   #endif
-
+*/
 }
 
 void Event::setInterval(time_t mSec){
@@ -49,19 +50,24 @@ time_t Event::getNextEventTime() const{
 }
 
 void Event::setNextEventTime(time_t mSec){
-  static time_t oldTime;
+  //static time_t oldTime = 0;
 
   _endTime = mSec;
-
+/*
   if( oldTime > _endTime ){
-    #ifndef EMBED
-      Serial.println(F("EVENT ROLLOVER!!!!"));
+    #ifdef SERIAL_DEBUG
+      MY_SERIAL.println(F("EVENT ROLLOVER!!!!"));
+      MY_SERIAL.print(F("OLD TIME: "));
+      MY_SERIAL.println(oldTime);
+      MY_SERIAL.print(F("\tNEW TIME: "));
+      MY_SERIAL.println(_endTime);
+      delay(2000);
     #endif
     rolloverFlag ^= 1 ;
   }
 
   oldTime = _endTime ;
-
+*/
 }
 
 void Event::disable( void ){
@@ -72,8 +78,8 @@ void Event::disable( void ){
 
 void Event::enable(){
 
-  #ifndef EMBED
-  Serial.println(F("EVENT enabled"));
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("EVENT enabled"));
   #endif
 
   if( !_enabled ){
@@ -96,6 +102,9 @@ Timer::Timer(time_t interval, bool enable){
 }
 
 void Timer::start( void ){
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("TIMER START ENABLE"));
+  #endif
   enable();
 
 }
@@ -106,8 +115,8 @@ void Timer::stop( void ){
 }
 
 void Timer::restart( void ){
-  #ifndef EMBED
-    Serial.println(F("Restart"));
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("Restart"));
   #endif
   resetPeriodic();
 }
@@ -123,8 +132,8 @@ bool Timer::check( timer_input_e action ){
 
   if( _elapsed ){ //TRUE == elapsed
 
-    #ifndef EMBED
-    Serial.println(F("EVENT Elapsed!!!!"));
+    #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("EVENT Elapsed!!!!"));
     #endif
 
     _enabled = 0 ;
@@ -168,14 +177,20 @@ void StuScheduler::initialize( void ){
 }
 
 void StuScheduler::addEvent( Event *t ){
+  if(_tItr >= MAX_EVENTS){
+    #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("TOO MANY EVENTS!!!"));
+    #endif
+    return;
+  }
   _Event[ _tItr ] = t;
   _tItr++;
 
 }
 
 void StuScheduler::restart( void ){
-  #ifndef EMBED
-    Serial.println(F("Schedule Restart"));
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("Schedule Restart"));
   #endif
 
   for(uint8_t i = 0; i < _tItr; i++){
@@ -191,8 +206,8 @@ void StuScheduler::run( void ){
 
   // HANDLE ROLLOVER
   if( oldTime > currentTime ){ //rollover
-    #ifndef EMBED
-    Serial.println( F("MILLI ROLLOVER!!!!") );
+    #ifdef SERIAL_DEBUG
+    MY_SERIAL.println( F("MILLI ROLLOVER!!!!") );
     #endif
     _milliRolloverFlag ^= 1; // Toggle rollover flag
   }

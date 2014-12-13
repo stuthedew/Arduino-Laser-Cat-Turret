@@ -42,6 +42,7 @@ typedef struct led_t{
 
   led_t( uint8_t ledPin ): pin( ledPin ), state( 0 ), _blinkTimer(){
     scheduler.addEvent(&_blinkTimer);
+    _blinkTimer.disable();
   }
 
 }led_t;

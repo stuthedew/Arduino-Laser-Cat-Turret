@@ -33,12 +33,12 @@ laser runs before shutting off in sleep mode).
 /*                                                                        */
 /* MINUTES the laser stays ON in intermittent mode for each cycle.        */
 /*------------------------------------------------------------------------*/
-  #define INTERMITTENT_ON_TIME   15 /*<=========== CHANGE ME (Default=15) */
+  #define INTERMITTENT_ON_TIME   1 /*<=========== CHANGE ME (Default=15) */
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /* MINUTES the laser stays OFF in intermittent mode for each cycle.       */
 /*------------------------------------------------------------------------*/
-  #define INTERMITTENT_OFF_TIME  60 /*<=========== CHANGE ME (Default=60) */
+  #define INTERMITTENT_OFF_TIME  2 /*<=========== CHANGE ME (Default=60) */
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /**************************************************************************/
@@ -54,7 +54,7 @@ laser runs before shutting off in sleep mode).
 /* MINUTES the laser stays ON before turning OFF FOREVER.                 */
 /* (You must change mode with dial to restart laser.)                     */
 /*------------------------------------------------------------------------*/
-  #define MINUTES_BEFORE_SLEEP    30 /*<=========== CHANGE ME (Default=30)*/
+  #define MINUTES_BEFORE_SLEEP    1 /*<=========== CHANGE ME (Default=30)*/
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /**************************************************************************/

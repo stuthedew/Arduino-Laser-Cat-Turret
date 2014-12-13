@@ -20,12 +20,15 @@
 
 
 static settings_t on_state( 1, LED_ON, LED_OFF, LED_OFF, STATE_RUN );
+static settings_t int_state( 1, LED_ON, LED_ON, LED_OFF, STATE_RUN );
+static settings_t sleep_state( 1, LED_ON, LED_OFF, LED_ON, STATE_RUN );
 static settings_t off_state( 0, LED_OFF, LED_OFF, LED_OFF, STATE_OFF);
-static settings_t rest_state( 0, LED_OFF, LED_BLINK, LED_OFF, STATE_REST);
+static settings_t rest_state( 0, LED_BLINK, LED_ON, LED_OFF, STATE_REST);
 
 PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
   _display( POWER_PIN,  CONT_PIN, INT_PIN ), posX( 50, 120, -30 ), posY( 7, 45, 0, 10),
-  _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &on_state, INTERMITTENT_ON_TIME, &rest_state, INTERMITTENT_OFF_TIME ), _sleepMode(  &on_state, MINUTES_BEFORE_SLEEP, &off_state ), _stateChangeTimer(), _currentState(&_currentMode->currentSettings->state->id) {
+  _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &int_state, INTERMITTENT_ON_TIME, &rest_state, INTERMITTENT_OFF_TIME ), _sleepMode(  &sleep_state, MINUTES_BEFORE_SLEEP, &off_state ), _stateChangeTimer(), _currentState(&_currentMode->currentSettings->state->id) {
+
 
   _modes[ 0 ] = &_offMode;
   _modes[ 1 ] = &_contMode;
@@ -75,7 +78,7 @@ void PanTilt::begin( void ){
 
 }
 
-void PanTilt::setMode( runmode_e mode ){
+void PanTilt::_setMode( runmode_e mode ){
 
   _stateChangeTimer.disable();
 
@@ -86,8 +89,8 @@ void PanTilt::setMode( runmode_e mode ){
       _setState(&off_state);
       _currentMode = &_offMode;
 
-      #ifndef EMBED
-        Serial.println(F("MODE set to OFF"));
+      #ifdef SERIAL_DEBUG
+        MY_SERIAL.println(F("MODE set to OFF"));
       #endif
 
       break;
@@ -97,41 +100,52 @@ void PanTilt::setMode( runmode_e mode ){
       _setState(&on_state);
       _currentMode = &_contMode;
 
-      #ifndef EMBED
-        Serial.println(F("MODE set to CONTINUOUS"));
+
+      #ifdef SERIAL_DEBUG
+        MY_SERIAL.println(F("MODE set to CONTINUOUS"));
       #endif
 
       break;
 
     case MODE_INTERMITTENT:
-      _setState(&on_state);
-      _display.setLEDState( 1, LED_ON ); //set INTERMITTENT led to ON
+      _setState(&int_state);
       _currentMode = &_intMode;
 
-      #ifndef EMBED
-      Serial.println(F("MODE set to INTERMITTENT"));
+      #ifdef SERIAL_DEBUG
+      MY_SERIAL.println(F("MODE set to INTERMITTENT"));
       #endif
 
       break;
 
     case MODE_SLEEP:
-      _setState(&on_state);
+      _setState(&sleep_state);
       _currentMode = &_sleepMode;
       _display.setLEDState( 2, LED_BLINK ); //set SLEEP led to BLINK
 
-      #ifndef EMBED
-      Serial.println(F("MODE set to SLEEP"));
+
+      #ifdef SERIAL_DEBUG
+      MY_SERIAL.println(F("MODE set to SLEEP"));
       #endif
 
       break;
   }
 
+  _currentMode->currentSettings = &_currentMode->settingA;
+  _currentMode->nextSettings = &_currentMode->settingB;
+
+  _setState( _currentMode->currentSettings->state );
+
   if( _currentMode->currentSettings->duration > 0){
     _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
     _stateChangeTimer.enable();
+    #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("PanTilt setmode Enable\n"));
+    #endif
 }
 
   _display.update();
+
+  _mode = mode;
 }
 
 
@@ -146,20 +160,27 @@ Callback PanTilt::callback( void ){
   _stateChangeTimer.disable();
 
 
-  #ifndef EMBED
-    Serial.println(F("STATE CALLBACK"));
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("STATE CALLBACK"));
   #endif
+
+
   statePair_t* tmp;
   tmp = _currentMode->currentSettings;
   _currentMode->currentSettings = _currentMode->nextSettings;
 
   _setState( _currentMode->currentSettings->state );
 
-  if( _currentMode->nextSettings != NULL){
+  if( _currentMode->currentSettings->duration > 0){
     _currentMode->nextSettings = tmp;
 
     _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
+
+    #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("PanTilt callback Enable\n"));
+    #endif
     _stateChangeTimer.enable();
+    delay(25);
   }
 }
 
@@ -194,8 +215,10 @@ void PanTilt::detach( void ){
 
 
 void PanTilt::update( void ){
-  _dial.update() ;
-  setMode( _dial.getMode() ) ;
+  runmode_e mode = _dial.getMode();
+  if(mode != _mode){ //don't change mode if the same as current.
+    PanTilt::_setMode( mode ) ;
+  }
   scheduler.run();
 
   _display.update();
@@ -215,6 +238,12 @@ void PanTilt::_updateAngles( void ){
 
   oldXangle = posX.angle;
   oldYangle = posY.angle;
+
+}
+
+void PanTilt::pause( unsigned long pauseVal ){
+
+delay( pauseVal );
 
 }
 
