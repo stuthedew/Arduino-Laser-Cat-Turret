@@ -99,7 +99,7 @@ typedef struct settings_t{
       statePair_t* nextSettings;
 
 
-        mode_t(settings_t* s1, time_t duration1=0, settings_t* s2=NULL, time_t duration2=0 ):settingA(s1, duration1*10*1000), settingB(s2, duration2*10*1000), currentSettings(&settingA), nextSettings(&settingB){
+        mode_t(settings_t* s1, time_t duration1=0, settings_t* s2=NULL, time_t duration2=0 ):settingA(s1, duration1*60*1000), settingB(s2, duration2*60*1000), currentSettings(&settingA), nextSettings(&settingB){
 
         }
   };
@@ -176,7 +176,7 @@ typedef struct settings_t{
       _currentMode;
 
     Task
-      _stateChangeTimer;
+      _stateChangeTask;
 
     runmode_e
       _mode; // pan tilt mode

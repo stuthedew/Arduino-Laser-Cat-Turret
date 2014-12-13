@@ -27,7 +27,7 @@ static settings_t rest_state( 0, LED_BLINK, LED_ON, LED_OFF, STATE_REST);
 
 PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
   _display( POWER_PIN,  CONT_PIN, INT_PIN ), posX( 50, 120, -30 ), posY( 7, 45, 0, 10),
-  _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &int_state, INTERMITTENT_ON_TIME, &rest_state, INTERMITTENT_OFF_TIME ), _sleepMode(  &sleep_state, MINUTES_BEFORE_SLEEP, &off_state ), _stateChangeTimer(), _currentState(&_currentMode->currentSettings->state->id) {
+  _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &int_state, INTERMITTENT_ON_TIME, &rest_state, INTERMITTENT_OFF_TIME ), _sleepMode(  &sleep_state, MINUTES_BEFORE_SLEEP, &off_state ), _stateChangeTask(), _currentState(&_currentMode->currentSettings->state->id) {
 
 
   _modes[ 0 ] = &_offMode;
@@ -44,7 +44,7 @@ PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
 }
 
 void PanTilt::begin( void ){
-  scheduler.initialize() ;
+  scheduler.begin() ;
   _laser.begin();
   delay( 500 ) ;
   _xServo.attach(_xPin) ;
@@ -56,7 +56,7 @@ void PanTilt::begin( void ){
   _dial.begin() ;
 
   _display.begin() ;
-  scheduler.addEvent(&_stateChangeTimer);
+  scheduler.addEvent(&_stateChangeTask);
 
   posX.angle = posX.minAngle;
   posY.angle = posY.minAngle;
@@ -80,7 +80,7 @@ void PanTilt::begin( void ){
 
 void PanTilt::_setMode( runmode_e mode ){
 
-  _stateChangeTimer.disable();
+  _stateChangeTask.disable();
 
   switch(mode){
 
@@ -136,8 +136,8 @@ void PanTilt::_setMode( runmode_e mode ){
   _setState( _currentMode->currentSettings->state );
 
   if( _currentMode->currentSettings->duration > 0){
-    _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
-    _stateChangeTimer.enable();
+    _stateChangeTask.setInterval( _currentMode->currentSettings->duration );
+    _stateChangeTask.enable();
     #ifdef SERIAL_DEBUG
     MY_SERIAL.println(F("PanTilt setmode Enable\n"));
     #endif
@@ -150,14 +150,14 @@ void PanTilt::_setMode( runmode_e mode ){
 
 
 Task* PanTilt::getTaskPtr( void ){
-  return &_stateChangeTimer;
+  return &_stateChangeTask;
 
 }
 
 
 Callback PanTilt::callback( void ){
 
-  _stateChangeTimer.disable();
+  _stateChangeTask.disable();
 
 
   #ifdef SERIAL_DEBUG
@@ -174,12 +174,12 @@ Callback PanTilt::callback( void ){
   if( _currentMode->currentSettings->duration > 0){
     _currentMode->nextSettings = tmp;
 
-    _stateChangeTimer.setInterval( _currentMode->currentSettings->duration );
+    _stateChangeTask.setInterval( _currentMode->currentSettings->duration );
 
     #ifdef SERIAL_DEBUG
     MY_SERIAL.println(F("PanTilt callback Enable\n"));
     #endif
-    _stateChangeTimer.enable();
+    _stateChangeTask.enable();
     delay(25);
   }
 }

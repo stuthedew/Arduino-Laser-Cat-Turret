@@ -37,7 +37,6 @@ class Event{
 public:
 
     void
-      initialize( void ) ,
       resetPeriodic( void ) ,
       setInterval( time_t mSec ) ,
       setNextEventTime( time_t mSec ) ,
@@ -122,7 +121,7 @@ class StuScheduler {
 public:
 
     void
-      initialize( void ) ,
+      begin( void ) ,
       addEvent( Event *e ) ,
       run( void ) ,
       restart( void ) ;

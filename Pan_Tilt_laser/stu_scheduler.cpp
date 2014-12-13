@@ -19,13 +19,10 @@
 
 StuScheduler scheduler;
 
-void Event::initialize( void ){
-  rolloverFlag = 0 ;
-}
 
 void Event::resetPeriodic(){
   _enabled = 1 ;
-  time_t temp = _timeDelta + millis() ;
+  time_t temp = _timeDelta + millis() + 5 ;
   setNextEventTime( temp );
   /*
   #ifdef SERIAL_DEBUG
@@ -98,6 +95,7 @@ void Event::run(){
 Timer::Timer(time_t interval, bool enable){
   _timeDelta = interval ;
   _enabled = enable ;
+  rolloverFlag = 0 ;
 
 }
 
@@ -133,7 +131,9 @@ bool Timer::check( timer_input_e action ){
   if( _elapsed ){ //TRUE == elapsed
 
     #ifdef SERIAL_DEBUG
-    MY_SERIAL.println(F("EVENT Elapsed!!!!"));
+    MY_SERIAL.print(F("Timer Elapsed!!!!\nDuration: "));
+    MY_SERIAL.println(_timeDelta);
+
     #endif
 
     _enabled = 0 ;
@@ -151,10 +151,11 @@ bool Timer::check( timer_input_e action ){
 Task::Task( void (*cbFunc)(), time_t interval, bool enable):_callback(cbFunc) {
   _timeDelta = interval ;
   _enabled = enable ;
+  rolloverFlag = 0 ;
 }
 
 Task::Task( time_t interval, bool enable) {
-
+  rolloverFlag = 0 ;
   _timeDelta = interval ;
   _enabled = enable ;
 
@@ -170,7 +171,7 @@ void Task::run( void ){
     _callback();
   }
 
-void StuScheduler::initialize( void ){
+void StuScheduler::begin( void ){
   _tItr = 0 ;
   _milliRolloverFlag = 0 ;
 

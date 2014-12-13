@@ -119,7 +119,7 @@ void StuDisplay::_ledWrite( led_t* led, bool ledState ){
 void StuDisplay::_enableBlink( led_t* led, unsigned int onTime, unsigned int offTime ){
   _offTime = offTime ;
   _blinkTime = onTime;
-
+  setLEDState(led, LED_OFF);
   led->_blinkTimer.setInterval( _offTime ) ;
   led->_blinkTimer.start();
 
