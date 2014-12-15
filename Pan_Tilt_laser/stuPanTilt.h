@@ -26,12 +26,12 @@
 #include "stu_display.h"
 #include "stu_dial.h"
 #include "stuLaser.h"
+#include "SETTINGS.h"
 
 
 #define DEFAULT_MIN 5
 #define DEFAULT_MAX 170
 
-typedef void (*stateCallback)(void);
 
 
   struct panTiltPos_t {
@@ -52,31 +52,62 @@ typedef void (*stateCallback)(void);
 
   };
 
-  typedef struct{
 
-    stateCallback callback ;
+typedef enum {
+  STATE_OFF,
+  STATE_RUN,
+  STATE_REST
+}state_e;
 
-  }state_t;
+typedef struct settings_t{
+      state_e
+        id;
 
+      bool const
+        laserState,
+        servoState;
+
+
+      ledState_e
+        ledState[3];
+
+      settings_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2, state_e e):laserState(laser), servoState(laser), id(e){
+        ledState[0] = e0;
+        ledState[1] = e1;
+        ledState[2] = e2;
+
+      }
+    } settings_t;
+
+
+    typedef struct statePair_t{
+      settings_t*
+        state;
+
+      time_t const
+        duration;
+
+      statePair_t(settings_t* s, time_t t=0): state(s), duration( t ){}
+
+    };
 
   typedef struct mode_t{
-    const runmode_e
-      displayState ;
 
-    const bool
-      laserState ;
+      statePair_t
+        settingA,
+        settingB;
 
-      mode_t(runmode_e led, bool laser):displayState( led ), laserState( laser ){}
-
-  } ;
+      statePair_t* currentSettings;
+      statePair_t* nextSettings;
 
 
-static mode_t
-  _offMode( MODE_OFF, false) ,
-  _contMode( MODE_CONTINUOUS, true) ,
-  _intMode( MODE_INTERMITTENT, true) ,
-  _restMode( MODE_REST, false ) ,
-  _sleepMode( MODE_SLEEP, false );
+        mode_t(settings_t* s1, time_t duration1=0, settings_t* s2=NULL, time_t duration2=0 ):settingA(s1, duration1*60*1000), settingB(s2, duration2*60*1000), currentSettings(&settingA), nextSettings(&settingB){
+
+        }
+  };
+
+
+
 
   class PanTilt {
 
@@ -87,19 +118,45 @@ static mode_t
     void
       begin( void ),
       detach( void ),
-      setMode( runmode_e mode ),
       update( void ),
       shake( void ),
-      setPosition(int X, int Y );
+      setPosition(int X, int Y ),
+      pause( unsigned long pauseVal ) ;
+
+    panTiltPos_t* getXPos( void );
+    panTiltPos_t* getYPos( void );
 
     runmode_e
       getMode( void ) const;
 
+    state_e
+      getState( void ) const;
+
+      Callback
+        callback( void );
+
+    Task* getTaskPtr( void );
+
+
+
+      panTiltPos_t
+        posX ,
+        posY ;
+
   private:
 
-
-
     StuDisplay _display ;
+
+    void
+      _setMode( runmode_e mode ),
+      _setState( settings_t* s );
+
+    mode_t
+      _offMode,
+      _contMode,
+      _intMode,
+      _sleepMode;
+
 
     StuServo
       _xServo,
@@ -112,30 +169,28 @@ static mode_t
     void
       _updateAngles( void );
 
-    panTiltPos_t
-      _posX ,
-      _posY ;
-
-
-
-    state_t
-      _offState   ,
-      _runState   ,
-      _restState  ,
-      _sleepState ;
 
 
     mode_t*
-      _modes[ 5 ];
+      _modes[ 4 ];
 
+    mode_t*
+      _currentMode;
+
+    Task
+      _stateChangeTask;
 
     runmode_e
       _mode; // pan tilt mode
+
+    state_e* const
+      _currentState;
 
     StuDial
       _dial ;
 
     StuLaser
       _laser ;
+
 
   };

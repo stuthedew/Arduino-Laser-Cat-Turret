@@ -11,6 +11,8 @@
 
     @section  HISTORY
     v0.0.1 - First release
+    v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
+             rotation.
 
 */
 /**************************************************************************/
@@ -22,31 +24,40 @@ void StuServo::setPowerPin( uint8_t powerPin ){
 
   _powerPin = powerPin ;
   pinMode( _powerPin, OUTPUT ) ;
-  digitalWrite( _powerPin, LOW ) ;
+  digitalWrite( _powerPin, HIGH ) ;
 
 }
 
 
 void StuServo::setCalibration( int min, int max ){
-  _position.min = min;
-  _position.max = max;
+  _position.min = map(min, 0, 180, MG995_MIN_MICRO, MG995_MAX_MICRO);
+  _position.max = map(max, 0, 180, MG995_MIN_MICRO, MG995_MAX_MICRO);
+}
+
+void StuServo::pause( void ){
+  digitalWrite( _powerPin, LOW ) ;
+}
+
+void StuServo::wake( void ){
+  digitalWrite( _powerPin, HIGH ) ;
 }
 
 
-void StuServo::stuWrite( int position ){
-
-  digitalWrite( _powerPin, HIGH ) ;
+void StuServo::stuWrite( int pos ){
+  int position = map(pos, 0, 180, MG995_MIN_MICRO, MG995_MAX_MICRO);
 
   if( position < _position.min ){
-    write(_position.min) ;
+    //write(_position.min) ;
+    writeMicroseconds(_position.min) ;
   }
   else if( position > _position.max ){
-    write( _position.max );
+    writeMicroseconds( _position.max );
   }
   else{
-    write( position ) ;
+    writeMicroseconds( position ) ;
   }
-  digitalWrite( _powerPin, LOW ) ;
+  delay(5);
+
 }
 
 

@@ -16,8 +16,6 @@ v0.0.1 - First release
 #include "stu_dial.h"
 
 
-  StuDial Dial;
-
 
 void StuDial::setPin( uint8_t dialPin ){
   _dialPin = dialPin ;
@@ -26,21 +24,41 @@ void StuDial::setPin( uint8_t dialPin ){
 
 void StuDial::begin( void ){
   pinMode( _dialPin, INPUT ) ;
-  update() ;
+  StuDial::_update() ;
+  //analogReference(INTERNAL);
 
 }
 
-void StuDial::update( void ){
-  int adcReading = 0;
+void StuDial::_update( void ){
 
-//  for(int i = 0; i< ADC_SAMPLES; i++){
-    adcReading += analogRead( _dialPin ) ;
-//    delay(10);
-//}
-  Serial.println(F("Reading:"));
-  Serial.println(adcReading);
+    //int adcReading = adcsample_and_lowpass( _dialPin, 1000, 300, 0.015, false );
 
-  if( abs(adcReading - MAX_OFF_ADC) <= ADC_VALUE_RANGE ){
+    int minRead = 1023;
+    int maxRead = 0;
+    int sumRead = 0;
+
+    for(int i = 0; i < 6; i++){
+      int tmpRead = analogRead(_dialPin);
+      minRead = min(tmpRead, minRead);
+      maxRead = max(tmpRead, maxRead);
+      sumRead += tmpRead;
+      delay(5);
+    }
+
+    sumRead -= minRead;
+    sumRead -= maxRead;
+    sumRead += 2; // for integer rounding with shift
+    int adcReading = sumRead >> 2; //divide by 4 (6 readings - hi - lo = 4 readings)
+
+
+#ifdef SERIAL_DEBUG
+#ifdef DIAL_DEBUG
+  MY_SERIAL.println(F("Reading:"));
+  MY_SERIAL.println(adcReading);
+#endif
+#endif
+
+  if( adcReading <= ADC_VALUE_RANGE ){ // 0 == MODE_OFF
     _mode = MODE_OFF ;
 
   }else if( abs(adcReading - MAX_CONT_ADC) <= ADC_VALUE_RANGE ){
@@ -51,13 +69,14 @@ void StuDial::update( void ){
     _mode = MODE_INTERMITTENT ;
 
   }
-  else
-    {
-      _mode = MODE_INTERMITTENT ;
+  else if( adcReading >= MAX_SLEEP_ADC - ADC_VALUE_RANGE ){
+    _mode = MODE_SLEEP ;
+
   }
 
 }
 
-runmode_e StuDial::getMode( void ) const{
+runmode_e StuDial::getMode( void ){
+  StuDial::_update();
   return _mode ;
 }

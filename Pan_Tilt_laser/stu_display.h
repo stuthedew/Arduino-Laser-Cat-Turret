@@ -23,6 +23,12 @@ v0.0.1 - First release
 #define LED_NUMBER 3
 
 
+typedef enum ledState_e{
+  LED_OFF = 0,
+  LED_ON     ,
+  LED_BLINK  ,
+}ledState_e;
+
 typedef struct led_t{
 
   uint8_t const
@@ -31,7 +37,13 @@ typedef struct led_t{
   bool
     state ; // current pin state (ON/OFF)
 
-  led_t( uint8_t ledPin ): pin( ledPin ), state( 0 ){}
+  Timer
+    _blinkTimer;
+
+  led_t( uint8_t ledPin ): pin( ledPin ), state( 0 ), _blinkTimer(){
+    scheduler.addEvent(&_blinkTimer);
+    _blinkTimer.disable();
+  }
 
 }led_t;
 
@@ -44,7 +56,9 @@ public:
 
   void
     begin( void ) ,
-    setMode( runmode_e mode ) ,
+    setLEDState( led_t* led, ledState_e e  ),
+    setLEDState( uint8_t ledVal, ledState_e e ),
+    setLEDStates( ledState_e e1, ledState_e e2, ledState_e e3 ),
     update( void ) ;
 
 private:
@@ -52,26 +66,19 @@ private:
   void
     _ledWrite( led_t* led, bool ledState ) ,
     _enableBlink( led_t* led, unsigned int duration, unsigned int onTime ) ,
-    _blinkLED( void ) ,
-    _disableBlink( void ) ;
+    _blinkLED( led_t* led ) ,
+    _disableBlink( led_t* led ) ;
 
   led_t* _led[ LED_NUMBER ] ;
-  led_t* _ledToBlink ;
 
   led_t
-    _power        ,
+    _sleep        ,
     _continuous   ,
     _intermittent ;
 
-    Timer
-      _blinkTimer;
 
     unsigned int
       _offTime,
       _blinkTime  ;
-
-    runmode_e
-      _currentDisplayMode;
-
 
 };

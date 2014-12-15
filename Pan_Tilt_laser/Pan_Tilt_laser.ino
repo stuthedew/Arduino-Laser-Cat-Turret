@@ -23,6 +23,8 @@
     v1.6.0 - Switched Markov speed change to Markov handler using circuler
              linked list.
     v1.6.1 - Switched Markov state to Markov handler
+    v1.7.0 - Moved control of timing to master Pan-Tilt Class
+    v1.8.0 - Switched to a state-machine model.
 */
 /**************************************************************************/
 
@@ -38,36 +40,34 @@
 #include "stu_dial.h"
 
 
-//#define EMBED
+#ifdef SERIAL_DEBUG
+#ifdef EMBED
+  #include <SoftwareSerial.h>
+  SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
+#endif
+#endif
+
+
 
 int markovShakeState = 1;
 int changeVal;
 
 LinkedMarkov lmSpeed;
 LinkedMarkov lmShake;
+LinkedMarkov lmPause;
 
 
-//X Position: lower numbers == Right
-//Y Position: lower numbers == Up
-panTiltPos_t _posX( 50, 120, -30);
-panTiltPos_t _posY( 7, 45, 0, 10);
-
-
-PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
-
-StuLaser _laser(LASER_PIN);
+PanTilt panTilt( SERVO_X_PIN, SERVO_Y_PIN );
 
 
 Task pauseTask(&pauseCB);
-Task restTask(&restCB);
-Task sleepTask(&sleepCB);
-Task speedAndDirTask(&updateSpeedAndDir, 750);
+Task updateMarkovTask(&updateMarkov, 750, 1);
 
-//StuScheduler schedule;
-
-void updateSpeedAndDir(){
+void updateMarkov(){
   changeVal = lmSpeed.getNextValue();
   markovShakeState = lmShake.getNextValue();
+  updateMarkovTask.enable();
+
 
 }
 
@@ -76,97 +76,67 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
+  #ifdef SERIAL_DEBUG
   #ifdef TIME_DEBUG
-    Serial.print(F("Next pause in "));
-    Serial.print(temp/1000);
-    Serial.println(F(" seconds.\n"));
+  MY_SERIAL.print(F("Next pause in "));
+  MY_SERIAL.print(temp/1000);
+  MY_SERIAL.println(F(" seconds.\n"));
+  #endif
   #endif
 
   pauseTask.setInterval(temp);
+  pauseTask.enable();
 
-}
-
-//turn off laser for a few moments at this time
-void setNextRestTime(unsigned long avg_sec_to_rest=360, double variance=60){
-  unsigned long temp = gauss.gRandom( avg_sec_to_rest, variance ) * 1000 ;
-
-  #ifdef TIME_DEBUG
-    Serial.print(F("Next rest in "));
-    Serial.print(temp/1000);
-    Serial.println(F(" seconds.\n"));
-  #endif
-
-  restTask.setInterval(temp);
-}
-
-
-//turn of laser for a minutes to hours at this time
-void setNextSleepTime(unsigned long avg_min_to_sleep=10, double variance = 3){
-  unsigned long mSecToSleep = max(1, gauss.gRandom(avg_min_to_sleep, variance))*60000;
-
-  //  unsigned long mSecToSleep = gauss.gRandom(avg_min_to_sleep, variance)*60000;
-  #ifdef TIME_DEBUG
-    Serial.print(F("Next sleep in "));
-    Serial.print(mSecToSleep/1000);
-    Serial.println(F(" seconds.\n"));
-  #endif
-
-  sleepTask.setInterval(mSecToSleep);
 }
 
 
 void pauseCB(){
-  //Serial.println(F("Pause Callback!"));
-  delay(markovPause());
+
+
+  pauseTask.disable();
+  panTilt.pause(markovPause());
+
   setNextPauseTime();
+
 }
 
-void restCB(){
-  //Serial.println(F("Rest Callback!"));
+void panTiltCB(){
 
-//  mSwitch.ledState(0);  TODO: Replace missile switch
-  panTilt.setMode(MODE_REST);
-  sleep(5, 10);
-//  mSwitch.ledState(1);  TODO: Replace missile switch
-  setNextPauseTime();
-  setNextRestTime();
-}
-
-void sleepCB(){
-  //Serial.println(F("Sleep Callback!"));
-  panTilt.setMode(MODE_SLEEP);
-  sleep(1800, 2400); //sleep between 30 and 40 minutes
-  panTilt.setMode(MODE_INTERMITTENT);
-  setNextPauseTime();
-  setNextRestTime();
-  setNextSleepTime();
-}
-
-
-
-void setup() {
-
-  #ifndef EMBED
-    Serial.begin(BAUD_RATE);
-//    mSwitch.begin();      TODO: Replace missile switch
-//    mSwitch.heartBeat(3); TODO: Replace missile switch
-    Serial.println(F("setup starting..."));
-//    mSwitch.ledState(1);  TODO: Replace missile switch
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("Main Sketch PanTilt Callback!!!! "));
   #endif
 
 
+  panTilt.callback();
+
+}
+
+void setup() {
   panTilt.begin();
+  scheduler.addEvent(&pauseTask);
+  scheduler.addEvent(&updateMarkovTask);
+
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.begin(BAUD_RATE);
+    MY_SERIAL.println(F("setup starting..."));
+  #endif
+
+  Task* taskPtr = panTilt.getTaskPtr();
+
+  taskPtr->changeCallback(panTiltCB);
+
+
 
 
 
 //        addLinkToBack(speed, previous_state_probability, next_state_probability)
-  lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
+  lmSpeed.addLinkToBack( 6,  5, 35 ); // Slow
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
+  lmSpeed.addLinkToBack( 8, 25, 35 ); // Med
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
+  lmSpeed.addLinkToBack( 10, 35, 25 ); // Fast
 //                           ^  ||
 //                           |  \/
 //                          | Slow |
@@ -182,75 +152,38 @@ void setup() {
 
 
 
-#ifndef EMBED
-  Serial.println(F("setup complete"));
+#ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("setup complete"));
 #endif
 
-  setNextPauseTime();
-  setNextRestTime();
-  setNextSleepTime();
 }
 
 
-void loop() {
-  panTilt.update();
+void loop(){
 
 
-  //schedule.run();
-  //Dial.update();
-  //panTilt.setMode(Dial.getMode());
 
-  #ifndef EMBED
-  //  Serial.println(panTilt.getMode());
+
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(panTilt.getState());
   #endif
 
-  delay(100);
-  return; //  TODO: Remove
+  if( panTilt.getState() == STATE_RUN ){
 
+      panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
+      panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
 
-if(panTilt.getMode() == MODE_OFF){
-
-    #ifdef MAIN_DEBUG
-      Serial.print(F("Switch is off!"));
-    #endif
-
-    _laser.fire(0);
-//    mSwitch.ledState(0); TODO: Replace missile switch
-    _posX.angle = 90;
-    _posY.angle = 90;
-    panTilt.update();
-
-    delay(50);
-
-    panTilt.detach();
-    //while(!mSwitch.switchState()){ TODO: Replace missile switch
-    while(panTilt.getMode() == MODE_OFF){
-      delay(50);
-
-    }
-    //mSwitch.ledState(1);  TODO: Replace missile switch
-    panTilt.begin();
-    _laser.fire(1);
-    //schedule.restart();
-    #ifdef MAIN_DEBUG
-      Serial.print(F("Switch is on!"));
-    #endif
+      if(markovShakeState == 2){
+        panTilt.shake();
+      }
+      delay(5);
   }
-
-
-  _posX.angle = getDeltaPosition(&_posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + _posX.angle;
-  _posY.angle = getDeltaPosition(&_posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + _posY.angle;
+  else{
+    delay(10);
+  }
 
   panTilt.update();
 
-
-  if(markovShakeState == 2){
-    panTilt.shake();
-  }
-
-
-  _laser.fire(1);
-  delay(5);
 }
 
 
@@ -275,6 +208,7 @@ int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
 
 int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
+
   int tempVal = getMarkovDirection(pt, changeProb);
 
   tempVal *= funcChangeVal;
@@ -296,44 +230,5 @@ int markovPause(){
   else{
     return random(500, 750);
   }
-}
 
-
-void sleep(unsigned long minSec, unsigned long maxSec){
-  unsigned int delayVal = random(minSec, maxSec);
-  _laser.fire(0);
-  panTilt.detach();
-
-  unsigned long startTime = millis();
-  for(unsigned long i = 0; i < delayVal; i++){
-    while(millis() - startTime < 1000){
-      heartBeat(10000);
-
-      //if(!mSwitch.switchState()){ //return if switch is turned off. Main program waits for restart. TODO: Replace missile switch
-        //return;
-    //  }
-      if(startTime > millis()){ //check for rollovers
-        startTime = millis();
-        break;
-
-      }
-    }
-    startTime = millis();
-  }
-  panTilt.begin();
-  _laser.fire(1);
-}
-
-
-void heartBeat(int hbInterval){
-  static unsigned long oldTime;
-
-  if(millis() - oldTime > hbInterval){
-    #ifndef EMBED
-//      mSwitch.heartBeat(1); TODO: Replace missile switch
-
-    #endif
-
-    oldTime = millis();
-  }
 }

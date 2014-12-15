@@ -17,7 +17,10 @@
 #pragma once
 
 #include "Arduino.h"
+#include "panTilt_config.h"
 #include <Time.h>
+
+#define MAX_EVENTS 20
 
 typedef void (*Callback)(void);
 
@@ -34,7 +37,6 @@ class Event{
 public:
 
     void
-      initialize( void ) ,
       resetPeriodic( void ) ,
       setInterval( time_t mSec ) ,
       setNextEventTime( time_t mSec ) ,
@@ -119,7 +121,7 @@ class StuScheduler {
 public:
 
     void
-      initialize( void ) ,
+      begin( void ) ,
       addEvent( Event *e ) ,
       run( void ) ,
       restart( void ) ;
@@ -128,7 +130,7 @@ public:
 private:
 
     Event
-      *_Event[ 20 ] ;
+      *_Event[ MAX_EVENTS ] ;
 
     bool
       _milliRolloverFlag ;

@@ -23,6 +23,9 @@
 #include <Servo.h>
 
 
+#define MG995_MIN_MICRO 800
+#define MG995_MAX_MICRO 2400
+
 struct servoPos{
 
     int
@@ -39,7 +42,10 @@ public:
       begin( void ) ,
       setPowerPin( uint8_t pwrPin ) ,
       setCalibration( int min, int max ) ,
-      stuWrite( int position ) ;
+      stuWrite( int position ),
+      pause( void ),
+      wake( void ) ;
+
 
     int
       getMin( void ) const ,
