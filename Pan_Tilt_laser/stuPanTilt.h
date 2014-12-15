@@ -64,12 +64,14 @@ typedef struct settings_t{
         id;
 
       bool const
-        laserState;
+        laserState,
+        servoState;
+
 
       ledState_e
         ledState[3];
 
-      settings_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2, state_e e):laserState(laser){
+      settings_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2, state_e e):laserState(laser), servoState(laser), id(e){
         ledState[0] = e0;
         ledState[1] = e1;
         ledState[2] = e2;

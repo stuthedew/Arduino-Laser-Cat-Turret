@@ -25,6 +25,7 @@ void StuDial::setPin( uint8_t dialPin ){
 void StuDial::begin( void ){
   pinMode( _dialPin, INPUT ) ;
   StuDial::_update() ;
+  //analogReference(INTERNAL);
 
 }
 
@@ -57,7 +58,7 @@ void StuDial::_update( void ){
 #endif
 #endif
 
-  if( abs(adcReading - MAX_OFF_ADC) <= ADC_VALUE_RANGE ){
+  if( adcReading <= ADC_VALUE_RANGE ){ // 0 == MODE_OFF
     _mode = MODE_OFF ;
 
   }else if( abs(adcReading - MAX_CONT_ADC) <= ADC_VALUE_RANGE ){
@@ -68,7 +69,7 @@ void StuDial::_update( void ){
     _mode = MODE_INTERMITTENT ;
 
   }
-  else if( adcReading <= MAX_SLEEP_ADC + ADC_VALUE_RANGE ){
+  else if( adcReading >= MAX_SLEEP_ADC - ADC_VALUE_RANGE ){
     _mode = MODE_SLEEP ;
 
   }

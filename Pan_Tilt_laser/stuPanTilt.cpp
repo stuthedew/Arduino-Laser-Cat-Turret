@@ -44,6 +44,7 @@ PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
 }
 
 void PanTilt::begin( void ){
+  PanTilt::_setMode(MODE_OFF);
   scheduler.begin() ;
   _laser.begin();
   delay( 500 ) ;
@@ -187,10 +188,18 @@ void PanTilt::_setState( settings_t* s ){
   _display.setLEDStates( s->ledState[0], s->ledState[1], s->ledState[2] );
   _laser.fire(s->laserState);
 
+  if(s->servoState){
+    _xServo.wake();
+    _yServo.wake();
+  }else{
+    _xServo.pause();
+    _yServo.pause();
+  }
+
 }
 
 state_e PanTilt::getState( void ) const{
-  return *_currentState;
+  return _currentMode->currentSettings->state->id;
 }
 
 
@@ -219,7 +228,7 @@ void PanTilt::update( void ){
   scheduler.run();
 
   _display.update();
-  if( *_currentState == STATE_RUN){
+  if( getState() == STATE_RUN){
     _updateAngles();
   }
 }
@@ -239,8 +248,11 @@ void PanTilt::_updateAngles( void ){
 }
 
 void PanTilt::pause( unsigned long pauseVal ){
-
-delay( pauseVal );
+  _xServo.pause();
+  _yServo.pause();
+  delay( pauseVal );
+  _xServo.wake();
+  _yServo.wake();
 
 }
 

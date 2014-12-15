@@ -54,7 +54,7 @@ laser runs before shutting off in sleep mode).
 /* MINUTES the laser stays ON before turning OFF FOREVER.                 */
 /* (You must change mode with dial to restart laser.)                     */
 /*------------------------------------------------------------------------*/
-  #define MINUTES_BEFORE_SLEEP    30 /*<=========== CHANGE ME (Default=30)*/
+  #define MINUTES_BEFORE_SLEEP    1 /*<=========== CHANGE ME (Default=30)*/
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /**************************************************************************/

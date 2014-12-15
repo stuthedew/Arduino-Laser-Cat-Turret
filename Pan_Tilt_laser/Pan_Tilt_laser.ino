@@ -39,14 +39,14 @@
 #include <Gaussian.h>
 #include "stu_dial.h"
 
-/*
+
 #ifdef SERIAL_DEBUG
 #ifdef EMBED
   #include <SoftwareSerial.h>
   SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
 #endif
 #endif
-*/
+
 
 
 int markovShakeState = 1;
@@ -57,7 +57,7 @@ LinkedMarkov lmShake;
 LinkedMarkov lmPause;
 
 
-PanTilt panTilt(SERVO_X_PIN, SERVO_Y_PIN );
+PanTilt panTilt( SERVO_X_PIN, SERVO_Y_PIN );
 
 
 Task pauseTask(&pauseCB);
@@ -78,8 +78,8 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
 
   #ifdef SERIAL_DEBUG
   #ifdef TIME_DEBUG
-  MY_SERIAL1.print(F("Next pause in "));
-  MY_SERIAL1.print(temp/1000);
+  MY_SERIAL.print(F("Next pause in "));
+  MY_SERIAL.print(temp/1000);
   MY_SERIAL.println(F(" seconds.\n"));
   #endif
   #endif
@@ -112,7 +112,7 @@ void panTiltCB(){
 }
 
 void setup() {
-
+  panTilt.begin();
   scheduler.addEvent(&pauseTask);
   scheduler.addEvent(&updateMarkovTask);
 
@@ -130,13 +130,13 @@ void setup() {
 
 
 //        addLinkToBack(speed, previous_state_probability, next_state_probability)
-  lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
+  lmSpeed.addLinkToBack( 6,  5, 35 ); // Slow
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
+  lmSpeed.addLinkToBack( 8, 25, 35 ); // Med
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
+  lmSpeed.addLinkToBack( 10, 35, 25 ); // Fast
 //                           ^  ||
 //                           |  \/
 //                          | Slow |
@@ -155,13 +155,18 @@ void setup() {
 #ifdef SERIAL_DEBUG
   MY_SERIAL.println(F("setup complete"));
 #endif
-panTilt.begin();
+
 }
 
 
 void loop(){
 
-  panTilt.update();
+
+
+
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(panTilt.getState());
+  #endif
 
   if( panTilt.getState() == STATE_RUN ){
 
@@ -171,14 +176,13 @@ void loop(){
       if(markovShakeState == 2){
         panTilt.shake();
       }
-
       delay(5);
   }
   else{
     delay(10);
   }
 
-
+  panTilt.update();
 
 }
 
