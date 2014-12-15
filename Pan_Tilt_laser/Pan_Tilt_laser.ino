@@ -39,14 +39,14 @@
 #include <Gaussian.h>
 #include "stu_dial.h"
 
-/*
+
 #ifdef SERIAL_DEBUG
 #ifdef EMBED
   #include <SoftwareSerial.h>
   SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
 #endif
 #endif
-*/
+
 
 #define MIN_LOOP_TIME 5
 
