@@ -176,7 +176,6 @@ void loop(){
       if(markovShakeState == 2){
         panTilt.shake();
       }
-      delay(5);
   }
   else{
     delay(10);
