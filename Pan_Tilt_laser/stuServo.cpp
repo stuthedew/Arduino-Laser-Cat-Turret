@@ -11,6 +11,8 @@
 
     @section  HISTORY
     v0.0.1 - First release
+    v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
+             rotation.
 
 */
 /**************************************************************************/
