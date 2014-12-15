@@ -88,9 +88,6 @@ bool Event::enabled() const {
   return _enabled;
 }
 
-void Event::run(){
-  return;
-}
 
 Timer::Timer(time_t interval, bool enable){
   _timeDelta = interval ;
@@ -178,14 +175,22 @@ void StuScheduler::begin( void ){
 }
 
 void StuScheduler::addEvent( Event *t ){
+
   if(_tItr >= MAX_EVENTS){
     #ifdef SERIAL_DEBUG
     MY_SERIAL.println(F("TOO MANY EVENTS!!!"));
     #endif
     return;
   }
+
   _Event[ _tItr ] = t;
   _tItr++;
+
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.print(F("Event Total: "));
+  MY_SERIAL.println( _tItr);
+
+  #endif
 
 }
 

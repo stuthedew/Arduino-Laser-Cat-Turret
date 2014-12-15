@@ -44,7 +44,7 @@ public:
       enable( void ) ;
 
     virtual void
-        run( void ) ;
+        run( void )=0 ;
 
     bool
       enabled( void ) const ;
@@ -71,7 +71,7 @@ class Timer: public Event{
 
 public:
 
-    Timer(time_t interval = 0, bool enable = 0) ;
+    Timer( time_t interval = 0, bool enable = 0 ) ;
 
     virtual void
       run( void ) ;
