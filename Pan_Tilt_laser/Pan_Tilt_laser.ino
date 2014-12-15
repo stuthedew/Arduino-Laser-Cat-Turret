@@ -39,14 +39,16 @@
 #include <Gaussian.h>
 #include "stu_dial.h"
 
-
+/*
 #ifdef SERIAL_DEBUG
 #ifdef EMBED
   #include <SoftwareSerial.h>
   SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
 #endif
 #endif
+*/
 
+#define MIN_LOOP_TIME 5
 
 
 int markovShakeState = 1;
@@ -56,12 +58,12 @@ LinkedMarkov lmSpeed;
 LinkedMarkov lmShake;
 LinkedMarkov lmPause;
 
-
 PanTilt panTilt( SERVO_X_PIN, SERVO_Y_PIN );
 
 
 Task pauseTask(&pauseCB);
 Task updateMarkovTask(&updateMarkov, 750, 1);
+Timer minLoopTime( MIN_LOOP_TIME, 1 );
 
 void updateMarkov(){
   changeVal = lmSpeed.getNextValue();
@@ -94,7 +96,7 @@ void pauseCB(){
 
 
   pauseTask.disable();
-  panTilt.pause(markovPause());
+  panTilt.pause( markovPause() );
 
   setNextPauseTime();
 
@@ -115,6 +117,7 @@ void setup() {
   panTilt.begin();
   scheduler.addEvent(&pauseTask);
   scheduler.addEvent(&updateMarkovTask);
+  scheduler.addEvent(&minLoopTime);
 
   #ifdef SERIAL_DEBUG
     MY_SERIAL.begin(BAUD_RATE);
@@ -168,7 +171,7 @@ void loop(){
   MY_SERIAL.println(panTilt.getState());
   #endif
 
-  if( panTilt.getState() == STATE_RUN ){
+  if( minLoopTime.check( ELAPSE_RESTART ) && panTilt.getState() == STATE_RUN ){
 
       panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
       panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
@@ -176,12 +179,13 @@ void loop(){
       if(markovShakeState == 2){
         panTilt.shake();
       }
-  }
+  }/*
   else{
     delay(10);
   }
-
+*/
   panTilt.update();
+
 
 }
 
