@@ -13,6 +13,7 @@
     v0.0.1 - First release
     v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
              rotation.
+    v0.0.3 - Added 5 microsecond delay after wake to allow capacitors to charge.
 
 */
 /**************************************************************************/
@@ -40,6 +41,7 @@ void StuServo::pause( void ){
 
 void StuServo::wake( void ){
   digitalWrite( _powerPin, HIGH ) ;
+  delay( 5 ); // Allow capacitor to charge.
 }
 
 
@@ -56,8 +58,8 @@ void StuServo::stuWrite( int pos ){
   else{
     writeMicroseconds( position ) ;
   }
-  delay(5);
-
+  delay(abs(position - _microSeconds));
+  _microSeconds = position;
 }
 
 
@@ -68,4 +70,9 @@ int StuServo::getMin( void ) const {
 
 int StuServo::getMax( void ) const {
   return _position.max ;
+}
+
+int StuServo::readMicroseconds( void ) const{
+  return _microSeconds;
+
 }

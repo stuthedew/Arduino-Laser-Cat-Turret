@@ -11,7 +11,10 @@
 
     @section  HISTORY
     v0.0.1 - First release
-    v0.0.2 - Added power control (MOSFET)
+    v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
+             rotation.
+    v0.0.3 - Added 5 microsecond delay after wake to allow capacitors to charge.
+    v0.0.4 - Added a readMicroseconds function to get position.
 
 */
 /**************************************************************************/
@@ -51,6 +54,9 @@ public:
       getMin( void ) const ,
       getMax( void ) const ;
 
+    int
+      readMicroseconds( void ) const;
+
 private:
 
     servoPos
@@ -58,5 +64,8 @@ private:
 
     uint8_t
       _powerPin ;
+
+    int
+      _microSeconds ;
 
 };
