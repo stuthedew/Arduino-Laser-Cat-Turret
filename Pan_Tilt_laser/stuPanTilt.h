@@ -56,6 +56,8 @@ typedef enum {
   STATE_REST
 }state_e;
 
+
+
 typedef struct settings_t{
       state_e
         id;
@@ -64,11 +66,13 @@ typedef struct settings_t{
         laserState,
         servoState;
 
+      Callback
+        callback;
 
       ledState_e
         ledState[3];
 
-      settings_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2, state_e e):laserState(laser), servoState(laser), id(e){
+      settings_t(bool laser, ledState_e e0, ledState_e e1, ledState_e e2, state_e e):laserState(laser), servoState(laser), id(e), callback(NULL){
         ledState[0] = e0;
         ledState[1] = e1;
         ledState[2] = e2;
@@ -118,7 +122,8 @@ typedef struct settings_t{
       update( void ),
       shake( void ),
       setPosition(int X, int Y ),
-      pause( unsigned long pauseVal, bool laserState = 1 ) ;
+      pause( unsigned long pauseVal, bool laserState = 1 ),
+      setStateCallback(state_e e , Callback f) ;
 
     panTiltPos_t* getXPos( void );
     panTiltPos_t* getYPos( void );

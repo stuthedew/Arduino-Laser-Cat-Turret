@@ -83,6 +83,25 @@ void PanTilt::begin( void ){
 
 }
 
+void PanTilt::setStateCallback(state_e e , Callback f){
+  switch(e){
+
+    case STATE_RUN:
+      on_state.callback = f;
+      sleep_state.callback = f;
+      int_state.callback = f;
+      break;
+
+    case STATE_OFF:
+      off_state.callback = f;
+      break;
+
+    case STATE_REST:
+      rest_state.callback = f;
+      break;
+    }
+}
+
 void PanTilt::_setMode( runmode_e mode ){
 
   _stateChangeTask.disable();
@@ -204,6 +223,7 @@ void PanTilt::_setState( settings_t* s ){
     _xServo.pause();
     _yServo.pause();
   }
+    s->callback();
 
 }
 

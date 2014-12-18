@@ -25,6 +25,9 @@
     v1.6.1 - Switched Markov state to Markov handler
     v1.7.0 - Moved control of timing to master Pan-Tilt Class
     v1.8.0 - Switched to a state-machine model.
+    v1.9.0 - Final Version
+    v1.9.1 - Tweaked minimum Y servo value
+    v1.9.2 - Fixed bug where pauseTask was still enabled when off.
 */
 /**************************************************************************/
 
@@ -61,7 +64,6 @@ void updateMarkov(){
   markovShakeState = lmShake.getNextValue();
   updateMarkovTask.enable();
 
-
 }
 
 //halt laser at certain spot for a few moments at this time
@@ -80,6 +82,24 @@ void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=6){
   pauseTask.setInterval(temp);
   pauseTask.enable();
 
+}
+
+void offCB(){
+
+  pauseTask.disable();
+
+}
+
+void runCB(){
+
+  pauseTask.enable();
+
+}
+
+void restCB(){
+
+
+  return;
 }
 
 
@@ -113,7 +133,9 @@ void setup() {
   #endif
 
   panTilt.begin();
-
+  panTilt.setStateCallback(STATE_OFF, &offCB);
+  panTilt.setStateCallback(STATE_RUN, &runCB);
+  panTilt.setStateCallback(STATE_REST, &restCB);
 
   Task* taskPtr = panTilt.getTaskPtr();
 
@@ -137,7 +159,7 @@ void setup() {
   lmShake.addLinkToBack( 1,  0, 2 ); // No shake
 //                           ^  ||
 //                           |  \/
-  lmShake.addLinkToBack( 2, 35, 0 ); // Shake
+  lmShake.addLinkToBack( 2, 40, 0 ); // Shake
 
   randomSeed(analogRead(5));
 
@@ -165,6 +187,10 @@ void loop(){
 
 
     if( panTilt.getState() == STATE_RUN ){
+      if(!pauseTask.enabled()){
+        pauseTask.enable();
+
+      }
 
       panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
       panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
@@ -175,7 +201,10 @@ void loop(){
       }
   }
 
+  else if(pauseTask.enabled()){
 
+
+  }
   scheduler.run();
   panTilt.update();
   delay(5);
