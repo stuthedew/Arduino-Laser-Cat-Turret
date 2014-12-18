@@ -65,7 +65,7 @@ laser runs before shutting off in sleep mode).
 #define SERVO_MAX_X_AXIS 120
 
 #define SERVO_MIN_Y_AXIS    110
-#define SERVO_MAX_Y_AXIS    160
+#define SERVO_MAX_Y_AXIS    150
 
 
 #define LASER_MIDPOINT_OFFSET_X 0
