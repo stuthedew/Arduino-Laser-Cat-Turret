@@ -118,7 +118,7 @@ typedef struct settings_t{
       update( void ),
       shake( void ),
       setPosition(int X, int Y ),
-      pause( unsigned long pauseVal ) ;
+      pause( unsigned long pauseVal, bool laserState = 1 ) ;
 
     panTiltPos_t* getXPos( void );
     panTiltPos_t* getYPos( void );

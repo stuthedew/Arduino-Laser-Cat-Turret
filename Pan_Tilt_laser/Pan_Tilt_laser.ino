@@ -87,7 +87,7 @@ void pauseCB(){
 
 
   pauseTask.disable();
-  panTilt.pause( markovPause() );
+  panTilt.pause( markovPause(), !!(random()%4) );
 
   setNextPauseTime();
 

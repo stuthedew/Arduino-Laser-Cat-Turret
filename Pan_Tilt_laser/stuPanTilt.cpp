@@ -249,12 +249,14 @@ void PanTilt::_updateAngles( void ){
 
 }
 
-void PanTilt::pause( unsigned long pauseVal ){
+void PanTilt::pause( unsigned long pauseVal, bool laserState ){
+  _laser.fire(laserState);
   _xServo.pause();
   _yServo.pause();
   delay( pauseVal );
   _xServo.wake();
   _yServo.wake();
+  _laser.fire(1);
 
 }
 
