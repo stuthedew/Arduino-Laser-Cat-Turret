@@ -55,7 +55,6 @@ PanTilt panTilt( SERVO_X_PIN, SERVO_Y_PIN );
 
 Task pauseTask(&pauseCB);
 Task updateMarkovTask(&updateMarkov, 750, 1);
-//Timer minLoopTime( MIN_LOOP_TIME, 1 );
 
 void updateMarkov(){
   changeVal = lmSpeed.getNextValue();
@@ -66,7 +65,7 @@ void updateMarkov(){
 }
 
 //halt laser at certain spot for a few moments at this time
-void setNextPauseTime(unsigned long avg_sec_to_pause=10, double variance=6){
+void setNextPauseTime(unsigned long avg_sec_to_pause=15, double variance=6){
 
   unsigned long temp = gauss.gRandom(avg_sec_to_pause, variance)*1000;
 
@@ -135,24 +134,24 @@ void setup() {
 
 
 //        addLinkToBack(state, previous_state_probability, next_state_probability)
-  lmShake.addLinkToBack( 1,  0, 5 ); // No shake
+  lmShake.addLinkToBack( 1,  0, 2 ); // No shake
 //                           ^  ||
 //                           |  \/
-  lmShake.addLinkToBack( 2, 30, 0 ); // Shake
+  lmShake.addLinkToBack( 2, 35, 0 ); // Shake
 
   randomSeed(analogRead(5));
 
 
   scheduler.addEvent(&pauseTask);
   scheduler.addEvent(&updateMarkovTask);
-  //scheduler.addEvent(&minLoopTime);
+
 
 
 #ifdef SERIAL_DEBUG
   MY_SERIAL.println(F("setup complete"));
 #endif
 
-delay(5);
+setNextPauseTime();
 
 }
 
@@ -165,7 +164,6 @@ void loop(){
   #endif
 
 
-//if(minLoopTime.check(ELAPSE_RESTART)){
     if( panTilt.getState() == STATE_RUN ){
 
       panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
@@ -176,7 +174,7 @@ void loop(){
         panTilt.shake();
       }
   }
-//}
+
 
   scheduler.run();
   panTilt.update();
