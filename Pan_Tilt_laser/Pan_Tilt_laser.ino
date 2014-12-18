@@ -39,16 +39,8 @@
 #include <Gaussian.h>
 #include "stu_dial.h"
 
-/*
-#ifdef SERIAL_DEBUG
-#ifdef EMBED
-  #include <SoftwareSerial.h>
-  SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
-#endif
-#endif
-*/
 
-#define MIN_LOOP_TIME 5
+#define MIN_LOOP_TIME 0
 
 
 int markovShakeState = 1;
@@ -63,7 +55,7 @@ PanTilt panTilt( SERVO_X_PIN, SERVO_Y_PIN );
 
 Task pauseTask(&pauseCB);
 Task updateMarkovTask(&updateMarkov, 750, 1);
-Timer minLoopTime( MIN_LOOP_TIME, 1 );
+//Timer minLoopTime( MIN_LOOP_TIME, 1 );
 
 void updateMarkov(){
   changeVal = lmSpeed.getNextValue();
@@ -114,32 +106,29 @@ void panTiltCB(){
 }
 
 void setup() {
-  panTilt.begin();
-  scheduler.addEvent(&pauseTask);
-  scheduler.addEvent(&updateMarkovTask);
-  scheduler.addEvent(&minLoopTime);
+
 
   #ifdef SERIAL_DEBUG
     MY_SERIAL.begin(BAUD_RATE);
     MY_SERIAL.println(F("setup starting..."));
   #endif
 
+  panTilt.begin();
+
+
   Task* taskPtr = panTilt.getTaskPtr();
 
   taskPtr->changeCallback(panTiltCB);
 
 
-
-
-
 //        addLinkToBack(speed, previous_state_probability, next_state_probability)
-  lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
+  lmSpeed.addLinkToBack( 1,  5, 35 ); // Slow
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
+  lmSpeed.addLinkToBack( 2, 25, 35 ); // Med
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
+  lmSpeed.addLinkToBack( 3, 35, 25 ); // Fast
 //                           ^  ||
 //                           |  \/
 //                          | Slow |
@@ -154,35 +143,44 @@ void setup() {
   randomSeed(analogRead(5));
 
 
+  scheduler.addEvent(&pauseTask);
+  scheduler.addEvent(&updateMarkovTask);
+  //scheduler.addEvent(&minLoopTime);
+
 
 #ifdef SERIAL_DEBUG
   MY_SERIAL.println(F("setup complete"));
 #endif
+
+delay(5);
 
 }
 
 
 void loop(){
 
+
   #ifdef SERIAL_DEBUG
   MY_SERIAL.println(panTilt.getState());
   #endif
 
-  if( minLoopTime.check( ELAPSE_RESTART )) {
 
+//if(minLoopTime.check(ELAPSE_RESTART)){
     if( panTilt.getState() == STATE_RUN ){
 
       panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
       panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
 
+
       if(markovShakeState == 2){
         panTilt.shake();
       }
   }
-}
+//}
 
   scheduler.run();
   panTilt.update();
+  delay(5);
 
 }
 

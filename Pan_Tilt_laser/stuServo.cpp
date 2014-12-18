@@ -42,13 +42,15 @@ void StuServo::pause( void ){
 
 void StuServo::wake( void ){
   digitalWrite( _powerPin, HIGH ) ;
-  delay( 15 ); // Allow capacitor to charge.
+  delay(10);
 }
 
 
 void StuServo::stuWrite( int position ){
   int curPos = read();
   int newPos;
+
+
   if( position < _position.min ){
     newPos = _position.min ;
 
@@ -62,9 +64,18 @@ void StuServo::stuWrite( int position ){
     newPos =  position ;
   }
 
-  write( newPos );
-  delay(abs(newPos - curPos));
+  int diff = newPos - curPos;
+  int sign = 1;
+  if( diff < 0){
+    sign = -1;
+    diff *= sign;
+  }
 
+  while( curPos != newPos ){
+    write( curPos );
+    curPos += sign;
+    delay(1);
+  }
 
 
 }
@@ -77,9 +88,4 @@ int StuServo::getMin( void ) const {
 
 int StuServo::getMax( void ) const {
   return _position.max ;
-}
-
-int StuServo::readMicroseconds( void ) const{
-  return _microSeconds;
-
 }
