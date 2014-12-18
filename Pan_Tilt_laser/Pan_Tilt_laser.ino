@@ -39,14 +39,14 @@
 #include <Gaussian.h>
 #include "stu_dial.h"
 
-
+/*
 #ifdef SERIAL_DEBUG
 #ifdef EMBED
   #include <SoftwareSerial.h>
   SoftwareSerial swSerial(SWS_DEBUG_RX, SWS_DEBUG_TX);
 #endif
 #endif
-
+*/
 
 #define MIN_LOOP_TIME 5
 
@@ -133,13 +133,13 @@ void setup() {
 
 
 //        addLinkToBack(speed, previous_state_probability, next_state_probability)
-  lmSpeed.addLinkToBack( 6,  5, 35 ); // Slow
+  lmSpeed.addLinkToBack( 2,  5, 35 ); // Slow
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 8, 25, 35 ); // Med
+  lmSpeed.addLinkToBack( 4, 25, 35 ); // Med
 //                           ^  ||
 //                           |  \/
-  lmSpeed.addLinkToBack( 10, 35, 25 ); // Fast
+  lmSpeed.addLinkToBack( 6, 35, 25 ); // Fast
 //                           ^  ||
 //                           |  \/
 //                          | Slow |
@@ -164,14 +164,13 @@ void setup() {
 
 void loop(){
 
-
-
-
   #ifdef SERIAL_DEBUG
   MY_SERIAL.println(panTilt.getState());
   #endif
 
-  if( minLoopTime.check( ELAPSE_RESTART ) && panTilt.getState() == STATE_RUN ){
+  if( minLoopTime.check( ELAPSE_RESTART )) {
+
+    if( panTilt.getState() == STATE_RUN ){
 
       panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
       panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
@@ -179,13 +178,11 @@ void loop(){
       if(markovShakeState == 2){
         panTilt.shake();
       }
-  }/*
-  else{
-    delay(10);
   }
-*/
-  panTilt.update();
+}
 
+  scheduler.run();
+  panTilt.update();
 
 }
 

@@ -26,9 +26,6 @@
 #include <Servo.h>
 
 
-#define MG995_MIN_MICRO 800
-#define MG995_MAX_MICRO 2400
-
 struct servoPos{
 
     int

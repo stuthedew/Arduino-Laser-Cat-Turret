@@ -58,3 +58,14 @@ laser runs before shutting off in sleep mode).
 /*------------------------------------------------------------------------*/
 /*                                                                        */
 /**************************************************************************/
+
+
+#define SERVO_MAX_LEFT 120
+#define SERVO_MAX_RIGHT 50
+#define SERVO_MAX_UP    0
+#define SERVO_MAX_DOWN  180
+
+#define LASER_MIDPOINT_OFFSET_X -30
+#define LASER_MIDPOINT_OFFSET_Y 0
+#define LASER_PROBABILITY_X     0
+#define LASER_PROBABILITY_Y     10

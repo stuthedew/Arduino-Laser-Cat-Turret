@@ -26,7 +26,9 @@ static settings_t off_state( 0, LED_OFF, LED_OFF, LED_OFF, STATE_OFF);
 static settings_t rest_state( 0, LED_BLINK, LED_ON, LED_OFF, STATE_REST);
 
 PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
-  _display( POWER_PIN,  CONT_PIN, INT_PIN ), posX( 50, 120, -30 ), posY( 7, 45, 0, 10),
+  _display( POWER_PIN,  CONT_PIN, INT_PIN ),
+  posX( SERVO_MAX_RIGHT, SERVO_MAX_LEFT, LASER_MIDPOINT_OFFSET_X, LASER_PROBABILITY_X ),
+  posY( SERVO_MAX_DOWN, SERVO_MAX_UP, LASER_MIDPOINT_OFFSET_Y, LASER_PROBABILITY_Y),
   _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &int_state, INTERMITTENT_ON_TIME, &rest_state, INTERMITTENT_OFF_TIME ), _sleepMode(  &sleep_state, MINUTES_BEFORE_SLEEP, &off_state ), _stateChangeTask(), _currentState(&_currentMode->currentSettings->state->id) {
 
 
@@ -225,7 +227,7 @@ void PanTilt::update( void ){
   if(mode != _mode){ //don't change mode if the same as current.
     PanTilt::_setMode( mode ) ;
   }
-  scheduler.run();
+
 
   _display.update();
   if( getState() == STATE_RUN){
@@ -238,11 +240,6 @@ void PanTilt::_updateAngles( void ){
 
   _xServo.stuWrite(posX.angle);
   _yServo.stuWrite(posY.angle);
-  delay(abs((posX.angle - oldXangle)+15));
-  delay(abs((posY.angle - oldYangle)+15));
-
-  oldXangle = posX.angle;
-  oldYangle = posY.angle;
 
 }
 

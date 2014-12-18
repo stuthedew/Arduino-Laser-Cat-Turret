@@ -31,8 +31,9 @@ void StuServo::setPowerPin( uint8_t powerPin ){
 
 
 void StuServo::setCalibration( int min, int max ){
-  _position.min = map(min, 0, 180, MG995_MIN_MICRO, MG995_MAX_MICRO);
-  _position.max = map(max, 0, 180, MG995_MIN_MICRO, MG995_MAX_MICRO);
+  _position.min = min;
+  _position.max = max;
+
 }
 
 void StuServo::pause( void ){
@@ -41,25 +42,31 @@ void StuServo::pause( void ){
 
 void StuServo::wake( void ){
   digitalWrite( _powerPin, HIGH ) ;
-  delay( 5 ); // Allow capacitor to charge.
+  delay( 15 ); // Allow capacitor to charge.
 }
 
 
-void StuServo::stuWrite( int pos ){
-  int position = map(pos, 0, 180, MG995_MIN_MICRO, MG995_MAX_MICRO);
-
+void StuServo::stuWrite( int position ){
+  int curPos = read();
+  int newPos;
   if( position < _position.min ){
-    //write(_position.min) ;
-    writeMicroseconds(_position.min) ;
+    newPos = _position.min ;
+
   }
   else if( position > _position.max ){
-    writeMicroseconds( _position.max );
+
+    newPos = _position.max ;
   }
   else{
-    writeMicroseconds( position ) ;
+
+    newPos =  position ;
   }
-  delay(abs(position - _microSeconds));
-  _microSeconds = position;
+
+  write( newPos );
+  delay(abs(newPos - curPos));
+
+
+
 }
 
 
