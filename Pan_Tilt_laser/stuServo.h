@@ -51,8 +51,6 @@ public:
       getMin( void ) const ,
       getMax( void ) const ;
 
-    int
-      readMicroseconds( void ) const;
 
 private:
 

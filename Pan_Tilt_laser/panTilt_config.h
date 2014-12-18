@@ -32,22 +32,13 @@
 #define DIAL_PIN A2
 
 
-#define SWS_DEBUG_RX 5
-#define SWS_DEBUG_TX 6
-
 #ifdef SERIAL_DEBUG
 
-#ifndef EMBED
 #define MY_SERIAL Serial
 
-#else
-#include <SoftwareSerial.h>
-extern SoftwareSerial swSerial;
-#define MY_SERIAL swSerial
 
 #endif
 
-#endif
 
 
 

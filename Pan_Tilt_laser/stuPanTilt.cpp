@@ -27,8 +27,8 @@ static settings_t rest_state( 0, LED_BLINK, LED_ON, LED_OFF, STATE_REST);
 
 PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
   _display( POWER_PIN,  CONT_PIN, INT_PIN ),
-  posX( SERVO_MAX_RIGHT, SERVO_MAX_LEFT, LASER_MIDPOINT_OFFSET_X, LASER_PROBABILITY_X ),
-  posY( SERVO_MAX_DOWN, SERVO_MAX_UP, LASER_MIDPOINT_OFFSET_Y, LASER_PROBABILITY_Y),
+  posX( SERVO_MIN_X_AXIS, SERVO_MAX_X_AXIS, -LASER_MIDPOINT_OFFSET_X-7, LASER_PROBABILITY_X ),
+  posY( SERVO_MIN_Y_AXIS, SERVO_MAX_Y_AXIS, -LASER_MIDPOINT_OFFSET_Y, LASER_PROBABILITY_Y),
   _laser(LASER_PIN), _offMode( &off_state ), _contMode( &on_state ), _intMode( &int_state, INTERMITTENT_ON_TIME, &rest_state, INTERMITTENT_OFF_TIME ), _sleepMode(  &sleep_state, MINUTES_BEFORE_SLEEP, &off_state ), _stateChangeTask(), _currentState(&_currentMode->currentSettings->state->id) {
 
 
@@ -49,7 +49,6 @@ void PanTilt::begin( void ){
   PanTilt::_setMode(MODE_OFF);
   scheduler.begin() ;
   _laser.begin();
-  delay( 500 ) ;
   _xServo.attach(_xPin) ;
   _yServo.attach(_yPin) ;
   _xServo.setPowerPin( X_PWR_PIN ) ;
@@ -63,21 +62,24 @@ void PanTilt::begin( void ){
 
   posX.angle = posX.minAngle;
   posY.angle = posY.minAngle;
-  PanTilt::update();
-  delay(500);
+  _updateAngles();
+  delay(1200);
 
   posX.angle = posX.maxAngle;
   posY.angle = posY.maxAngle;
-  PanTilt::update();
-  delay(500);
+  _updateAngles();
+  delay(1300);
 
-  _laser.fire(1);
   posX.angle = posX.midAngle;
   posY.angle = posY.midAngle;
-  PanTilt::update();
+  _updateAngles();
+  delay(450);
+  _laser.fire(1);
 
-  delay(500);
+  delay(2000);
   _laser.fire(0);
+  PanTilt::_setMode(MODE_OFF);
+
 
 }
 
@@ -88,6 +90,11 @@ void PanTilt::_setMode( runmode_e mode ){
   switch(mode){
 
     case MODE_OFF:
+      _laser.fire(0);
+      posX.angle = posX.midAngle;
+      posY.angle = posY.midAngle;
+      _updateAngles();
+      delay(250);
       _setState(&off_state);
       _currentMode = &_offMode;
 
@@ -236,7 +243,6 @@ void PanTilt::update( void ){
 }
 
 void PanTilt::_updateAngles( void ){
-  static int oldXangle, oldYangle ;
 
   _xServo.stuWrite(posX.angle);
   _yServo.stuWrite(posY.angle);
@@ -253,7 +259,7 @@ void PanTilt::pause( unsigned long pauseVal ){
 }
 
 void PanTilt::shake( void ){
-  int moveVal = 10;
+  int moveVal = 20;
   const int shakeDelay = 0;
   posX.angle += moveVal;
   PanTilt::update();
