@@ -46,7 +46,7 @@ PanTilt::PanTilt(uint8_t xPin, uint8_t yPin ):_xServo(), _yServo(),
 }
 
 void PanTilt::begin( void ){
-  PanTilt::_setMode(MODE_OFF);
+
   scheduler.begin() ;
   _laser.begin();
   _xServo.attach(_xPin) ;
@@ -62,13 +62,16 @@ void PanTilt::begin( void ){
 
   posX.angle = posX.minAngle;
   posY.angle = posY.minAngle;
+
   _updateAngles();
-  delay(1200);
+  delay(800);
 
   posX.angle = posX.maxAngle;
   posY.angle = posY.maxAngle;
   _updateAngles();
-  delay(1300);
+  delay(900);
+
+
 
   posX.angle = posX.midAngle;
   posY.angle = posY.midAngle;
@@ -78,7 +81,6 @@ void PanTilt::begin( void ){
 
   delay(2000);
   _laser.fire(0);
-  PanTilt::_setMode(MODE_OFF);
 
 
 }
@@ -270,6 +272,9 @@ void PanTilt::_updateAngles( void ){
 }
 
 void PanTilt::pause( unsigned long pauseVal, bool laserState ){
+  if(PanTilt::getState() != STATE_RUN){
+    return;
+  }
   _laser.fire(laserState);
   _xServo.pause();
   _yServo.pause();
