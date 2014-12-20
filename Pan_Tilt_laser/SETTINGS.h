@@ -61,14 +61,14 @@ laser runs before shutting off in sleep mode).
 
 
 
-#define SERVO_MIN_X_AXIS 20
-#define SERVO_MAX_X_AXIS 120
+#define SERVO_MIN_X_AXIS 30
+#define SERVO_MAX_X_AXIS 110
 
 #define SERVO_MIN_Y_AXIS    110
-#define SERVO_MAX_Y_AXIS    150
+#define SERVO_MAX_Y_AXIS    140
 
 
 #define LASER_MIDPOINT_OFFSET_X 0
 #define LASER_MIDPOINT_OFFSET_Y 0
 #define LASER_PROBABILITY_X     0
-#define LASER_PROBABILITY_Y     0
+#define LASER_PROBABILITY_Y     5
