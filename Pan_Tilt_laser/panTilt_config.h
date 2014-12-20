@@ -39,9 +39,6 @@
 
 #endif
 
-
-
-
 // Global Run Mode enum
 typedef enum {
   MODE_OFF = 0      ,
