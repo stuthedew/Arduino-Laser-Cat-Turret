@@ -92,12 +92,19 @@ void offCB(){
 
 void runCB(){
 
-  pauseTask.enable();
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("RUN CALLBACK"));
+  #endif
+
+  setNextPauseTime();
 
 }
 
 void restCB(){
 
+  #ifdef SERIAL_DEBUG
+  MY_SERIAL.println(F("REST CALLBACK"));
+  #endif
 
   return;
 }
@@ -105,8 +112,12 @@ void restCB(){
 
 void pauseCB(){
 
-
   pauseTask.disable();
+
+  #ifdef SERIAL_DEBUG
+    MY_SERIAL.println(F("PAUSE CALLBACK"));
+  #endif
+
   panTilt.pause( markovPause(), !!(random()%4) );
 
   setNextPauseTime();
