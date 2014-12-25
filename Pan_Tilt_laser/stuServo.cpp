@@ -30,8 +30,7 @@ void StuServo::setCalibration(int min, int max){
 }
 
 
-void StuServo::stuWrite(int position){
-  void StuServo::stuWrite( int position ){
+void StuServo::stuWrite( int position ){
     int curPos = read();
     int newPos;
 
@@ -61,9 +60,6 @@ void StuServo::stuWrite(int position){
       curPos += sign;
       delay(1);
     }
-
-
-  }
 }
 
 int StuServo::getMin() const {
