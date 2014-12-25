@@ -31,17 +31,39 @@ void StuServo::setCalibration(int min, int max){
 
 
 void StuServo::stuWrite(int position){
+  void StuServo::stuWrite( int position ){
+    int curPos = read();
+    int newPos;
 
-  if(position < _position.min){
-    write(_position.min);
-  }
-  else if(position > _position.max){
-    write(_position.max);
-  }
-  else{
-    write(position);
-  }
 
+    if( position < _position.min ){
+      newPos = _position.min ;
+
+    }
+    else if( position > _position.max ){
+
+      newPos = _position.max ;
+    }
+    else{
+
+      newPos =  position ;
+    }
+
+    int diff = newPos - curPos;
+    int sign = 1;
+    if( diff < 0){
+      sign = -1;
+      diff *= sign;
+    }
+
+    while( curPos != newPos ){
+      write( curPos );
+      curPos += sign;
+      delay(1);
+    }
+
+
+  }
 }
 
 int StuServo::getMin() const {
