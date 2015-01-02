@@ -1,35 +1,35 @@
-/*************************************************************************/
+/**************************************************************************/
 /*!
-    @file     Pan_Tilt__laser.ino
-    @author   Stuart Feichtinger
-    @license  MIT (see license.txt)
+@file     Pan_Tilt__laser.ino
+@author   Stuart Feichtinger
+@license  MIT (see license.txt)
 
-    Main program running an automatic laser-turret cat toy using a pan-tilt
-    rig (https://www.adafruit.com/products/1967) and laser diode
-    (https://www.adafruit.com/products/1054). Random laser path, speed
-    and pauses determined by homebrew Markov chain algorithm.
+Main program running an automatic laser-turret cat toy using a pan-tilt
+rig (https://www.adafruit.com/products/1967) and laser diode
+(https://www.adafruit.com/products/1054). Random laser path, speed
+and pauses determined by homebrew Markov chain algorithm.
 
 
-    @section  HISTORY
-    v1.0.0 - First release
-    v1.1.0 - Added Markov-based speed control
-    v1.2.0 - Added Markov-based pause length/frequency
-    v1.2.1 - Added Heartbeat during pause
-    v1.3.0 - Added laser shake to enhance cat enjoyment
-    v1.3.1 - Changed probability polling frequency to once a second
-    v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
-    v1.5.0 - Added scheduler and gaussian library for random values
-    v1.5.1 - Converted speed and direction function to scheduled task
-    v1.6.0 - Switched Markov speed change to Markov handler using circuler
-             linked list.
-    v1.6.1 - Switched Markov state to Markov handler
-    v1.7.0 - Moved control of timing to master Pan-Tilt Class
-    v1.8.0 - Switched to a state-machine model.
-    v1.9.0 - Final Version
-    v1.9.1 - Tweaked minimum Y servo value
-    v1.9.2 - Fixed bug where pauseTask was still enabled when off.
+@section  HISTORY
+v1.0.0 - First release
+v1.1.0 - Added Markov-based speed control
+v1.2.0 - Added Markov-based pause length/frequency
+v1.2.1 - Added Heartbeat during pause
+v1.3.0 - Added laser shake to enhance cat enjoyment
+v1.3.1 - Changed probability polling frequency to once a second
+v1.4.0 - Added ON/OFF Missile Switch from Sparkfun
+v1.5.0 - Added scheduler and gaussian library for random values
+v1.5.1 - Converted speed and direction function to scheduled task
+v1.6.0 - Switched Markov speed change to Markov handler using circuler
+linked list.
+v1.6.1 - Switched Markov state to Markov handler
+v1.7.0 - Moved control of timing to master Pan-Tilt Class
+v1.8.0 - Switched to a state-machine model.
+v1.9.0 - Final Version
+v1.9.1 - Tweaked minimum Y servo value
+v1.9.2 - Fixed bug where pauseTask was still enabled when off.
 */
-/*************************************************************************/
+/**************************************************************************/
 
 #include "panTilt_config.h"
 #include "stuPanTilt.h"
@@ -115,7 +115,7 @@ void pauseCB(){
   pauseTask.disable();
 
   #ifdef SERIAL_DEBUG
-    MY_SERIAL.println(F("PAUSE CALLBACK"));
+  MY_SERIAL.println(F("PAUSE CALLBACK"));
   #endif
 
   panTilt.pause( markovPause(), !!(random()%4) );
@@ -136,15 +136,11 @@ void panTiltCB(){
 }
 
 void setup() {
-<<<<<<< HEAD
-  //Serial.begin(BAUD_RATE);
-=======
->>>>>>> Leah
 
 
   #ifdef SERIAL_DEBUG
-    MY_SERIAL.begin(BAUD_RATE);
-    MY_SERIAL.println(F("setup starting..."));
+  MY_SERIAL.begin(BAUD_RATE);
+  MY_SERIAL.println(F("setup starting..."));
   #endif
 
   panTilt.begin();
@@ -157,66 +153,41 @@ void setup() {
   taskPtr->changeCallback(panTiltCB);
 
 
-//        addLinkToBack(speed, previous_state_probability, next_state_probability)
+  //        addLinkToBack(speed, previous_state_probability, next_state_probability)
   lmSpeed.addLinkToBack( 1,  5, 35 ); // Slow
-//                           ^  ||
-//                           |  \/
+  //                           ^  ||
+  //                           |  \/
   lmSpeed.addLinkToBack( 2, 25, 35 ); // Med
-//                           ^  ||
-//                           |  \/
+  //                           ^  ||
+  //                           |  \/
   lmSpeed.addLinkToBack( 3, 35, 25 ); // Fast
-//                           ^  ||
-//                           |  \/
-//                          | Slow |
+  //                           ^  ||
+  //                           |  \/
+  //                          | Slow |
 
 
-//        addLinkToBack(state, previous_state_probability, next_state_probability)
+  //        addLinkToBack(state, previous_state_probability, next_state_probability)
   lmShake.addLinkToBack( 1,  0, 2 ); // No shake
-//                           ^  ||
-//                           |  \/
+  //                           ^  ||
+  //                           |  \/
   lmShake.addLinkToBack( 2, 40, 0 ); // Shake
 
   randomSeed(analogRead(5));
 
 
-<<<<<<< HEAD
-  if(!mSwitch.switchState()) {
-    mSwitch.ledState(0);
-    while(!mSwitch.switchState()){
-      delay(50);
-      }
-  }
-
-  panTilt.begin();
-
-  //Serial.println(F("setup starting..."));
-  mSwitch.ledState(1);
-=======
   scheduler.addEvent(&pauseTask);
   scheduler.addEvent(&updateMarkovTask);
->>>>>>> Leah
 
 
 
-#ifdef SERIAL_DEBUG
+  #ifdef SERIAL_DEBUG
   MY_SERIAL.println(F("setup complete"));
-#endif
+  #endif
 
-setNextPauseTime();
+  setNextPauseTime();
 
 }
 
-<<<<<<< HEAD
-  panTiltX.angle = panTiltX.midAngle;
-  panTiltY.angle = panTiltY.midAngle;
-  panTilt.updateAngles();
-
-  delay(1000);
-  laser.fire(1);
-
-  //Serial.println(F("setup complete"));
-=======
->>>>>>> Leah
 
 void loop(){
 
@@ -226,23 +197,19 @@ void loop(){
   #endif
 
 
-    if( panTilt.getState() == STATE_RUN ){
-      if(!pauseTask.enabled()){
-        pauseTask.enable();
+  if( panTilt.getState() == STATE_RUN ){
+    if(!pauseTask.enabled()){
+      pauseTask.enable();
 
-      }
+    }
 
-<<<<<<< HEAD
-    delay(20);
-=======
-      panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
-      panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
->>>>>>> Leah
+    panTilt.posX.angle = getDeltaPosition(&panTilt.posX, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posX.angle;
+    panTilt.posY.angle = getDeltaPosition(&panTilt.posY, changeVal, DIRECTION_CHANGE_PROBABILITY) + panTilt.posY.angle;
 
 
-      if(markovShakeState == 2){
-        panTilt.shake();
-      }
+    if(markovShakeState == 2){
+      panTilt.shake();
+    }
   }
 
   else if(pauseTask.enabled()){
@@ -258,22 +225,22 @@ void loop(){
 
 int getMarkovDirection(panTiltPos_t *pt, int changeProb){
 
-    int prob = changeProb;
+  int prob = changeProb;
 
-    if(pt->dir == 0){
-      pt->dir = 1;
-    }
-
-    if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
-      prob += abs(pt->midAngle - pt->angle) * max(pt->probOffset, 1);
-
-    }
-
-    if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
-      pt->dir *= -1;
-    }
-    return pt->dir;
+  if(pt->dir == 0){
+    pt->dir = 1;
   }
+
+  if((pt->dir == 1 && pt->angle >= pt->midAngle) || (pt->dir == -1 && pt->angle <= pt->midAngle)){
+    prob += abs(pt->midAngle - pt->angle) * max(pt->probOffset, 1);
+
+  }
+
+  if(random(1001) <= prob << 1 || (pt->angle >= pt->maxAngle && pt->dir == 1) || pt->angle <= pt->minAngle && pt->dir == -1){
+    pt->dir *= -1;
+  }
+  return pt->dir;
+}
 
 
 int getDeltaPosition(panTiltPos_t *pt, int funcChangeVal, int changeProb){
