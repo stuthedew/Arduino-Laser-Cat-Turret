@@ -15,15 +15,13 @@
 /**************************************************************************/
 #pragma once
 
-#define LINKED_LIST_SIZE 5
-
-#ifdef ARDUINO
+//#ifdef ARDUINO
 #include "Arduino.h"
-#endif
+//#endif
 
 #include <assert.h>
 
-namespace stu{
+  #define LINKED_LIST_SIZE 5
 
 struct markovLink_t;
 
@@ -71,5 +69,3 @@ private:
         int8_t           _itr ;
 
 };
-
-}// end namespace

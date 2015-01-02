@@ -1,32 +1,48 @@
 #pragma once
 
-#define BAUD_RATE 115200
+#include "Arduino.h"
 
 
-#include <Arduino.h>
+#define EMBED
 
-#include <Servo.h>
-#include <math.h>
-#include "stuServo.h"
-#include "stuPanTilt.h"
-#include "stuLaser.h"
-#include "stu_scheduler.h"
-#include "missileswitch.h"
-#include "stu_gauss.h"
-#include <Gaussian.h>
-#include "stutility.h"
-#include <assert.h>
-#include "stuMarkov.h"
 
-using namespace stu;
+//#define SERIAL_DEBUG
 
-#define MS_SWITCH_PIN 3
-#define MS_LED_PIN 4
 
-#define LASER_PIN 5
-
-#define SERVO_X_PIN A0
-#define SERVO_Y_PIN A1
-
+#ifdef SERIAL_DEBUG
+  #define BAUD_RATE 9600
+#endif
 
 #define DIRECTION_CHANGE_PROBABILITY 15
+
+
+// Servo pins
+#define X_PWR_PIN   A3
+#define Y_PWR_PIN   A4
+#define SERVO_X_PIN A0    // PWM Pins
+#define SERVO_Y_PIN A1
+
+//LED power pins
+#define POWER_PIN 8 // Power lED pin
+#define CONT_PIN  4 // Continuous LED pin
+#define INT_PIN   3 // Intermittent LED pin
+
+#define LASER_PIN 9
+
+#define DIAL_PIN A2
+
+
+#ifdef SERIAL_DEBUG
+
+#define MY_SERIAL Serial
+
+
+#endif
+
+// Global Run Mode enum
+typedef enum {
+  MODE_OFF = 0      ,
+  MODE_CONTINUOUS   ,
+  MODE_INTERMITTENT ,
+  MODE_SLEEP
+}runmode_e;

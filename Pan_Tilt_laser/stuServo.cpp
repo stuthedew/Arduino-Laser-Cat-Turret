@@ -11,26 +11,43 @@
 
     @section  HISTORY
     v0.0.1 - First release
+    v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
+             rotation.
+    v0.0.3 - Added 5 microsecond delay after wake to allow capacitors to charge.
 
 */
 /**************************************************************************/
 
 #include "stuServo.h"
 
-void StuServo::calibrate(){
 
+void StuServo::setPowerPin( uint8_t powerPin ){
+
+  _powerPin = powerPin ;
+  pinMode( _powerPin, OUTPUT ) ;
+  digitalWrite( _powerPin, HIGH ) ;
 
 }
 
-void StuServo::setCalibration(int min, int max){
+
+void StuServo::setCalibration( int min, int max ){
   _position.min = min;
   _position.max = max;
 
+}
 
+void StuServo::pause( void ){
+  digitalWrite( _powerPin, LOW ) ;
+}
+
+void StuServo::wake( void ){
+  digitalWrite( _powerPin, HIGH ) ;
+  delay(10);
 }
 
 
 void StuServo::stuWrite( int position ){
+<<<<<<< HEAD
     int curPos = read();
     int newPos;
 
@@ -60,12 +77,47 @@ void StuServo::stuWrite( int position ){
       curPos += sign;
       delay(1);
     }
+=======
+  int curPos = read();
+  int newPos;
+
+
+  if( position < _position.min ){
+    newPos = _position.min ;
+
+  }
+  else if( position > _position.max ){
+
+    newPos = _position.max ;
+  }
+  else{
+
+    newPos =  position ;
+  }
+
+  int diff = newPos - curPos;
+  int sign = 1;
+  if( diff < 0){
+    sign = -1;
+    diff *= sign;
+  }
+
+  while( curPos != newPos ){
+    write( curPos );
+    curPos += sign;
+    delay(1);
+  }
+
+
+>>>>>>> Leah
 }
 
-int StuServo::getMin() const {
-  return _position.min;
+
+int StuServo::getMin( void ) const {
+  return _position.min ;
 }
 
-int StuServo::getMax() const {
-  return _position.max;
+
+int StuServo::getMax( void ) const {
+  return _position.max ;
 }
