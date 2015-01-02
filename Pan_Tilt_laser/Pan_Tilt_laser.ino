@@ -93,7 +93,7 @@ void sleepCB(){
 
 
 void setup() {
-  Serial.begin(BAUD_RATE);
+  //Serial.begin(BAUD_RATE);
 
   mSwitch.begin();
 
@@ -134,7 +134,7 @@ void setup() {
 
   panTilt.begin();
 
-  Serial.println(F("setup starting..."));
+  //Serial.println(F("setup starting..."));
   mSwitch.ledState(1);
 
 
@@ -158,7 +158,7 @@ void setup() {
   delay(1000);
   laser.fire(1);
 
-  Serial.println(F("setup complete"));
+  //Serial.println(F("setup complete"));
 
   setNextPauseTime();
   setNextRestTime();
@@ -182,7 +182,7 @@ void loop() {
     panTiltY.angle = 90;
     panTilt.updateAngles();
 
-    delay(50);
+    delay(20);
 
     panTilt.detach();
     while(!mSwitch.switchState()){
