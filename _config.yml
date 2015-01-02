@@ -1,0 +1,8 @@
+# Site settings
+title: KIT-10 Distract-O-Matic
+email: stuart.feichtinger@gmail.com
+description: Arduino-based laser turret/automatic cat toy
+#baseurl: /Arduino-Laser-Cat-Turret # the subpath of your site, e.g. /blog/
+
+# Build settings
+highlighter: pygments
