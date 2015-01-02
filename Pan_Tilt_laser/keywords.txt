@@ -9,6 +9,7 @@
 
 StuScheduler	      KEYWORD1
 Task		            KEYWORD1
+Timer               KEYWORD1
 StuLaser	          KEYWORD1
 
 
