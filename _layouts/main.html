@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html>
+---
+layout: default
+---
 
-{% include head.html %}
-<link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
-<link rel="stylesheet" type="text/css" href="css/pygment_trac.css" media="screen">
-<link rel="stylesheet" type="text/css" href="css/print.css" media="print">
+<div class="main">
 
 <body>
+  <article class="page-content">
+    {{ content }}
+  </article>
+  
 
-  {% include header.html %}
-
-  <div class="page-content">
-    <div class="wrapper">
-      {{ content }}
-    </div>
-  </div>
-
-  {% include footer.html %}
 
 </body>
-
-</html>
+</div>
