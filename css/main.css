@@ -510,6 +510,10 @@ header h2 {
   color: #9ddcff;
   letter-spacing: 0;
 }
+.post-header{
+  background: none;
+  margin-bottom: 1em;
+}
 
 .inner {
   position: relative;
@@ -785,6 +789,7 @@ footer {
   margin-top: 40px;
   font-size: 13px;
   color: #aaa;
+  text-align: center;
   background: transparent url('../assets/images/bg_hr.png') 0 0 no-repeat;
 }
 

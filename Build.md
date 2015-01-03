@@ -1,6 +1,7 @@
 ---
-layout: main
+layout: page
 title: Build Process
+permalink: /build/
 ---
 
 Test page

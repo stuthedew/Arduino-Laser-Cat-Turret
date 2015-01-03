@@ -6,8 +6,20 @@ layout: default
 
 <body>
   <article class="page-content">
-    
-    {{ content }}
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+
+        <section id="main-content">
+          {{ content }}
+
+        </section>
+
+        {% include sidebar.html %}
+
+      </div>
+
+    </div>
   </article>
 
 

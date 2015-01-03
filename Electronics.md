@@ -1,6 +1,7 @@
 ---
-layout: main
+layout: page
 title: Electronics
+permalink: /electronics/
 ---
 
 Test page
