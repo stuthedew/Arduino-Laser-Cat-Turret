@@ -6,7 +6,7 @@ description: Arduino-based laser turret/automatic cat toy
 timezone: America/Chicago
 
 # Build settings
-baseurl: /project-name
+baseurl: /Arduino-Laser-Cat-Turret
 markdown: kramdown
 permalink: pretty
 
