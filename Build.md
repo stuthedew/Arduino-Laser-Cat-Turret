@@ -4,4 +4,4 @@ title: Build
 permalink: /build/
 ---
 
-Test page
+Build page
