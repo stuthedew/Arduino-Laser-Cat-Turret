@@ -6,7 +6,7 @@ description: Arduino-based laser turret/automatic cat toy
 timezone: America/Chicago
 
 # Build settings
-baseurl: "Arduino-Laser-Cat-Turret"
+baseurl: /project-name
 markdown: kramdown
 permalink: pretty
 
@@ -20,4 +20,4 @@ defaults:
       path: "" # an empty string here means all files in the project
     values:
       GitHubUserName: "stuthedew"
-      GitHubProjectName: /project-name
+      GitHubProjectName: "Arduino-Laser-Cat-Turret"
