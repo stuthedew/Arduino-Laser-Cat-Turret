@@ -20,4 +20,4 @@ defaults:
       path: "" # an empty string here means all files in the project
     values:
       GitHubUserName: "stuthedew"
-      GitHubProjectName: "Arduino-Laser-Cat-Turret"
+      GitHubProjectName: /project-name
