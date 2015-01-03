@@ -40,7 +40,7 @@ nav{
 nav li a{
   font-size: 1.5em;
   color: #fff;
-  margin: 2em 3em 2em 3em;
+  margin: 2em 1em 2em 1em;
   border: 3px solid white;
   border-radius: 10px;
   padding: 0.25em 1em 0.25em 1em;
@@ -490,10 +490,10 @@ header {
 }
 
 header h1 {
-  width: 540px;
+  width: 720px;
   margin-top: 0;
   margin-bottom: 0.2em;
-  font-size: 72px;
+  font-size: 64px;
   font-weight: normal;
   line-height: 1;
   color: #fff;

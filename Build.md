@@ -1,7 +1,6 @@
 ---
 layout: main
-title: Test Page
-
+title: Build Process
 ---
 
 Test page
