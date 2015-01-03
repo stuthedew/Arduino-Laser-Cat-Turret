@@ -30,8 +30,39 @@ body {
 * Correct `block` display not defined for `main` in IE 11.
 */
 
-#nav ul{margin:0;padding:0 1em 0 0;text-align:center}
-#nav li{display:inline;padding-left:1em}
+
+
+nav{
+  padding-top: 0.5em;
+  margin-top: 1em;
+  border-top: solid 1px #275da1;
+}
+nav li a{
+  font-size: 1.5em;
+  color: #fff;
+  margin: 2em 3em 2em 3em;
+  border: 3px solid white;
+  border-radius: 10px;
+  padding: 0.25em 1em 0.25em 1em;
+}
+
+.primary-nav:hover{
+  color: #9ddcff;
+  border-color: #9ddcff;
+  outline: 0;
+}
+
+nav ul{
+  padding-top: 0em;
+  text-align: center;
+  }
+
+nav li{
+  display: inline;
+  list-style-type: none;
+
+  }
+
 
 article,
 aside,
@@ -42,6 +73,7 @@ footer,
 header,
 hgroup,
 main,
+nav,
 menu,
 section,
 summary {
@@ -450,8 +482,8 @@ a:hover {
 }
 
 header {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 2em;
+  padding-bottom: 0.5em;
   font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
   background: #2e7bcf url(../assets/images/header-bg.jpg) 0 0 repeat-x;
   border-bottom: solid 1px #275da1;
@@ -745,7 +777,7 @@ dl dd {
 
 footer {
   border-top: 1px solid lighten(#828282, 40%);
-  padding: 30px; 0;
+  padding: 30px;
   /*
   padding-top: 20px;
   padding-bottom: 30px;
@@ -765,7 +797,7 @@ footer a:hover {
 
 .footer-heading {
   font-size: 18px;
-  margin-bottom: 30px; / 2;
+  margin-bottom: 15;
 }
 
 .footer-col-wrapper {
