@@ -794,7 +794,7 @@ footer a {
 footer a:hover {
   color: #444;
 }
-
+/*
 .footer-heading {
   font-size: 18px;
   margin-bottom: 15;
@@ -827,7 +827,7 @@ footer a:hover {
   width: -webkit-calc(45% - (#{30px} / 2));
   width:         calc(45% - (#{30px} / 2));
 }
-
+*/
 /* MISC */
 .clearfix:after {
   display: block;
