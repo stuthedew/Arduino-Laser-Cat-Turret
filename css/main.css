@@ -30,6 +30,9 @@ body {
 * Correct `block` display not defined for `main` in IE 11.
 */
 
+#nav ul{margin:0;padding:0 1em 0 0;text-align:center}
+#nav li{display:inline;padding-left:1em}
+
 article,
 aside,
 details,
@@ -40,7 +43,6 @@ header,
 hgroup,
 main,
 menu,
-nav,
 section,
 summary {
   display: block;
