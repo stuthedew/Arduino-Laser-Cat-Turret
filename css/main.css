@@ -742,8 +742,12 @@ dl dd {
 }
 
 footer {
+  border-top: 1px solid lighten(#828282, 40%);
+  padding: 30px; 0;
+  /*
   padding-top: 20px;
   padding-bottom: 30px;
+  */
   margin-top: 40px;
   font-size: 13px;
   color: #aaa;
@@ -755,6 +759,39 @@ footer a {
 }
 footer a:hover {
   color: #444;
+}
+
+.footer-heading {
+  font-size: 18px;
+  margin-bottom: 30px; / 2;
+}
+
+.footer-col-wrapper {
+  font-size: 15px;
+  color: #828282
+  margin-left: -15px;
+  @extend %clearfix;
+}
+
+.footer-col {
+  float: left;
+  margin-bottom: 15px;
+  padding-left: 15px;
+}
+
+.footer-col-1 {
+  width: -webkit-calc(35% - (#{30px} / 2));
+  width:         calc(35% - (#{30px} / 2));
+}
+
+.footer-col-2 {
+  width: -webkit-calc(20% - (#{30px} / 2));
+  width:         calc(20% - (#{30px} / 2));
+}
+
+.footer-col-3 {
+  width: -webkit-calc(45% - (#{30px} / 2));
+  width:         calc(45% - (#{30px} / 2));
 }
 
 /* MISC */
