@@ -4,4 +4,4 @@ title: Electronics
 permalink: /electronics/
 ---
 
-Test page
+Electronics page
