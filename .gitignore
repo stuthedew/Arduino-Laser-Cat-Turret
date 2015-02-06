@@ -26,3 +26,5 @@ Temporary Items
 adafruit_products_protrink5vschm.png
 .sass-cache
 Eagle files/LaenPCBOrder.dru
+
+*.b#1

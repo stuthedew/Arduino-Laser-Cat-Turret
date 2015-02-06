@@ -192,6 +192,7 @@
 <wire x1="1.016" y1="26.162" x2="3.556" y2="26.162" width="0.4064" layer="25"/>
 <wire x1="3.556" y1="26.162" x2="3.556" y2="26.289" width="0.4064" layer="25"/>
 <wire x1="43.18" y1="0" x2="43.18" y2="43.18" width="0" layer="20"/>
+<text x="31.242" y="1.397" size="1.778" layer="25">v1.1</text>
 </plain>
 <libraries>
 <library name="adafruit">
