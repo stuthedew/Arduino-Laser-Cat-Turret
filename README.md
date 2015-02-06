@@ -9,3 +9,4 @@ and pauses determined by homebrew Markov chain algorithm.
 ![alt tag](https://raw.githubusercontent.com/stuthedew/Arduino-Laser-Cat-Turret/master/Extra/Images/Laser4.jpg)
 
 ![alt tag](https://raw.githubusercontent.com/stuthedew/Arduino-Laser-Cat-Turret/master/Extra/Images/Laser3.jpg)
+(The panel text was made using QCAD and then printed (horiztonally reversed) onto [transparent inkjet paper](http://www.amazon.com/gp/product/B000XALNPI)). 
