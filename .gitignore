@@ -1,6 +1,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+.sass-cache
 
 # Icon must end with two \r
 Icon
@@ -20,3 +21,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 Pan_Tilt_laser/vector_test/macVectorTest
+
+*.s#*
+*.b#*
+
+*.bts
