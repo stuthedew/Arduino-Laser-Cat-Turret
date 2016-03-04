@@ -11,13 +11,12 @@
 
 
     @section  HISTORY
-    v1.0 - First release
+    v0.0.1 - First release
 
 */
 /**************************************************************************/
 
-#ifndef _STULASER_H_
-#define _STULASER_H_
+#pragma once
 
 #include "Arduino.h"
 #include <AVector.h>
@@ -39,8 +38,9 @@ class StuLaser {
 
 public:
 
-  StuLaser(uint8_t laserPin);
+  StuLaser( uint8_t laserPin );
 
+<<<<<<< HEAD
   void
     begin(),
     fire(boolean state),
@@ -86,6 +86,15 @@ private:
 
 
 };
+=======
+    void
+      begin( void ) ,
+      fire( boolean state ) ;
 
+private:
+>>>>>>> master
 
-#endif
+    uint8_t
+      _pin ;
+
+};

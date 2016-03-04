@@ -10,75 +10,134 @@
 
 
     @section  HISTORY
-    v1.0 - First release
+    v0.0.1 - First release
 
 */
 /**************************************************************************/
-
-#ifndef _STU_SCHEDULER_H_
-#define _STU_SCHEDULER_H_
+#pragma once
 
 #include "Arduino.h"
+#include "panTilt_config.h"
+#include <Time.h>
 
+#define MAX_EVENTS 20
 
 typedef void (*Callback)(void);
 
-class Task{
+//action on elpased timer
+typedef enum{
+
+  ELAPSE_RESTART,  // Restart if timer elapsed
+  ELAPSE_DISABLE   // Disable if timer elapsed
+
+}timer_input_e;
+
+class Event{
+
 public:
 
-  Task(void (*callback)(), unsigned long interval=100, bool enable=1);
+    void
+      resetPeriodic( void ) ,
+      setInterval( time_t mSec ) ,
+      setNextEventTime( time_t mSec ) ,
+      disable( void ) ,
+      enable( void ) ;
 
-  void
-    resetPeriodic(),
-    setInterval(unsigned long mSec),
-    setNextRunTime(unsigned long mSec),
-    disable(),
-    enable(),
-    run(),
-    changeCallback(void (*callback)());
+    virtual void
+        run( void )=0 ;
 
-  bool
-    enabled();
+    bool
+      enabled( void ) const ;
 
-  unsigned long
-    nextRunTime();
+    time_t
+      getNextEventTime( void ) const ;
 
-private:
-  bool
-    _enabled;
+    bool
+      rolloverFlag ;
 
-  Callback
-    _callback;
 
-  unsigned long
-    _runNextAt,
-    _timeBetweenRuns;
+protected:
+    bool
+      _enabled ;
+
+
+    time_t
+      _endTime ,
+      _timeDelta ;
 
 };
 
+class Timer: public Event{
 
+public:
+
+    Timer( time_t interval = 0, bool enable = 0 ) ;
+
+    virtual void
+      run( void ) ;
+
+    void
+      start( void ) ,
+      stop( void ) ,
+      restart( void ) ;
+
+    bool
+      check( timer_input_e action = ELAPSE_DISABLE ) ;
+
+  private:
+    bool
+      _elapsed ;
+
+
+};
+
+class Task: public Event{
+
+public:
+
+    Task( void (*callback)(), time_t interval=100, bool enable=0 ) ;
+    Task( time_t interval = 100, bool enable = 0 ) ;
+
+
+    virtual void
+      run( void ) ;
+
+    void
+      changeCallback( void ( *callback )( void ) ) ;
+
+
+    time_t
+      nextRunTime( void ) const ;
+
+private:
+
+    Callback
+      _callback ;
+
+};
 
 class StuScheduler {
 
 public:
-  StuScheduler();
 
-  void
-    addTask(Task *t),
-    run(),
-    restart();
-
+    void
+      begin( void ) ,
+      addEvent( Event *e ) ,
+      run( void ) ,
+      restart( void ) ;
 
 
 private:
-  Task
-    *_Task[20];
 
-  uint8_t
-    _tItr;
+    Event
+      *_Event[ MAX_EVENTS ] ;
 
+    bool
+      _milliRolloverFlag ;
 
+    uint8_t
+      _tItr ;
 
 };
 
-#endif
+extern StuScheduler scheduler;

@@ -10,13 +10,15 @@
 
 
     @section  HISTORY
-    v1.0 - First release
+    v0.0.1 - First release
 
 */
 /**************************************************************************/
 
 #include "stu_gauss.h"
 
+
+StuGauss gauss;
 
 StuGauss::StuGauss():_gauss(){
 
@@ -27,6 +29,10 @@ unsigned long StuGauss::gRandom(unsigned long zero, double variance){
   _gauss.setVariance(variance);
   _gauss.setMean(zero);
   double temp = _gauss.random();
-  Serial.println(temp);
+
+  #ifdef GAUSS_DEBUG
+    MY_SERIAL.println(temp);
+  #endif
+
   return round(max(temp, 2));
 }
