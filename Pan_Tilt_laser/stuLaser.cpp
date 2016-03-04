@@ -12,7 +12,7 @@
 
 
     @section  HISTORY
-    v0.0.1 - First release
+    v1.0 - First release
 
 */
 /**************************************************************************/
@@ -28,7 +28,6 @@ StuLaser::StuLaser(uint8_t pin){
 
 }
 
-<<<<<<< HEAD
 void StuLaser::begin(){
   pinMode(_pin, OUTPUT);
   digitalWrite(_pin, HIGH);
@@ -109,16 +108,6 @@ return _servoAngle.hRad;
 int StuLaser::hAngleDeg(){
 return _servoAngle.hDeg;
 }
-=======
-
-void StuLaser::begin( void ){
-  pinMode( _pin, OUTPUT ) ;
-  digitalWrite( _pin, LOW );
-}
-
-void StuLaser::fire( boolean state ){
-digitalWrite( _pin, state );
->>>>>>> master
 
 void StuLaser::calcAngles(){
   _servoAngle.hRad = M_PI - asin(_hDot.y()/_hDot.y());

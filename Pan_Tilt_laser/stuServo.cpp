@@ -1,19 +1,16 @@
 
 /**************************************************************************/
 /*!
-@file     stuServo.cpp
-@author   Stuart Feichtinger
-@license  MIT (see license.txt)
+    @file     stuServo.cpp
+    @author   Stuart Feichtinger
+    @license  MIT (see license.txt)
 
-Augmented servo library based off of Arduino Servo library. Adds maximum
-and minimum angles, and prevents servo from going past them.
+    Augmented servo library based off of Arduino Servo library. Adds maximum
+    and minimum angles, and prevents servo from going past them.
 
 
-@section  HISTORY
-v0.0.1 - First release
-v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
-rotation.
-v0.0.3 - Added 5 microsecond delay after wake to allow capacitors to charge.
+    @section  HISTORY
+    v1.0 - First release
 
 */
 /**************************************************************************/
@@ -21,74 +18,36 @@ v0.0.3 - Added 5 microsecond delay after wake to allow capacitors to charge.
 #include "stuServo.h"
 
 
-void StuServo::setPowerPin( uint8_t powerPin ){
+void StuServo::calibrate(){
 
-  _powerPin = powerPin ;
-  pinMode( _powerPin, OUTPUT ) ;
-  digitalWrite( _powerPin, HIGH ) ;
 
 }
 
-
-void StuServo::setCalibration( int min, int max ){
+void StuServo::setCalibration(int min, int max){
   _position.min = min;
   _position.max = max;
 
-<<<<<<< HEAD
-=======
-}
-
-void StuServo::pause( void ){
-  digitalWrite( _powerPin, LOW ) ;
-}
-
-void StuServo::wake( void ){
-  digitalWrite( _powerPin, HIGH ) ;
-  delay(10);
->>>>>>> master
 }
 
 
-void StuServo::stuWrite( int position ){
-  int curPos = read();
-  int newPos;
+void StuServo::stuWrite(int position){
 
-
-  if( position < _position.min ){
-    newPos = _position.min ;
-
+  if(position < _position.min){
+    write(_position.min);
   }
-  else if( position > _position.max ){
-
-    newPos = _position.max ;
+  else if(position > _position.max){
+    write(_position.max);
   }
   else{
-
-    newPos =  position ;
+    write(position);
   }
-
-  int diff = newPos - curPos;
-  int sign = 1;
-  if( diff < 0){
-    sign = -1;
-    diff *= sign;
-  }
-
-  while( curPos != newPos ){
-    write( curPos );
-    curPos += sign;
-    delay(1);
-  }
-
 
 }
 
-
-int StuServo::getMin( void ) const {
-  return _position.min ;
+int StuServo::getMin(){
+  return _position.min;
 }
 
-
-int StuServo::getMax( void ) const {
-  return _position.max ;
+int StuServo::getMax(){
+  return _position.max;
 }

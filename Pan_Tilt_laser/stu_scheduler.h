@@ -10,134 +10,75 @@
 
 
     @section  HISTORY
-    v0.0.1 - First release
+    v1.0 - First release
 
 */
 /**************************************************************************/
-#pragma once
+
+#ifndef _STU_SCHEDULER_H_
+#define _STU_SCHEDULER_H_
 
 #include "Arduino.h"
-#include "panTilt_config.h"
-#include <Time.h>
 
-#define MAX_EVENTS 20
 
 typedef void (*Callback)(void);
 
-//action on elpased timer
-typedef enum{
-
-  ELAPSE_RESTART,  // Restart if timer elapsed
-  ELAPSE_DISABLE   // Disable if timer elapsed
-
-}timer_input_e;
-
-class Event{
-
+class Task{
 public:
 
-    void
-      resetPeriodic( void ) ,
-      setInterval( time_t mSec ) ,
-      setNextEventTime( time_t mSec ) ,
-      disable( void ) ,
-      enable( void ) ;
+  Task(void (*callback)(), unsigned long interval=100, bool enable=1);
 
-    virtual void
-        run( void )=0 ;
+  void
+    resetPeriodic(),
+    setInterval(unsigned long mSec),
+    setNextRunTime(unsigned long mSec),
+    disable(),
+    enable(),
+    run(),
+    changeCallback(void (*callback)());
 
-    bool
-      enabled( void ) const ;
+  bool
+    enabled();
 
-    time_t
-      getNextEventTime( void ) const ;
-
-    bool
-      rolloverFlag ;
-
-
-protected:
-    bool
-      _enabled ;
-
-
-    time_t
-      _endTime ,
-      _timeDelta ;
-
-};
-
-class Timer: public Event{
-
-public:
-
-    Timer( time_t interval = 0, bool enable = 0 ) ;
-
-    virtual void
-      run( void ) ;
-
-    void
-      start( void ) ,
-      stop( void ) ,
-      restart( void ) ;
-
-    bool
-      check( timer_input_e action = ELAPSE_DISABLE ) ;
-
-  private:
-    bool
-      _elapsed ;
-
-
-};
-
-class Task: public Event{
-
-public:
-
-    Task( void (*callback)(), time_t interval=100, bool enable=0 ) ;
-    Task( time_t interval = 100, bool enable = 0 ) ;
-
-
-    virtual void
-      run( void ) ;
-
-    void
-      changeCallback( void ( *callback )( void ) ) ;
-
-
-    time_t
-      nextRunTime( void ) const ;
+  unsigned long
+    nextRunTime();
 
 private:
+  bool
+    _enabled;
 
-    Callback
-      _callback ;
+  Callback
+    _callback;
+
+  unsigned long
+    _runNextAt,
+    _timeBetweenRuns;
 
 };
+
+
 
 class StuScheduler {
 
 public:
+  StuScheduler();
 
-    void
-      begin( void ) ,
-      addEvent( Event *e ) ,
-      run( void ) ,
-      restart( void ) ;
+  void
+    addTask(Task *t),
+    run(),
+    restart();
+
 
 
 private:
+  Task
+    *_Task[20];
 
-    Event
-      *_Event[ MAX_EVENTS ] ;
+  uint8_t
+    _tItr;
 
-    bool
-      _milliRolloverFlag ;
 
-    uint8_t
-      _tItr ;
 
 };
 
-extern StuScheduler scheduler;
+#endif

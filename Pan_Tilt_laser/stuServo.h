@@ -10,57 +10,47 @@
 
 
     @section  HISTORY
-    v0.0.1 - First release
-    v0.0.2 - Switched write to writeMicroseconds to allow maximal servo
-             rotation.
-    v0.0.3 - Added 5 microsecond delay after wake to allow capacitors to charge.
-    v0.0.4 - Added a readMicroseconds function to get position.
+    v1.0 - First release
 
 */
 /**************************************************************************/
 
 
-#pragma once
+#ifndef _STUSERVO_H_
+#define _STUSERVO_H_
 
-#include "Arduino.h"
 #include <Servo.h>
-#include "Arduino.h"
 
 struct servoPos{
+  int
+    min,
+    max,
+    current;
 
-    int
-      min ,
-      max ,
-      current ;
 };
 
 class StuServo: public Servo {
 
 public:
 
-    void
-      begin( void ) ,
-      setPowerPin( uint8_t pwrPin ) ,
-      setCalibration( int min, int max ) ,
-      stuWrite( int position ),
-      pause( void ),
-      wake( void ) ;
+  void
+    setCalibration(int min, int max),
+    calibrate(),
+    stuWrite(int position);
 
-
-    int
-      getMin( void ) const ,
-      getMax( void ) const ;
+  int
+    getMin(),
+    getMax();
 
 
 private:
 
-    servoPos
-      _position ;
+  servoPos
+    _position;
 
-    uint8_t
-      _powerPin ;
-
-    int
-      _microSeconds ;
 
 };
+
+
+
+#endif

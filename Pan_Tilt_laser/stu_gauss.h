@@ -11,16 +11,16 @@
 
 
     @section  HISTORY
-    v0.0.1 - First release
+    v1.0 - First release
 
 */
 /**************************************************************************/
-#pragma once
+
+#ifndef _STU_GAUSS_H_
+#define _STU_GAUSS_H_
 
 #include "Arduino.h"
 #include <Gaussian.h>
-
-
 
 class StuGauss {
 
@@ -30,13 +30,15 @@ public:
 
 
   unsigned long
-    gRandom( unsigned long zero, double variance ) ;
+    gRandom(unsigned long zero, double variance);
+
+
 
 private:
 
-        Gaussian
-          _gauss;
+  Gaussian _gauss;
+
 
 };
 
-extern StuGauss gauss;
+#endif
