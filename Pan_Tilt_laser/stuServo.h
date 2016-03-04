@@ -1,5 +1,6 @@
 
 /**************************************************************************/
+
 /*!
     @file     stuServo.h
     @author   Stuart Feichtinger
@@ -12,7 +13,8 @@
     @section  HISTORY
     v1.0 - First release
 
-*/
+ */
+
 /**************************************************************************/
 
 
@@ -21,36 +23,31 @@
 
 #include <Servo.h>
 
-struct servoPos{
+struct servoPos {
   int
     min,
     max,
     current;
-
 };
 
-class StuServo: public Servo {
-
+class StuServo : public Servo {
 public:
 
   void
-    setCalibration(int min, int max),
-    calibrate(),
-    stuWrite(int position);
+  setCalibration(int min,
+                 int max),
+  calibrate(),
+  stuWrite(int position);
 
   int
-    getMin(),
-    getMax();
-
+  getMin(),
+  getMax();
 
 private:
 
   servoPos
     _position;
-
-
 };
 
 
-
-#endif
+#endif /* ifndef _STUSERVO_H_ */

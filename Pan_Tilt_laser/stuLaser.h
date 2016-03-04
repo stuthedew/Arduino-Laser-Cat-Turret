@@ -1,4 +1,5 @@
 /**************************************************************************/
+
 /*!
     @file     stuLaser.h
     @author   Stuart Feichtinger
@@ -13,7 +14,8 @@
     @section  HISTORY
     v1.0 - First release
 
-*/
+ */
+
 /**************************************************************************/
 
 #ifndef _STULASER_H_
@@ -24,7 +26,7 @@
 #include <math.h>
 
 
-struct angle_t{
+struct angle_t {
   float
     hRad,
     vRad;
@@ -32,40 +34,38 @@ struct angle_t{
   int
     hDeg,
     vDeg;
-
 };
 
 class StuLaser {
-
 public:
 
   StuLaser(uint8_t laserPin);
 
   void
-    begin(),
-    fire(boolean state),
-    setOrigin(int vX, int vY),
-    setDotPosition(int hX, int hY),
-    setDotPositionFast(int hX, int hY);
+  begin(),
+  fire(boolean state),
+  setOrigin(int vX, int vY),
+  setDotPosition(int hX, int hY),
+  setDotPositionFast(int hX, int hY);
 
-    void
-      calcAngles();
+  void
+  calcAngles();
 
 
   int
-    vX(),
-    vY(),
-    hX(),
-    hY(),
-    vAngleDeg(),
-    hAngleDeg();
+  vX(),
+  vY(),
+  hX(),
+  hY(),
+  vAngleDeg(),
+  hAngleDeg();
 
   float
-    vAngle(),
-    hAngle();
+  vAngle(),
+  hAngle();
 
   inline int
-    rad2Deg(float);
+  rad2Deg(float);
 
 private:
 
@@ -80,12 +80,7 @@ private:
 
   angle_t
     _servoAngle;
-
-
-
-
-
 };
 
 
-#endif
+#endif /* ifndef _STULASER_H_ */

@@ -1,5 +1,6 @@
 
 /**************************************************************************/
+
 /*!
     @file     stuPanTilt.h
     @author   Stuart Feichtinger
@@ -13,7 +14,8 @@
     @section  HISTORY
     v1.0 - First release
 
-*/
+ */
+
 /**************************************************************************/
 
 
@@ -41,22 +43,20 @@ struct panTiltPos_t {
     midAngle;
 
 
-  panTiltPos_t(int mn, int mx):dir(1), minAngle(mn), maxAngle(mx),
-    midAngle(((mx-mn) >>1) + mn){}
-
+  panTiltPos_t(int mn, int mx) : dir(1), minAngle(mn), maxAngle(mx),
+                                 midAngle(((mx - mn) >> 1) + mn) {}
 };
 
 
 class PanTilt {
-
 public:
 
-  PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos);
+  PanTilt(uint8_t xPin, panTiltPos_t * xPos, uint8_t yPin, panTiltPos_t * yPos);
 
   void
-    begin(),
-    detach(),
-    updateAngles();
+  begin(),
+  detach(),
+  updateAngles();
 
 private:
 
@@ -65,20 +65,16 @@ private:
     _yPin;
 
   void
-    _update();
+  _update();
 
   panTiltPos_t
-    *_Xpos,
-    *_Ypos;
+  *_Xpos,
+  *_Ypos;
 
   StuServo
     _xServo,
     _yServo;
-
-
-
 };
 
 
-
-#endif
+#endif /* ifndef _STUPANTILT_H_ */

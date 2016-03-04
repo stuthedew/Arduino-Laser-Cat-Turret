@@ -1,49 +1,47 @@
+/**************************************************************************!
+    @file     stu_scheduler.h                                             *
+    @author   Stuart Feichtinger                                          *
+    @license  MIT (see license.txt)                                       *
+ *
+    Simple scheduler to manage various events (e.g. sleep). Addapted from *
+    "Making Embedded Systems" by Elecia White.                            *
+ *
+ *
+    @section  HISTORY                                                     *
+    v1.0 - First release                                                  *
+ *
+ **************************************************************************/
 
-/**************************************************************************/
-/*!
-    @file     stu_scheduler.h
-    @author   Stuart Feichtinger
-    @license  MIT (see license.txt)
-
-    Simple scheduler to manage various events (e.g. sleep). Addapted from
-    "Making Embedded Systems" by Elecia White.
-
-
-    @section  HISTORY
-    v1.0 - First release
-
-*/
-/**************************************************************************/
 
 #ifndef _STU_SCHEDULER_H_
 #define _STU_SCHEDULER_H_
 
 #include "Arduino.h"
 
-
 typedef void (*Callback)(void);
 
-class Task{
+class Task {
 public:
 
-  Task(void (*callback)(), unsigned long interval=100, bool enable=1);
+  Task(void (*callback)(), unsigned long interval = 100, bool enable = 1);
 
   void
-    resetPeriodic(),
-    setInterval(unsigned long mSec),
-    setNextRunTime(unsigned long mSec),
-    disable(),
-    enable(),
-    run(),
-    changeCallback(void (*callback)());
+  resetPeriodic(),
+  setInterval(unsigned long mSec),
+  setNextRunTime(unsigned long mSec),
+  disable(),
+  enable(),
+  run(),
+  changeCallback(void (*callback)());
 
   bool
-    enabled();
+  enabled();
 
   unsigned long
-    nextRunTime();
+  nextRunTime();
 
 private:
+
   bool
     _enabled;
 
@@ -53,32 +51,26 @@ private:
   unsigned long
     _runNextAt,
     _timeBetweenRuns;
-
 };
-
 
 
 class StuScheduler {
-
 public:
+
   StuScheduler();
 
   void
-    addTask(Task *t),
-    run(),
-    restart();
-
-
+  addTask(Task *t),
+  run(),
+  restart();
 
 private:
+
   Task
-    *_Task[20];
+  *_Task[20];
 
   uint8_t
     _tItr;
-
-
-
 };
 
-#endif
+#endif /* ifndef _STU_SCHEDULER_H_ */

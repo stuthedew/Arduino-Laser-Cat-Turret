@@ -1,5 +1,6 @@
 
 /**************************************************************************/
+
 /*!
     @file     stuServo.cpp
     @author   Stuart Feichtinger
@@ -12,42 +13,36 @@
     @section  HISTORY
     v1.0 - First release
 
-*/
+ */
+
 /**************************************************************************/
 
 #include "stuServo.h"
 
 
-void StuServo::calibrate(){
+void StuServo::calibrate() {}
 
-
-}
-
-void StuServo::setCalibration(int min, int max){
+void StuServo::setCalibration(int min, int max) {
   _position.min = min;
   _position.max = max;
-
 }
 
-
-void StuServo::stuWrite(int position){
-
-  if(position < _position.min){
+void StuServo::stuWrite(int position) {
+  if (position < _position.min) {
     write(_position.min);
   }
-  else if(position > _position.max){
+  else if (position > _position.max) {
     write(_position.max);
   }
-  else{
+  else {
     write(position);
   }
-
 }
 
-int StuServo::getMin(){
+int StuServo::getMin() {
   return _position.min;
 }
 
-int StuServo::getMax(){
+int StuServo::getMax() {
   return _position.max;
 }

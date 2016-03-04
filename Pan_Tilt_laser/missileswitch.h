@@ -1,19 +1,19 @@
 
-/**************************************************************************/
-/*!
-    @file     missileswitch.h
-    @author   Stuart Feichtinger
-    @license  MIT (see license.txt)
 
-    Simple library for reading input from Sparkfun's missile switch
-    (https://www.sparkfun.com/products/11310) and controlling its led.
+/***********************************************************************!
+    @file     missileswitch.h                                          *
+    @author   Stuart Feichtinger                                       *
+    @license  MIT (see license.txt)                                    *
+                                                                       *
+    Simple library for reading input from Sparkfun's missile switch    *
+    (https://www.sparkfun.com/products/11310) and controlling its led. *
+                                                                       *
+                                                                       *
+    @section  HISTORY                                                  *
+    v1.0 - First release                                               *
+                                                                       *
+ ***********************************************************************/
 
-
-    @section  HISTORY
-    v1.0 - First release
-
-*/
-/**************************************************************************/
 
 #ifndef _MISSILESWITCH_H_
 #define _MISSILESWITCH_H_
@@ -22,36 +22,30 @@
 
 
 class Missileswitch {
-  public:
+public:
 
-    Missileswitch(int, int);
+  Missileswitch(int, int);
 
-    void
-      begin(),
-      ledState(bool),
-      heartBeat(int);
+  void
+  begin(),
+  ledState(bool),
+  heartBeat(int);
 
-    bool
-      ledState(),
-      switchState();
+  bool
+  ledState(),
+  switchState();
 
+private:
 
-  private:
-    const int
-      _ledPin,
-      _switchPin;
+  const int
+    _ledPin,
+    _switchPin;
 
-    bool
-      _ledState,
-      _switchState,
-      _debounce();
-
-
-
+  bool
+    _ledState,
+    _switchState,
+  _debounce();
 };
 
 
-
-
-
-#endif
+#endif /* ifndef _MISSILESWITCH_H_ */

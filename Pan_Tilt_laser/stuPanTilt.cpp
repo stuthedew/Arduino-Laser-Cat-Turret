@@ -1,5 +1,6 @@
 
 /**************************************************************************/
+
 /*!
     @file     stuPanTilt.cpp
     @author   Stuart Feichtinger
@@ -13,16 +14,19 @@
     @section  HISTORY
     v1.0 - First release
 
-*/
+ */
+
 /**************************************************************************/
 
 
 #include "stuPanTilt.h"
 
 
-PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *yPos):
-  _xServo(), _yServo(){
-
+PanTilt::PanTilt(uint8_t       xPin,
+                 panTiltPos_t *xPos,
+                 uint8_t       yPin,
+                 panTiltPos_t *yPos) :
+  _xServo(), _yServo() {
   _xPin = xPin;
   _yPin = yPin;
 
@@ -31,36 +35,33 @@ PanTilt::PanTilt(uint8_t xPin, panTiltPos_t *xPos, uint8_t yPin, panTiltPos_t *y
 
   _xServo.setCalibration(_Xpos->minAngle, _Xpos->maxAngle);
   _yServo.setCalibration(_Ypos->minAngle, _Ypos->maxAngle);
-
 }
 
-
-void PanTilt::begin(){
+void PanTilt::begin() {
   _xServo.attach(_xPin);
   _yServo.attach(_yPin);
   delay(500);
 }
 
-void PanTilt::detach(){
+void PanTilt::detach() {
   _xServo.detach();
   _yServo.detach();
 }
 
-void PanTilt::updateAngles(){
+void PanTilt::updateAngles() {
   _update();
 }
 
-void PanTilt::_update(){
+void PanTilt::_update() {
   static int oldXangle, oldYangle;
 
 
   _xServo.stuWrite(_Xpos->angle);
   delay(10);
   _yServo.stuWrite(_Ypos->angle);
-  delay(abs((_Xpos->angle - oldXangle)+15));
-  delay(abs((_Ypos->angle - oldYangle)+15));
+  delay(abs((_Xpos->angle - oldXangle) + 15));
+  delay(abs((_Ypos->angle - oldYangle) + 15));
 
   oldXangle = _Xpos->angle;
   oldYangle = _Ypos->angle;
-
 }
