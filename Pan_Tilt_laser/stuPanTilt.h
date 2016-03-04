@@ -1,22 +1,19 @@
 
-/**************************************************************************/
 
-/*!
-    @file     stuPanTilt.h
-    @author   Stuart Feichtinger
-    @license  MIT (see license.txt)
-
-    Library for controlling dual servo pan-tilt rig
-    (https://www.adafruit.com/products/1967) with an Arduino Uno (Atmel
-    Atmega 328).
-
-
-    @section  HISTORY
-    v1.0 - First release
-
- */
-
-/**************************************************************************/
+/************************************************************************!
+    @file     stuPanTilt.h                                              *
+    @author   Stuart Feichtinger                                        *
+    @license  MIT (see license.txt)                                     *
+ *
+    Library for controlling dual servo pan-tilt rig                     *
+    (https://www.adafruit.com/products/1967) with an Arduino Uno (Atmel *
+    Atmega 328).                                                        *
+ *
+ *
+    @section  HISTORY                                                   *
+    v1.0 - First release                                                *
+ *
+ ************************************************************************/
 
 
 #ifndef _STUPANTILT_H_
@@ -51,7 +48,10 @@ struct panTiltPos_t {
 class PanTilt {
 public:
 
-  PanTilt(uint8_t xPin, panTiltPos_t * xPos, uint8_t yPin, panTiltPos_t * yPos);
+  PanTilt(uint8_t const xPin,
+          panTiltPos_t * xPos,
+          uint8_t const yPin,
+          panTiltPos_t * yPos);
 
   void
   begin(),
@@ -60,8 +60,8 @@ public:
 
 private:
 
-  uint8_t
-    _xPin,
+  uint8_t const
+  _xPin,
     _yPin;
 
   void

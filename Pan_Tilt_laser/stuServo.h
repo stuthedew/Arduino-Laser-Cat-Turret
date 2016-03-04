@@ -1,21 +1,18 @@
 
-/**************************************************************************/
 
-/*!
-    @file     stuServo.h
-    @author   Stuart Feichtinger
-    @license  MIT (see license.txt)
-
-    Augmented servo library based off of Arduino Servo library. Adds maximum
-    and minimum angles, and prevents servo from going past them.
-
-
-    @section  HISTORY
-    v1.0 - First release
-
- */
-
-/**************************************************************************/
+/*****************************************************************************!
+    @file     stuServo.h                                                     *
+    @author   Stuart Feichtinger                                             *
+    @license  MIT (see license.txt)                                          *
+ *
+    Augmented servo library based off of Arduino Servo library. Adds maximum *
+    and minimum angles, and prevents servo from going past them.             *
+ *
+ *
+    @section  HISTORY                                                        *
+    v1.0 - First release                                                     *
+ *
+ *****************************************************************************/
 
 
 #ifndef _STUSERVO_H_
